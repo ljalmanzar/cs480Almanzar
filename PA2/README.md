@@ -44,3 +44,6 @@ Additional Notes For OSX Users
 ------------------------------
 
 Ensure that the latest version of the Developer Tools is installed.
+
+
+By, Luis Almanzar

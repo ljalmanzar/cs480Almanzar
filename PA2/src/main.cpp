@@ -63,18 +63,17 @@ void mouse_options(int button, int state, int x_pos, int y_pos);
 
 
 /********
-*********
 --MAIN--
-*********
 ********/
 
 int main(int argc, char **argv)
 {
     // Initialize glut
     glutInit(&argc, argv); // just initializes
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH); /* changes options...  
+    /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH); 
     glutInitWindowSize(w, h);
 
     // Name and create the Window
@@ -181,7 +180,7 @@ void update()
     model = glm::translate( glm::mat4(1.0f), glm::vec3(4.0 * sin(angle), 0.0, 4.0 * cos(angle)));
 
     model = glm::rotate(model, // what youre starting with
-    angle * 2 * SPIN_DIRECTION, // angle of rotation (how much it rotates)
+    angle * 2 * SPIN_DIRECTION, // angle of rotation (how much it rotates), spin direction is 1 or -1 
     glm::vec3(0.0,1.0,0.0)); // a three vector, axis 
 
     // Update the state of the scene
@@ -293,8 +292,6 @@ bool initialize()
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     //Shader Sources
-    // Put these into files and write a loader in the future
-    // Note the added uniform!
 
     // load shader info by calling function
     std::string vs = shaderLoader("../bin/vrtxshdr.txt");   
@@ -396,7 +393,7 @@ void cleanUp()
 //returns the time delta
 float getDT()
 {
-   // check global "PAUSED" variable
+   // check global "PAUSED" variable, if true make times equal
    if (PAUSED == true)
       t1 = std::chrono::high_resolution_clock::now();
 
