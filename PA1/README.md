@@ -1,6 +1,12 @@
 A simple example of matrix use in OpenGL
 ========================================
 
+Assignment:
+===========
+
+1) Write a Shader Loader and move the shaders to files.
+2) You need to make the cube rotate about its Y-axis as well as move in the circle.
+
 Building This Example
 ---------------------
 
