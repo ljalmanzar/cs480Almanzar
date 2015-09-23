@@ -551,9 +551,21 @@ void special_keyboard(int key, int x_pos, int y_pos)
    switch(key)
       {
          case GLUT_KEY_LEFT:
+         model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
          break;
 
          case GLUT_KEY_RIGHT:
+         model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
          break;
+
+		 case GLUT_KEY_UP:
+         model = glm::rotate(model, (.2f), glm::vec3(1.0,0.0,0.0));
+         break;
+
+         case GLUT_KEY_DOWN:
+         model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
+         break;         
       }
+
+    glutPostRedisplay();
 }
