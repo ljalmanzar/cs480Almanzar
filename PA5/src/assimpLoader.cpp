@@ -10,7 +10,8 @@ assimpLoader::assimpLoader(){
 
 // - Parameterized Constructor
 assimpLoader::assimpLoader( const std::string& filename ){
-
+   //Assign variables
+   object_filename = filename;
 }
 
 // - DESTRUCTOR

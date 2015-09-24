@@ -5,13 +5,13 @@ LIBS= -lglut -lGLEW -lGL -lassimp
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x
 
-all: ../bin/Matrix
+all: ../bin/Assimp1
 
-../bin/Matrix: ../src/main.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Matrix $(LIBS)
+../bin/Assimp1: ../src/main.cpp
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp1 $(LIBS)
 
 clean:
-	rm ../bin/Matrix -f
+	rm ../bin/Assimp1 -f
 
-run: ../bin/Matrix
-	../bin/Matrix
+run: ../bin/Assimp1
+	../bin/Assimp1
