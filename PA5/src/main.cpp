@@ -24,6 +24,7 @@ struct Vertex
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
+assimpLoader AI_Obj; //
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader

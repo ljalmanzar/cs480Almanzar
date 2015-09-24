@@ -10,9 +10,11 @@ class assimpLoader
 {
 public:
    assimpLoader();
+   assimpLoader( const std::string& filename );
    ~assimpLoader();
 
 private:
+   std::string object_filename;
    Assimp::Importer importer;
    
 };
