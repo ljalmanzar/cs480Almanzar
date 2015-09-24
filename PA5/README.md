@@ -1,3 +1,6 @@
+THIS IS ME LUIS!
+===============
+
 PA3 - Moons (Description from online)
 Objective: Now that we have a window open and an animation going, with keyboard, mouse, and menus, we will be dealing with multiple objects. You'll be taking your code from last week and a moon to the object you have already.
 For this project, students will be expected to render two cubes onto the screen. One of the cubes will move around in a circle while the other cube orbits around it. The program is expected to be designed in such a way that the user, through keyboard inputs, can change the direction of rotation of the first cube, while the second continuously orbits it.
