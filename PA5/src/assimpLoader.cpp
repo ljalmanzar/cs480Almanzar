@@ -16,7 +16,7 @@ assimpLoader::assimpLoader( const std::string& filename ){
 
 // - DESTRUCTOR
 assimpLoader::~assimpLoader(){
-
+	// deez nutes
 }
 
 #endif
