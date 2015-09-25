@@ -4,20 +4,13 @@
 #include <GL/freeglut.h> // extension to glut
 #include <iostream>
 #include <chrono>
+#include "vertex.cpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 #include "loader.cpp"
 #include "assimpLoader.cpp"
-
-//--Data types
-//This object will define the attributes of a vertex(position, color, etc...)
-struct Vertex
-{
-    GLfloat position[3];
-    GLfloat color[3];
-};
 
 //--Evil Global variables
 //Just for this example!

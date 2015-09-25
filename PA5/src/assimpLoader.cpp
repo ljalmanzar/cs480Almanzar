@@ -5,13 +5,18 @@
 
 // - CONSTRUCTOR
 assimpLoader::assimpLoader(){
-
+   //stub
 }
 
 // - Parameterized Constructor
 assimpLoader::assimpLoader( const std::string& filename ){
-	object_filename = filename;
-	this -> initialize( object_filename );
+   object_filename = filename;
+   this -> initialize( object_filename );
+}
+
+// - DESTRUCTOR
+assimpLoader::~assimpLoader(){
+   //stub
 }
 
 // - INTIALIZATION FUNCTION
@@ -21,9 +26,5 @@ void assimpLoader::initialize( const std::string& filename ){
    myScene = importer.ReadFile( filename, aiProcess_Triangulate );
 }
 
-// - DESTRUCTOR
-assimpLoader::~assimpLoader(){
-	
-}
 
 #endif

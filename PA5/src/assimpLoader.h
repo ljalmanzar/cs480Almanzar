@@ -6,22 +6,32 @@
 #include <assimp/postprocess.h> 
 #include <assimp/color4.h>
 #include <iostream>
+#include "vertex.cpp"
 
-class assimpLoader
-{
-public:
-   assimpLoader();
-   assimpLoader( const std::string& filename );
+class assimpLoader{
+   public:
+      //Constructors and Destructors
+      assimpLoader();
+      assimpLoader( const std::string& filename );
+      ~assimpLoader();
 
-   void initialize( const std::string& filename );
+      //Point to the file and make myScene
+         //calls orderVertices()
+      void initialize( const std::string& filename );
 
-   ~assimpLoader();
+      //changes inOrderVertices to match faces
+      void orderVertices();
 
-private: 
-   std::string object_filename;
+      //returns vector to user
+      std::vector<Vertex> getOrderedVertices() const;
 
-   Assimp::Importer importer;
-   const aiScene* myScene;
+   private: 
+      std::string object_filename;
+
+      Assimp::Importer importer;
+      const aiScene* myScene;
+
+      std::vector<Vertex> inOrderVertices;
 };
 
 #endif
