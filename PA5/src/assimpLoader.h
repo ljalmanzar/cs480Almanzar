@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h> 
 #include <assimp/color4.h>
 #include <iostream>
+#include <fstream>
 #include "vertex.cpp"
 
 class assimpLoader{
@@ -17,7 +18,7 @@ class assimpLoader{
 
       //Point to the file and make myScene
          //calls orderVertices()
-      void initialize( const std::string& filename );
+      bool initialize( const std::string& filename );
 
       //changes inOrderVertices to match faces
       void orderVertices();
