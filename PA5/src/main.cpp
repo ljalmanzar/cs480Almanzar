@@ -24,7 +24,7 @@ struct Vertex
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-assimpLoader AI_Obj; //
+
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -91,6 +91,7 @@ int main(int argc, char **argv)
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
     glutSpecialFunc(special_keyboard);
     // Initialize all of our resources(shaders, geometry)
+
     bool init = initialize();
     if(init)
     {
@@ -109,7 +110,7 @@ void render()
     //--Render the scene
 
     //clear the screen
-    glClearColor(0.0, 0.0, 0.0, 1.0); // sets color for clearing the frame buffer
+    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
     //premultiply the matrix for this example
@@ -170,7 +171,7 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
-
+    assimpLoader AI_Obj; //
     //this defines a cube, this is why a model loader is nice
     //you can also do this with a draw elements and indices, try to get that working
     Vertex geometry[] = { {{-1.0, -1.0, -1.0}, {0.0, 0.0, 0.0}},
