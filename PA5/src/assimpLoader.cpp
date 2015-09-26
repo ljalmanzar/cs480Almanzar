@@ -63,9 +63,9 @@ void assimpLoader::orderVertices(){
          //get val from faces' mIndeces array
          for( int i = 0; i < 3; i++ ){
             //go to aiMesh's mVertices Array
-            int vertice_index = myScene->mMeshes[meshIndex].mFaces[faceIndex].mIndex[i];
+            int vertice_index = myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
             //get position 
-            tempVert.position[i] = myScene->mMeshes[meshIndex].mVertices[vertice_index];
+            tempVert.position[i] = myScene->mMeshes[meshIndex]->mVertices[vertice_index];
          }
          //push tempVert back to vector 
          inOrderVertices.push_back( tempVert );    
@@ -74,7 +74,10 @@ void assimpLoader::orderVertices(){
 }
 
 std::vector<Vertex> assimpLoader::getOrderedVertices() const {
-   return std::vector<Vertex>(0);
+   if( inOrderVertices.size() <= 0 ){
+      return std::vector<Vertex>(0);
+   }
+   return inOrderVertices;
 }
 
 #endif
