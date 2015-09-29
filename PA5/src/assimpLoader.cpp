@@ -71,6 +71,7 @@ void assimpLoader::orderVertices(){
             tempVert.color[0] = 1.0f;
             tempVert.color[1] = 1.0f;
             tempVert.color[2] = 1.0f;
+            
             inOrderVertices.push_back( tempVert );    
          }
       }

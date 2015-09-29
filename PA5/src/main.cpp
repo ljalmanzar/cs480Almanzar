@@ -182,7 +182,8 @@ bool initialize()
     	{
     		std::cout << v[i].position[j] << " "; 
     	}
-    	std::cout << endl; 
+    	std::cout << endl;
+        //did stuff 
     }
 
     //this defines a cube, this is why a model loader is nice
