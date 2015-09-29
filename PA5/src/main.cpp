@@ -166,7 +166,7 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( "../bin/rectable.obj" ); //
+    assimpLoader AI_Obj( "../bin/box_3.obj" ); //
 
     AI_Obj.orderVertices();
 

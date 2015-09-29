@@ -55,51 +55,26 @@ void assimpLoader::orderVertices(){
 
    //obtain the number of meshes
    numMeshes = myScene -> mNumMeshes;
-/*
-   for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){
-      aiMesh * myMesh = myScene->mMeshes[ meshIndex ];
-
-      for( int faceIndex = 0; faceIndex < myMesh.mNumfaces; faceIndex++ ){
-         int indices[3];
-         indices[0] = myMesh->mFaces[faceIndex].mIndices[0];
-      }
-   }
-*/
 
    for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){
       int numFacesInMesh = myScene->mMeshes[meshIndex]->mNumFaces;
-      aiMesh * myMesh = myScene->mMeshes[ meshIndex ];
-
-      std::cout << numFacesInMesh << endl;
       //iterate through faces
-   
       for( int faceIndex = 0; faceIndex < numFacesInMesh; faceIndex++ ){
-
-         const aiFace &myFace = myMesh->mFaces[faceIndex];
-
          //get val from faces' mIndeces array
          for( int i = 0; i < 3; i++ ){
             //go to aiMesh's mVertices Array
-           // unsigned int vertice_index = 
-           // std::cout << vertice_index << " ";
+            int vertice_index = myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
             //get position 
-            std::cout << myFace.mIndices[i]<< " "; 
-            tempVert.position[i] = myMesh->mVertices[0][myFace.mIndices[i]];
-            tempVert.color[i] = 0.0f;
+            tempVert.position[0] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][0];
+            tempVert.position[1] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][1];
+            tempVert.position[2] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][2];
+            tempVert.color[0] = 1.0f;
+            tempVert.color[1] = 1.0f;
+            tempVert.color[2] = 1.0f;
+            inOrderVertices.push_back( tempVert );    
          }
-
-         std::cout << endl;
-         //push tempVert back to vector 
-         inOrderVertices.push_back( tempVert );    
       }
    }
-   
-
-//int shit = myScene -> mMeshes[1] -> mNumVerticies;
-//for (int i = 0; i < shit; ++i)
-//{
-
-  // inOrderVerticies[i] = tempVert.position[i] = myScene->mMeshes[meshIndex]->mVertices[0][vertice_index]; 
 }
 
 
