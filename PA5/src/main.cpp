@@ -18,7 +18,7 @@ int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
 
-int PENIS = 0;
+int NUM_OF_VERTICIES = 0;
 
 
 //uniform locations
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Adding I/O");
+    glutCreateWindow("Assimp Loading");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -137,7 +137,7 @@ void render()
                            sizeof(Vertex),
                            (void*)offsetof(Vertex,color));
 
-    glDrawArrays(GL_TRIANGLES, 0, 72);//mode, starting index, count
+    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
 
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -149,7 +149,6 @@ void render()
 
 void update()
 {
-    glutPostRedisplay();//call the display callback
 }
 
 void reshape(int n_w, int n_h)
@@ -173,30 +172,29 @@ bool initialize()
     std::vector<Vertex> v;
     v = AI_Obj.getOrderedVertices();
 
-    PENIS = v.size();
-    std::cout << "PENIS = " << PENIS << endl;
-    for (int i = 0; i < PENIS; ++i)
-    {
-    	std::cout << "Line " << i << ": ";
-    	for (int j = 0; j < 3; ++j)
-    	{
-    		std::cout << v[i].position[j] << " "; 
-    	}
-    	std::cout << endl;
-        //did stuff 
-    }
+    NUM_OF_VERTICIES = v.size();
+
+    for (int i = 0; i < NUM_OF_VERTICIES; ++i)
+        {
+        	std::cout << "Line " << (i+1) << ": ";
+        	for (int j = 0; j < 3; ++j)
+            	{
+            		std::cout << v[i].position[j] << " "; 
+            	}
+        	std::cout << endl; 
+        }
 
     //this defines a cube, this is why a model loader is nice
     //you can also do this with a draw elements and indices, try to get that working
-    Vertex geometry[PENIS];
+    Vertex geometry[NUM_OF_VERTICIES];
 
-    for (int i = 0; i < PENIS; ++i)
-    {
-    	for (int j = 0; j < 3; ++j)
-    	{
-    		geometry[i].position[j] = v[i].position[j];
-    	}
-    }
+    for (int i = 0; i < NUM_OF_VERTICIES; ++i)
+        {
+        	for (int j = 0; j < 3; ++j)
+            	{
+            		geometry[i].position[j] = v[i].position[j];
+            	}
+        }
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);

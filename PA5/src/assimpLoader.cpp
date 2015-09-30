@@ -26,7 +26,7 @@ bool assimpLoader::initialize( const std::string& filename ){
    ifstream fin;
    fin.open( filename.c_str() );
    if( !fin.good() ){
-      std::cerr << "File had problems with meth." << std::endl;
+      std::cerr << "File had problems opening." << std::endl;
       return false;
    }
    fin.close();
@@ -35,7 +35,7 @@ bool assimpLoader::initialize( const std::string& filename ){
    object_filename = filename;
    myScene = importer.ReadFile( filename, aiProcess_Triangulate );
    if( myScene == NULL ){
-      std::cerr << "File contents had problems with coke." << std::endl;
+      std::cerr << "File contents had problems but was successfully opened." << std::endl;
       return false;
    }
 
@@ -65,20 +65,17 @@ void assimpLoader::orderVertices(){
             //go to aiMesh's mVertices Array
             int vertice_index = myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
             //get position 
-            tempVert.position[0] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][0];
-            tempVert.position[1] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][1];
-            tempVert.position[2] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][2];
-            tempVert.color[0] = 1.0f;
-            tempVert.color[1] = 1.0f;
-            tempVert.color[2] = 1.0f;
+            for (int j = 0; j < 3; ++j){
+               tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
+               tempVert.color[j] = 1.0f;
+            }
             
+            //add to the final vec
             inOrderVertices.push_back( tempVert );    
          }
       }
    }
 }
-
-
 
 std::vector<Vertex> assimpLoader::getOrderedVertices() const {
    if( inOrderVertices.size() <= 0 ){
