@@ -173,17 +173,7 @@ bool initialize()
     v = AI_Obj.getOrderedVertices();
 
     NUM_OF_VERTICIES = v.size();
-
-    for (int i = 0; i < NUM_OF_VERTICIES; ++i)
-        {
-        	std::cout << "Line " << (i+1) << ": ";
-        	for (int j = 0; j < 3; ++j)
-            	{
-            		std::cout << v[i].position[j] << " "; 
-            	}
-        	std::cout << endl; 
-        }
-
+    
     //this defines a cube, this is why a model loader is nice
     //you can also do this with a draw elements and indices, try to get that working
     Vertex geometry[NUM_OF_VERTICIES];
@@ -193,6 +183,7 @@ bool initialize()
         	for (int j = 0; j < 3; ++j)
             	{
             		geometry[i].position[j] = v[i].position[j];
+                    geometry[i].color[j] = v[i].color[j];
             	}
         }
     // Create a Vertex Buffer object to store this vertex info on the GPU
