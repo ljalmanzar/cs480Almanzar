@@ -17,7 +17,9 @@ assimpLoader::assimpLoader( const std::string& filename ){
 
 // - DESTRUCTOR
 assimpLoader::~assimpLoader(){
-
+   if( myScene != NULL ){
+      delete myScene;
+   }
 }
 
 // - INTIALIZATION FUNCTION
