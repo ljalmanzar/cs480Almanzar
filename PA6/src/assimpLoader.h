@@ -13,7 +13,7 @@ class assimpLoader{
    public:
       //Constructors and Destructors
       assimpLoader();
-      assimpLoader( const std::string& filename );
+      assimpLoader( char * filename );
       ~assimpLoader();
 
       //Point to the file and make myScene

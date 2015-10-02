@@ -9,17 +9,15 @@ assimpLoader::assimpLoader(){
 }
 
 // - Parameterized Constructor
-assimpLoader::assimpLoader( const std::string& filename ){
+assimpLoader::assimpLoader( char * filename ){
    myScene = NULL;
-   object_filename = filename;
+   object_filename = std::string( filename );
    initialize( object_filename );
 }
 
 // - DESTRUCTOR
 assimpLoader::~assimpLoader(){
-   if( myScene != NULL ){
-      delete myScene;
-   }
+
 }
 
 // - INTIALIZATION FUNCTION
@@ -69,7 +67,6 @@ void assimpLoader::orderVertices(){
             //get position 
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
-               tempVert.color[j] = 1.0f;
             }
             
             //add to the final vec
