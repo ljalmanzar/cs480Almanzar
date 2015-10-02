@@ -1,5 +1,7 @@
 Assimp Model Loader
 ==================
+Use this link guys:
+http://www.imagemagick.org/script/install-source.php
 
 How to run
 ==========
