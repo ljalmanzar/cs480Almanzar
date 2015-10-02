@@ -67,8 +67,13 @@ void assimpLoader::orderVertices(){
             //get position 
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
+               tempVert.color[j] = (i*j)/3;
+               //tempVert.uv[j]
             }
-            
+            aiVector3D * textures = myScene->mMeshes[meshIndex]->mTextureCoords[0];
+            tempVert.uv[0] = textures->x;
+            tempVert.uv[1] = textures->y;
+
             //add to the final vec
             inOrderVertices.push_back( tempVert );    
          }

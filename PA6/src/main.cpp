@@ -27,6 +27,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLint loc_color;
+Glint loc_texture;
 
 //transform matrices
 glm::mat4 moon_model;
@@ -122,9 +123,11 @@ void render()
 
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_color);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
+    //glEnableVertexAttribArray(loc_color);
+    glEnableVertexAttribArray(loc_texture);
     
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
+    glBindBuffer( GL_TEXTURE_2D, loc_texture );
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -133,18 +136,26 @@ void render()
                            sizeof(Vertex),//stride
                            0);//offset
 
-    glVertexAttribPointer( loc_color,
-                           3,
-                           GL_FLOAT,
-                           GL_FALSE,
-                           sizeof(Vertex),
-                           (void*)offsetof(Vertex,color));
+//    glVertexAttribPointer( loc_color,
+//                           3,
+//                           GL_FLOAT,
+//                           GL_FALSE,
+//                           sizeof(Vertex),
+//                           (void*)offsetof(Vertex,color));
+
+    glVertexAttribPointer( loc_texture,
+                            3,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            sizeof(Vertex),
+                            0);
 
     glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
 
     //clean up
     glDisableVertexAttribArray(loc_position);
     glDisableVertexAttribArray(loc_color);
+    glDisableVertexAttribArray(loc_texture);
                            
     //swap the buffers
     glutSwapBuffers();
@@ -152,6 +163,7 @@ void render()
 
 void update()
 {
+    
 }
 
 void reshape(int n_w, int n_h)
@@ -183,12 +195,30 @@ bool initialize()
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER
-                ,v.size() * sizeof(Vertex)
-                ,&v.front()
-                ,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,
+                v.size() * sizeof(Vertex),
+                &v.front(),
+                GL_STATIC_DRAW);
 
     //--Geometry done
+
+    //- Textures
+    Magick::Image myImage();
+    myImage.read( "../bin/capsule0.jpg" );
+    int imageWidth = myImage.columns()
+    int imageHeight = myImage.rows();
+    PixelArray imageData;
+
+
+    glGenTextures(1, &loc_texture);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
+    glTextImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
+                    imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                    imageData );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);

@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h> 
 #include <assimp/color4.h>
+#include <Magick++.h>
 #include <iostream>
 #include <fstream>
 #include "vertex.cpp"
@@ -25,6 +26,9 @@ class assimpLoader{
 
       //returns vector to user
       std::vector<Vertex> getOrderedVertices() const;
+
+      //gets texture coordinate
+      void getTextures();
 
    private: 
       std::string object_filename;
