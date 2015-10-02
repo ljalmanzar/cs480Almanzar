@@ -17,7 +17,7 @@
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-
+char * model_filename;
 int NUM_OF_VERTICIES = 0;
 
 
@@ -60,6 +60,9 @@ int main(int argc, char **argv)
 {
     // Initialize glut
     glutInit(&argc, argv); // just initializes
+    int filenamelength = strlen( argv[1] );
+    model_filename = new char [filenamelength+1];
+    strcpy( model_filename, argv[1] );
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -165,7 +168,7 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( "../bin/box_3.obj" ); //
+    assimpLoader AI_Obj( model_filename ); //
 
     AI_Obj.orderVertices();
 
@@ -176,20 +179,14 @@ bool initialize()
     
     //this defines a cube, this is why a model loader is nice
     //you can also do this with a draw elements and indices, try to get that working
-    Vertex geometry[NUM_OF_VERTICIES];
 
-    for (int i = 0; i < NUM_OF_VERTICIES; ++i)
-        {
-        	for (int j = 0; j < 3; ++j)
-            	{
-            		geometry[i].position[j] = v[i].position[j];
-                    geometry[i].color[j] = v[i].color[j];
-            	}
-        }
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(geometry), geometry, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER
+                ,v.size() * sizeof(Vertex)
+                ,&v.front()
+                ,GL_STATIC_DRAW);
 
     //--Geometry done
 
