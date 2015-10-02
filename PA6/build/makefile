@@ -1,10 +1,10 @@
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lassimp
-MODEL= ../bin/box_3.obj
+LIBS= -lglut -lGLEW -lGL -lassimp `Magick++-config --ldflags --libs`
+MODEL= ../bin/capsule.obj
 
 # Compiler flags
-CXXFLAGS= -g -Wall -std=c++0x
+CXXFLAGS= -g -Wall -std=c++0x `Magick++-config --cxxflags --cppflags`
 
 all: ../bin/Assimp1
 
