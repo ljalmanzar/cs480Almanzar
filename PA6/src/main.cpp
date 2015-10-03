@@ -27,7 +27,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLint loc_color;
-Glint loc_texture;
+GLint loc_texture;
 
 //transform matrices
 glm::mat4 moon_model;
@@ -121,13 +121,16 @@ void render()
     //upload the matrix to the shader
     glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
+    //Bind each texture to the corresponding object
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
     //glEnableVertexAttribArray(loc_color);
     glEnableVertexAttribArray(loc_texture);
     
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBindBuffer( GL_TEXTURE_2D, loc_texture );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -163,7 +166,7 @@ void render()
 
 void update()
 {
-    
+
 }
 
 void reshape(int n_w, int n_h)
@@ -202,18 +205,19 @@ bool initialize()
 
     //--Geometry done
 
-    //- Textures
-    Magick::Image myImage();
+    using namespace Magick;
+    //- Texture Image Handling
+    Image myImage();
     myImage.read( "../bin/capsule0.jpg" );
     int imageWidth = myImage.columns()
     int imageHeight = myImage.rows();
-    PixelArray imageData;
+    Pixels imageData(myImage);
 
 
     glGenTextures(1, &loc_texture);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTextImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
                     imageWidth, imageHeight, 
                     0, GL_RGBA, GL_UNSIGNED_BYTE, 
                     imageData );
