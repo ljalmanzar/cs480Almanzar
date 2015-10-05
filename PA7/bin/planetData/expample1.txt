@@ -1,0 +1,12 @@
+# Geometry file (.obj)
+	fooModel.obj
+# Center of rotation (Planet or xyz floats)
+	0f 0f 0f
+# Direction of rotation (1 for clockwise -1 for counter)
+	-1
+# Rotation speed (float)
+	35f
+# Orbit Radius (float)
+	12f
+# Oribit speed (float)
+	34f
