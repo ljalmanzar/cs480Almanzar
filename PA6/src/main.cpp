@@ -27,7 +27,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLint loc_color;
-GLint loc_texture;
+GLuint loc_texture;
 
 //transform matrices
 glm::mat4 moon_model;
@@ -205,24 +205,6 @@ bool initialize()
 
     //--Geometry done
 
-    using namespace Magick;
-    //- Texture Image Handling
-    Image myImage();
-    myImage.read( "../bin/capsule0.jpg" );
-    int imageWidth = myImage.columns()
-    int imageHeight = myImage.rows();
-    Pixels imageData(myImage);
-
-
-    glGenTextures(1, &loc_texture);
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
-                    imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
-                    imageData );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -282,9 +264,9 @@ bool initialize()
         return false;
     }
 
-    loc_color = glGetAttribLocation(program,
+    loc_texture = glGetAttribLocation(program,
                     const_cast<const char*>("v_color"));
-    if(loc_color == -1)
+    if(loc_texture < 0)
     {
         std::cerr << "[F] V_COLOR NOT FOUND" << std::endl;
         return false;
@@ -298,6 +280,35 @@ bool initialize()
         return false;
     }
     
+    using namespace Magick;
+    //- Texture Image Handling
+    Image myImage;
+    //myImage.modifyImage();
+    myImage.read( "../bin/capsule0.jpg" );
+    int imageWidth = myImage.columns();
+    int imageHeight = myImage.rows();
+    Blob blob;
+    myImage.magick("RGBA");
+    myImage.write( &blob );
+
+    /*
+    using namespace cimg_library;
+    CImg<unsigned char> src("../bin/capsule0.jpg");
+    int imageWidth = src.width();
+    int imageHeight = src.height();
+    unsigned char * imageData = src.data(0, 0); 
+    */
+
+    glGenTextures(1, &loc_texture);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
+                    imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                    blob.data() );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
     //--Init the view and projection matrices
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
