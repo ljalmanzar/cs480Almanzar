@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h> 
 #include <assimp/color4.h>
 #include <Magick++.h>
+//#include "CImg.h"
 #include <iostream>
 #include <fstream>
 #include "vertex.cpp"
