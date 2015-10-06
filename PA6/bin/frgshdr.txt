@@ -1,6 +1,6 @@
-varying vec2 color;
+varying vec2 uv;
 uniform sampler2D gsampler;
 
 void main(void){
-	gl_FragColor = texture2D( gsampler, color.xy );
+	gl_FragColor = texture2D( gsampler, uv.xy );
 }

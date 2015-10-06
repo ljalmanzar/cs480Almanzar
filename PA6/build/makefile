@@ -1,8 +1,6 @@
 # Image Loader
 MAGICKLIBS= `Magick++-config --ldflags --libs`
 MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
-CIMGLIBS=
-CIMGFLAGS= -O2 -L/user/X11R6/lib -lm -lpthread -lX11
 
 # Linux
 CC=g++

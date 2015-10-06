@@ -69,7 +69,6 @@ int main(int argc, char **argv)
     filenamelength = strlen( argv[2] );
     texture_filename = new char [filenamelength+1];
     strcpy( texture_filename, argv[2] );
-    cout << texture_filename << endl;
 
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
@@ -214,7 +213,7 @@ bool initialize()
     int imageHeight = myImage.rows();
     // Not too sure what this stuff is.. 
     Blob blob;
-    //myImage.magick("RGBA");
+    myImage.magick("RGBA");
     myImage.write( &blob, "RGBA" );
 
     glGenTextures(1, &loc_texture);
