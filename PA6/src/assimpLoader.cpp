@@ -50,7 +50,7 @@ void assimpLoader::orderVertices(){
    }
 
    //declare variables
-   int numMeshes; //should be 1, for now, but let's put it in
+   int numMeshes;
    Vertex tempVert;
 
    //obtain the number of meshes
@@ -67,12 +67,11 @@ void assimpLoader::orderVertices(){
             //get position 
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
-               //tempVert.color[j] = (i*j)/3;
-               //tempVert.uv[j]
             }
+            
             aiVector3D * textures = myScene->mMeshes[meshIndex]->mTextureCoords[0];
-            tempVert.uv[0] = textures->x;
-            tempVert.uv[1] = textures->y;
+            tempVert.uv[0] = textures->y;
+            tempVert.uv[1] = textures->x;
 
             //add to the final vec
             inOrderVertices.push_back( tempVert );    

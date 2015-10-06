@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     int filenamelength = strlen( argv[1] );
     model_filename = new char [filenamelength+1];
     strcpy( model_filename, argv[1] );
+
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -71,7 +72,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Assimp Loading");
+    glutCreateWindow("Assimp Texture Loading");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -89,8 +90,8 @@ int main(int argc, char **argv)
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
     glutSpecialFunc(special_keyboard);
-    // Initialize all of our resources(shaders, geometry)
 
+    // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
     if(init)
     {
@@ -138,13 +139,6 @@ void render()
                            GL_FALSE,//normalized?
                            sizeof(Vertex),//stride
                            0);//offset
-
-//    glVertexAttribPointer( loc_color,
-//                           3,
-//                           GL_FLOAT,
-//                           GL_FALSE,
-//                           sizeof(Vertex),
-//                           (void*)offsetof(Vertex,color));
 
     glVertexAttribPointer( loc_texture,
                             3,
