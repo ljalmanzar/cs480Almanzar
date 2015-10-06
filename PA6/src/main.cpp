@@ -60,6 +60,8 @@ void special_keyboard(int key, int x_pos, int y_pos);
 
 int main(int argc, char **argv)
 {
+    // Initialize Magick
+    Magick::InitializeMagick(*argv);
     // Initialize glut
     glutInit(&argc, argv); // just initializes
     int filenamelength = strlen( argv[1] );
@@ -214,17 +216,16 @@ bool initialize()
     // Not too sure what this stuff is.. 
     Blob blob;
     myImage.magick("RGBA");
-    myImage.write( &blob, "RGBA" );
+    myImage.write( &blob );
 
     glGenTextures(1, &loc_texture);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
-                    imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
-                    blob.data() );
+    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -341,7 +342,7 @@ float getDT()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
-    static float CameraZoom_Y = 8.0;
+    static float CameraZoom_Z = -10.0;
 
     // Handle keyboard input
     if(key == 27)//ESC
@@ -349,14 +350,14 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
            exit(0);
        }
     if(key == '+'){
-        CameraZoom_Y += 1.0;
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom_Y, -10.0), //Eye Position
+        CameraZoom_Z += 1.0;
+        view = glm::lookAt( glm::vec3(0.0, 8.0, CameraZoom_Z), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
     if(key == '-'){
-        CameraZoom_Y -= 1.0;
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom_Y, -10.0), //Eye Position
+        CameraZoom_Z -= 1.0;
+        view = glm::lookAt( glm::vec3(0.0, 8.0, CameraZoom_Z), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
