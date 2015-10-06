@@ -68,13 +68,15 @@ void assimpLoader::orderVertices(){
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
             }
-            
-            aiVector3D * textures = myScene->mMeshes[meshIndex]->mTextureCoords[0];
-            tempVert.uv[0] = textures->y;
-            tempVert.uv[1] = textures->x;
+            if( myScene->mMeshes[meshIndex]->mNormals != NULL and
+               myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
+               aiVector3D textures = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index];
+               tempVert.uv[0] = textures.x;
+               tempVert.uv[1] = 1 - textures.y;
+            }
 
             //add to the final vec
-            inOrderVertices.push_back( tempVert );    
+            inOrderVertices.push_back( tempVert );
          }
       }
    }

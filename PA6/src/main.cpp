@@ -18,6 +18,7 @@ int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
 char * model_filename;
+char * texture_filename;
 int NUM_OF_VERTICIES = 0;
 
 
@@ -64,6 +65,11 @@ int main(int argc, char **argv)
     int filenamelength = strlen( argv[1] );
     model_filename = new char [filenamelength+1];
     strcpy( model_filename, argv[1] );
+
+    filenamelength = strlen( argv[2] );
+    texture_filename = new char [filenamelength+1];
+    strcpy( texture_filename, argv[2] );
+    cout << texture_filename << endl;
 
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
@@ -151,7 +157,7 @@ void render()
 
     //clean up
     glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_color);
+    //glDisableVertexAttribArray(loc_color);
     glDisableVertexAttribArray(loc_texture);
                            
     //swap the buffers
@@ -202,14 +208,14 @@ bool initialize()
     //- Texture Image Handling
     Image myImage;
  	// Get image
-    myImage.read( "../bin/capsule0.jpg" );
+    myImage.read( texture_filename );
     // Get size
     int imageWidth = myImage.columns();
     int imageHeight = myImage.rows();
     // Not too sure what this stuff is.. 
     Blob blob;
-    myImage.magick("RGBA");
-    myImage.write( &blob );
+    //myImage.magick("RGBA");
+    myImage.write( &blob, "RGBA" );
 
     glGenTextures(1, &loc_texture);
     glActiveTexture( GL_TEXTURE0 );
@@ -279,7 +285,7 @@ bool initialize()
     }
 
     loc_texture = glGetAttribLocation(program,
-                    const_cast<const char*>("v_color"));
+                    const_cast<const char*>("v_uv"));
     if(loc_texture < 0)
     {
         std::cerr << "[F] V_COLOR NOT FOUND" << std::endl;
@@ -336,11 +342,26 @@ float getDT()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
+    static float CameraZoom_Y = 8.0;
+
     // Handle keyboard input
     if(key == 27)//ESC
        {
            exit(0);
        }
+    if(key == '+'){
+        CameraZoom_Y += 1.0;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom_Y, -10.0), //Eye Position
+                            glm::vec3(0.0, 0.0, 0.0), //Focus point
+                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+    }
+    if(key == '-'){
+        CameraZoom_Y -= 1.0;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom_Y, -10.0), //Eye Position
+                            glm::vec3(0.0, 0.0, 0.0), //Focus point
+                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+    }
+    glutPostRedisplay();
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
