@@ -169,6 +169,7 @@ void reshape(int n_w, int n_h)
     h = n_h;
     //Change the viewport to be correct
     glViewport( 0, 0, w, h);
+
     //Update the projection matrix as well
     //See the init function for an explaination
     projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
@@ -197,15 +198,34 @@ bool initialize()
                 &v.front(),
                 GL_STATIC_DRAW);
 
-    //--Geometry done
+    using namespace Magick;
+    //- Texture Image Handling
+    Image myImage;
+ 	// Get image
+    myImage.read( "../bin/capsule0.jpg" );
+    // Get size
+    int imageWidth = myImage.columns();
+    int imageHeight = myImage.rows();
+    // Not too sure what this stuff is.. 
+    Blob blob;
+    myImage.magick("RGBA");
+    myImage.write( &blob );
 
+    glGenTextures(1, &loc_texture);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
+                    imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
+                    blob.data() );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
+    // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    //Shader Sources
-
-    // load shader info by calling function
+    // Load the shaders
     std::string vs = shaderLoader::insertLoader("../bin/vrtxshdr.txt");   
     std::string fs = shaderLoader::insertLoader("../bin/frgshdr.txt");
 
@@ -274,40 +294,13 @@ bool initialize()
         return false;
     }
     
-    using namespace Magick;
-    //- Texture Image Handling
-    Image myImage;
-    //myImage.modifyImage();
-    myImage.read( "../bin/capsule0.jpg" );
-    int imageWidth = myImage.columns();
-    int imageHeight = myImage.rows();
-    Blob blob;
-    myImage.magick("RGBA");
-    myImage.write( &blob );
-
-    /*
-    using namespace cimg_library;
-    CImg<unsigned char> src("../bin/capsule0.jpg");
-    int imageWidth = src.width();
-    int imageHeight = src.height();
-    unsigned char * imageData = src.data(0, 0); 
-    */
-
-    glGenTextures(1, &loc_texture);
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
-                    imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
-                    blob.data() );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    
 
     //--Init the view and projection matrices
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -16.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 8.0, -10.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 
