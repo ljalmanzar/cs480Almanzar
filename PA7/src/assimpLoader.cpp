@@ -9,10 +9,12 @@ assimpLoader::assimpLoader(){
 }
 
 // - Parameterized Constructor
-assimpLoader::assimpLoader( char * filename ){
+assimpLoader::assimpLoader( char * filename, char * textureFile ){
    myScene = NULL;
    object_filename = std::string( filename );
    initialize( object_filename );
+
+   texture_file = std::string(textureFile);
 }
 
 // - DESTRUCTOR
@@ -50,7 +52,7 @@ void assimpLoader::orderVertices(){
    }
 
    //declare variables
-   int numMeshes; //should be 1, for now, but let's put it in
+   int numMeshes;
    Vertex tempVert;
 
    //obtain the number of meshes
@@ -67,15 +69,15 @@ void assimpLoader::orderVertices(){
             //get position 
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
-               tempVert.color[j] = (i*j)/3;
-               //tempVert.uv[j]
             }
-            aiVector3D * textures = myScene->mMeshes[meshIndex]->mTextureCoords[0];
-            tempVert.uv[0] = textures->x;
-            tempVert.uv[1] = textures->y;
+            if( myScene->mMeshes[meshIndex]->mNormals != NULL && myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
+               tempVert.uv[0] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
+               tempVert.uv[1] = 1-myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
+            }
+
 
             //add to the final vec
-            inOrderVertices.push_back( tempVert );    
+            inOrderVertices.push_back( tempVert );
          }
       }
    }
@@ -86,6 +88,33 @@ std::vector<Vertex> assimpLoader::getOrderedVertices() const {
       return std::vector<Vertex>(0);
    }
    return inOrderVertices;
+}
+
+void assimpLoader::mapTextures(GLuint & location){
+
+   using namespace Magick;
+    //- Texture Image Handling
+    Image myImage;
+   // Get image
+    myImage.read( texture_file );
+    // Get size
+    int imageWidth = myImage.columns();
+    int imageHeight = myImage.rows();
+    // Not too sure what this stuff is.. 
+    Blob blob;
+    myImage.magick("RGBA");
+    myImage.write( &blob );
+
+    // Some more stuff for gpu
+    glGenTextures(1, &location);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, location );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
 }
 
 #endif

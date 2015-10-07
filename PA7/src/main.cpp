@@ -18,6 +18,7 @@ int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
 char * model_filename;
+char * texture_filename;
 int NUM_OF_VERTICIES = 0;
 
 
@@ -26,11 +27,9 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
 //attribute locations
 GLint loc_position;
-GLint loc_color;
-GLint loc_texture;
+GLuint loc_texture;
 
 //transform matrices
-glm::mat4 moon_model;
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
@@ -46,7 +45,6 @@ bool initialize();
 void cleanUp();
 
 //--Random time things
-float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
 //--I/O callbacks
@@ -59,11 +57,22 @@ void special_keyboard(int key, int x_pos, int y_pos);
 
 int main(int argc, char **argv)
 {
+    // Initialize Magick
+    Magick::InitializeMagick(*argv);
+
     // Initialize glut
     glutInit(&argc, argv); // just initializes
+
+    // Saving obj file
     int filenamelength = strlen( argv[1] );
     model_filename = new char [filenamelength+1];
     strcpy( model_filename, argv[1] );
+
+    // Saving texture
+    filenamelength = strlen( argv[2] );
+    texture_filename = new char [filenamelength+1];
+    strcpy( texture_filename, argv[2] );
+
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -71,7 +80,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Assimp Loading");
+    glutCreateWindow("Assimp Texture Loading");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -89,8 +98,8 @@ int main(int argc, char **argv)
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
     glutSpecialFunc(special_keyboard);
-    // Initialize all of our resources(shaders, geometry)
 
+    // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
     if(init)
     {
@@ -124,13 +133,14 @@ void render()
     //Bind each texture to the corresponding object
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
+
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
-    //glEnableVertexAttribArray(loc_color);
     glEnableVertexAttribArray(loc_texture);
     
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
     glBindTexture( GL_TEXTURE_2D, loc_texture );
+
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -139,25 +149,17 @@ void render()
                            sizeof(Vertex),//stride
                            0);//offset
 
-//    glVertexAttribPointer( loc_color,
-//                           3,
-//                           GL_FLOAT,
-//                           GL_FALSE,
-//                           sizeof(Vertex),
-//                           (void*)offsetof(Vertex,color));
-
     glVertexAttribPointer( loc_texture,
-                            3,
+                            2,
                             GL_FLOAT,
                             GL_FALSE,
                             sizeof(Vertex),
-                            0);
+                            (void*)offsetof(Vertex,uv));
 
     glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
 
     //clean up
     glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_color);
     glDisableVertexAttribArray(loc_texture);
                            
     //swap the buffers
@@ -175,6 +177,7 @@ void reshape(int n_w, int n_h)
     h = n_h;
     //Change the viewport to be correct
     glViewport( 0, 0, w, h);
+
     //Update the projection matrix as well
     //See the init function for an explaination
     projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
@@ -183,17 +186,15 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( model_filename ); //
+    assimpLoader AI_Obj( model_filename, texture_filename ); //
 
     AI_Obj.orderVertices();
 
+    // V is where we keep all our info for the object
     std::vector<Vertex> v;
     v = AI_Obj.getOrderedVertices();
 
     NUM_OF_VERTICIES = v.size();
-    
-    //this defines a cube, this is why a model loader is nice
-    //you can also do this with a draw elements and indices, try to get that working
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
@@ -203,33 +204,14 @@ bool initialize()
                 &v.front(),
                 GL_STATIC_DRAW);
 
-    //--Geometry done
+    // Text loading
+    AI_Obj.mapTextures(loc_texture);
 
-    using namespace Magick;
-    //- Texture Image Handling
-    Image myImage();
-    myImage.read( "../bin/capsule0.jpg" );
-    int imageWidth = myImage.columns()
-    int imageHeight = myImage.rows();
-    Pixels imageData(myImage);
-
-
-    glGenTextures(1, &loc_texture);
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 
-                    imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, 
-                    imageData );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
+    // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    //Shader Sources
-
-    // load shader info by calling function
+    // Load the shaders
     std::string vs = shaderLoader::insertLoader("../bin/vrtxshdr.txt");   
     std::string fs = shaderLoader::insertLoader("../bin/frgshdr.txt");
 
@@ -282,9 +264,9 @@ bool initialize()
         return false;
     }
 
-    loc_color = glGetAttribLocation(program,
-                    const_cast<const char*>("v_color"));
-    if(loc_color == -1)
+    loc_texture = glGetAttribLocation(program,
+                    const_cast<const char*>("v_uv"));
+    if(loc_texture < 0)
     {
         std::cerr << "[F] V_COLOR NOT FOUND" << std::endl;
         return false;
@@ -298,11 +280,13 @@ bool initialize()
         return false;
     }
     
+    
+
     //--Init the view and projection matrices
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -16.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 8.0, -8.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 
@@ -326,23 +310,28 @@ void cleanUp()
     glDeleteBuffers(1, &vbo_geometry);
 }
 
-//returns the time delta
-float getDT()
-{
-   float ret;
-   t2 = std::chrono::high_resolution_clock::now();
-   ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
-   t1 = std::chrono::high_resolution_clock::now();
-   return ret;
-}
-
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
+    static float CameraZoom = 8.0;
+
     // Handle keyboard input
     if(key == 27)//ESC
        {
            exit(0);
        }
+    if(key == '+'){
+        CameraZoom -= .5f;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
+                            glm::vec3(0.0, 0.0, 0.0), //Focus point
+                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+    }
+    if(key == '-'){
+        CameraZoom += .5f;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
+                            glm::vec3(0.0, 0.0, 0.0), //Focus point
+                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+    }
+    glutPostRedisplay();
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
