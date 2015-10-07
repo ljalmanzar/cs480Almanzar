@@ -1,18 +1,23 @@
+# Image Loader
+MAGICKLIBS= `Magick++-config --ldflags --libs`
+MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
+
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lassimp `Magick++-config --ldflags --libs`
+LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS)
 MODEL= ../bin/capsule.obj
+TEXTURE= ../bin/capsule0.jpg
 
 # Compiler flags
-CXXFLAGS= -g -Wall -std=c++0x `Magick++-config --cxxflags --cppflags`
+CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
-all: ../bin/Assimp1
+all: ../bin/Assimp2
 
-../bin/Assimp1: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp1 $(LIBS)
+../bin/Assimp2: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp2 $(LIBS)
 
 clean:
-	rm ../bin/Assimp1 -f
+	rm ../bin/Assimp2 -f
 
-run: ../bin/Assimp1
-	../bin/Assimp1 $(MODEL)
+run: ../bin/Assimp2
+	../bin/Assimp2 $(MODEL) $(TEXTURE)
