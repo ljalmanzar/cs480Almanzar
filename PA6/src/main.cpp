@@ -221,11 +221,11 @@ bool initialize()
     glGenTextures(1, &loc_texture);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glGenerateMipmap(GL_TEXTURE_2D);
+//    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+                    1, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -306,7 +306,7 @@ bool initialize()
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -10.0), //Eye Position
+    view = glm::lookAt( glm::vec3(0.0, 8.0, -8.0), //Eye Position
                         glm::vec3(0.0, 0.0, 0.0), //Focus point
                         glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 
@@ -342,7 +342,7 @@ float getDT()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
-    static float CameraZoom_Z = -10.0;
+    static float CameraZoom = 8.0;
 
     // Handle keyboard input
     if(key == 27)//ESC
@@ -350,14 +350,14 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
            exit(0);
        }
     if(key == '+'){
-        CameraZoom_Z += 1.0;
-        view = glm::lookAt( glm::vec3(0.0, 8.0, CameraZoom_Z), //Eye Position
+        CameraZoom -= 1.0;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
     if(key == '-'){
-        CameraZoom_Z -= 1.0;
-        view = glm::lookAt( glm::vec3(0.0, 8.0, CameraZoom_Z), //Eye Position
+        CameraZoom += 1.0;
+        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
