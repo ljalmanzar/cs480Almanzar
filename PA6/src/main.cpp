@@ -148,11 +148,11 @@ void render()
                            0);//offset
 
     glVertexAttribPointer( loc_texture,
-                            3,
+                            2,
                             GL_FLOAT,
                             GL_FALSE,
                             sizeof(Vertex),
-                            0);
+                            (void*)offsetof(Vertex,uv));
 
     glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
 
@@ -221,11 +221,11 @@ bool initialize()
     glGenTextures(1, &loc_texture);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
-//    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
-                    1, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -350,13 +350,13 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
            exit(0);
        }
     if(key == '+'){
-        CameraZoom -= 1.0;
+        CameraZoom -= .5f;
         view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
     if(key == '-'){
-        CameraZoom += 1.0;
+        CameraZoom += .5f;
         view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        

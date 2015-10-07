@@ -71,8 +71,9 @@ void assimpLoader::orderVertices(){
             if( myScene->mMeshes[meshIndex]->mNormals != NULL && myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
                tempVert.uv[0] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
                tempVert.uv[1] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
-              // cout << tempVert.uv[0] << " " << tempVert.uv[1] << endl;
+               //cout << tempVert.uv[0] << " " << tempVert.uv[1] << endl;
             }
+
 
             //add to the final vec
             inOrderVertices.push_back( tempVert );
