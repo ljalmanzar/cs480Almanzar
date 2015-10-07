@@ -1,6 +1,6 @@
 # Geometry file (.obj)
 
-# Center of rotation (Planet or xyz floats)
+# Center of orbit (Planet or xyz floats)
 
 # Direction of rotation (1 for clockwise -1 for counter)
 
