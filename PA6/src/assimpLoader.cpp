@@ -9,10 +9,12 @@ assimpLoader::assimpLoader(){
 }
 
 // - Parameterized Constructor
-assimpLoader::assimpLoader( char * filename ){
+assimpLoader::assimpLoader( char * filename, char * textureFile ){
    myScene = NULL;
    object_filename = std::string( filename );
    initialize( object_filename );
+
+   texture_file = std::string(textureFile);
 }
 
 // - DESTRUCTOR
@@ -86,6 +88,33 @@ std::vector<Vertex> assimpLoader::getOrderedVertices() const {
       return std::vector<Vertex>(0);
    }
    return inOrderVertices;
+}
+
+void assimpLoader::mapTextures(GLuint & location){
+
+   using namespace Magick;
+    //- Texture Image Handling
+    Image myImage;
+   // Get image
+    myImage.read( texture_file );
+    // Get size
+    int imageWidth = myImage.columns();
+    int imageHeight = myImage.rows();
+    // Not too sure what this stuff is.. 
+    Blob blob;
+    myImage.magick("RGBA");
+    myImage.write( &blob );
+
+    // Some more stuff for gpu
+    glGenTextures(1, &location);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, location );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
+                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
 }
 
 #endif

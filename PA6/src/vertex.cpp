@@ -5,7 +5,6 @@
 struct Vertex
 {
     GLfloat position[3];
-    //GLfloat color[3];
     GLfloat uv[2];
 };
 

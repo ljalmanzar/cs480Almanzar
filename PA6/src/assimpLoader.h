@@ -14,7 +14,7 @@ class assimpLoader{
    public:
       //Constructors and Destructors
       assimpLoader();
-      assimpLoader( char * filename );
+      assimpLoader( char * filename, char * textureFile);
       ~assimpLoader();
 
       //Point to the file and make myScene
@@ -27,11 +27,12 @@ class assimpLoader{
       //returns vector to user
       std::vector<Vertex> getOrderedVertices() const;
 
-      //gets texture coordinate
-      void getTextures();
+      //load textures
+      void mapTextures(GLuint & location);
 
    private: 
       std::string object_filename;
+      std::string texture_file; 
 
       Assimp::Importer importer;
       const aiScene* myScene;

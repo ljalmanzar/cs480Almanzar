@@ -27,11 +27,9 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
 //attribute locations
 GLint loc_position;
-GLint loc_color;
 GLuint loc_texture;
 
 //transform matrices
-glm::mat4 moon_model;
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
@@ -47,7 +45,6 @@ bool initialize();
 void cleanUp();
 
 //--Random time things
-float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
 //--I/O callbacks
@@ -62,12 +59,16 @@ int main(int argc, char **argv)
 {
     // Initialize Magick
     Magick::InitializeMagick(*argv);
+
     // Initialize glut
     glutInit(&argc, argv); // just initializes
+
+    // Saving obj file
     int filenamelength = strlen( argv[1] );
     model_filename = new char [filenamelength+1];
     strcpy( model_filename, argv[1] );
 
+    // Saving texture
     filenamelength = strlen( argv[2] );
     texture_filename = new char [filenamelength+1];
     strcpy( texture_filename, argv[2] );
@@ -132,13 +133,14 @@ void render()
     //Bind each texture to the corresponding object
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, loc_texture );
+
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
-    //glEnableVertexAttribArray(loc_color);
     glEnableVertexAttribArray(loc_texture);
     
     glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
     glBindTexture( GL_TEXTURE_2D, loc_texture );
+
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
                            3,//number of elements
@@ -158,7 +160,6 @@ void render()
 
     //clean up
     glDisableVertexAttribArray(loc_position);
-    //glDisableVertexAttribArray(loc_color);
     glDisableVertexAttribArray(loc_texture);
                            
     //swap the buffers
@@ -185,17 +186,15 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( model_filename ); //
+    assimpLoader AI_Obj( model_filename, texture_filename ); //
 
     AI_Obj.orderVertices();
 
+    // V is where we keep all our info for the object
     std::vector<Vertex> v;
     v = AI_Obj.getOrderedVertices();
 
     NUM_OF_VERTICIES = v.size();
-    
-    //this defines a cube, this is why a model loader is nice
-    //you can also do this with a draw elements and indices, try to get that working
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
@@ -205,27 +204,8 @@ bool initialize()
                 &v.front(),
                 GL_STATIC_DRAW);
 
-    using namespace Magick;
-    //- Texture Image Handling
-    Image myImage;
- 	// Get image
-    myImage.read( texture_filename );
-    // Get size
-    int imageWidth = myImage.columns();
-    int imageHeight = myImage.rows();
-    // Not too sure what this stuff is.. 
-    Blob blob;
-    myImage.magick("RGBA");
-    myImage.write( &blob );
-
-    glGenTextures(1, &loc_texture);
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
-                    0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
-
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    // Text loading
+    AI_Obj.mapTextures(loc_texture);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -328,16 +308,6 @@ void cleanUp()
     // Clean up, Clean up
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo_geometry);
-}
-
-//returns the time delta
-float getDT()
-{
-   float ret;
-   t2 = std::chrono::high_resolution_clock::now();
-   ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
-   t1 = std::chrono::high_resolution_clock::now();
-   return ret;
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
