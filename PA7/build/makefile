@@ -11,13 +11,16 @@ TEXTURE= ../bin/capsule0.jpg
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
-all: ../bin/Assimp2
+# Program Name
+PROGRAMNAME= SolarSystem
 
-../bin/Assimp2: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp2 $(LIBS)
+all: ../bin/$(PROGRAMNAME)
+
+../bin/$(PROGRAMNAME): ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/$(PROGRAMNAME) $(LIBS)
 
 clean:
-	rm ../bin/Assimp2 -f
+	rm ../bin/$(PROGRAMNAME) -f
 
-run: ../bin/Assimp2
-	../bin/Assimp2 $(MODEL) $(TEXTURE)
+run: ../bin/$(PROGRAMNAME)
+	../bin/$(PROGRAMNAME) $(MODEL) $(TEXTURE)
