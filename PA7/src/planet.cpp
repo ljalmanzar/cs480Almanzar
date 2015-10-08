@@ -6,20 +6,22 @@ Planet::Planet(){
 
 }
 
-Planet::Planet(const std::String &fileName){
+Planet::Planet(const std::string &fileName){
 	initialize(fileName);
 }
+
+
 
 Planet::~Planet(){
 
 }
 
-Boolean initialize (const std::string &fileName){
+bool Planet::initialize (const std::string &fileName){
 	// parse data from file
 	ifstream fin;
 	fin.open( fileName.c_str());
 	if (!fin.good()){
-		stid::cerr << "ERROR: Cannot find file: "
+		std::cerr << "ERROR: Cannot find file: "
 				   << fileName << std::endl;
 		return false;
 	}
@@ -28,50 +30,56 @@ Boolean initialize (const std::string &fileName){
 	
 	while (fin.good()){
 		
-		std::getline(fin, line)
+		std::getline(fin, line);
 		
 		// get object file name
 		if (line.substr(0,5) == "model "){ //string
-			const std::string temp = line.substr(5);
-			std::sscanf(temp, "%s", _objectFile);
+			const char * temp = line.substr(5).c_str();
+			char buffer[50];
+			std::sscanf(temp, "%s", buffer);
+			std::string obj(buffer);
+			_objectFile = obj;
 		} 
 		// get point of origin
 		else if (line.substr(0,6) == "planet "){ //string
-			const std::string temp = line.substr(6);
-			std::sscanf(temp, "%s", _targetKey);
+			const char * temp = line.substr(6).c_str();
+			char buffer[50];
+			std::sscanf(temp, "%s", buffer);
+			std::string target(buffer);
+			_targetKey = target;
 		} 
 		// get point of origin 
 		else if (line.substr(0,9) == "crotation "){
-			const std::string temp = line.substr(9);
+			const char * temp = line.substr(9).c_str();
 			std::sscanf(temp, "%f %f %f"
 						, &_centerOfRotation.x
 						, &_centerOfRotation.y
-						, &_centerOfRotation.z)
+						, &_centerOfRotation.z);
 		}
 		// get the direction scalar
 		else if (line.substr(0,3) == "dir "){ // int
-			const std::string temp = line.substr(3);
-			std::sscanf(temp, "%i", _rotationDirection);
+			const char * temp = line.substr(3).c_str();
+			std::sscanf(temp, "%i", &_rotationDirection);
 		} 
 		// get the speed of rotation
 		else if (line.substr(0,6) == "rspeed "){ // float
-			const std::string temp = line.substr(6);
-			std::sscanf(temp,"%f", _rotationSpeed);
+			const char * temp = line.substr(6).c_str();
+			std::sscanf(temp,"%f", &_rotationSpeed);
 		}
 		// get the distance of orbit 
 		else if (line.substr(0,7) == "oradius "){ // float
-			const std::string temp = line.substr(7);
-			std::scanf(temp, "%f", _orbitRadius);
+			const char * temp = line.substr(7).c_str();
+			std::scanf(temp, "%f", &_orbitRadius);
 		} 
 		// get the speed/rate of orbit
 		else if (line.substr(0,6) == "ospeed "){ // float
-			const std::string temp = line.substr(6);
-			std::scanf(temp, "%f", _orbitSpeed);
+			const char * temp = line.substr(6).c_str();
+			std::scanf(temp, "%f", &_orbitSpeed);
 		} 		
 		// get planet radius
 		else if (line.substr(0,6) == "pradius "){ // float
-			const std::string temp = line.substr(6);
-			std::scanf(temp, "%f", _planetRadius);
+			const char * temp = line.substr(6).c_str();
+			std::scanf(temp, "%f", &_planetRadius);
 		} 
 		// ignore for comments
 		else if (line.substr(0,1) == "# "){
@@ -84,7 +92,6 @@ Boolean initialize (const std::string &fileName){
 				      << line << std::endl;
 				      return false;
 		}
-			}
 	}
 	// exit file
 	fin.close();
@@ -92,12 +99,12 @@ Boolean initialize (const std::string &fileName){
 	return true;
 }
 
-std::string Planet::getTargetKey(){
+std::string Planet::getTargetKey() const {
 	return _targetKey;
 }
 
-Vertex Planet::getVertex() const {
-	return _vertex;
+Vertex * Planet::getGeometry() const {
+	return _geometry;
 }
 
 glm::mat4 Planet::getModel() const {

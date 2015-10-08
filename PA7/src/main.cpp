@@ -11,6 +11,8 @@
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 #include "shaderLoader.cpp"
 #include "assimpLoader.cpp"
+#include "solarSystem.cpp"
+#include "planet.cpp"
 
 //--Evil Global variables
 //Just for this example!
@@ -45,6 +47,7 @@ bool initialize();
 void cleanUp();
 
 //--Random time things
+float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
 //--I/O callbacks
@@ -168,7 +171,8 @@ void render()
 
 void update()
 {
-
+    //static float DT = getDT();
+    //SolarSystem::
 }
 
 void reshape(int n_w, int n_h)
@@ -313,7 +317,7 @@ void cleanUp()
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     static float CameraZoom = 8.0;
-
+    static glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
     // Handle keyboard input
     if(key == 27)//ESC
        {
@@ -321,6 +325,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
        }
     if(key == '+'){
         CameraZoom -= .5f;
+
         view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
@@ -330,6 +335,22 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+    }
+    else{
+        switch( key ){
+            case '1':
+                cout << "Numpad 1 pressed" << endl;
+                CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
+                break;
+            case '3':
+                cout << "Numpad 3 pressed" << endl;
+                break;
+            case '7':
+                cout << "Numpad 7 pressed" << endl;
+                break;
+            default:
+                break;
+        }
     }
     glutPostRedisplay();
 }
@@ -356,4 +377,13 @@ void special_keyboard(int key, int x_pos, int y_pos)
       }
 
     glutPostRedisplay();
+}
+
+float getDT()
+{
+   float ret;
+   t2 = std::chrono::high_resolution_clock::now();
+   ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
+   t1 = std::chrono::high_resolution_clock::now();
+   return ret;
 }
