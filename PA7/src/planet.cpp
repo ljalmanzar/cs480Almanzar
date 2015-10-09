@@ -1,3 +1,6 @@
+#ifndef __PLANET_CPP_
+#define __PLANET_CPP_
+
 #include "planet.h"
 #include <fstream>
 
@@ -9,7 +12,6 @@ Planet::Planet(){
 Planet::Planet(const std::string &fileName){
 	initialize(fileName);
 }
-
 
 
 Planet::~Planet(){
@@ -110,3 +112,5 @@ Vertex * Planet::getGeometry() const {
 glm::mat4 Planet::getModel() const {
 	return _model;
 }
+
+#endif

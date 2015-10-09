@@ -1,8 +1,17 @@
+#ifndef __PLANET_H_
+#define __PLANET_H_
+
 #include <iostream>
 #include <glm/glm.hpp>
 #include "vertex.cpp"
 
+#ifndef __SOLAR_SYSTEM_H_
+class SolarSystem;
+#endif
+
 class Planet{
+	friend class SolarSystem;
+
 	public:
 
 		// constructors/destructors
@@ -43,3 +52,5 @@ class Planet{
 
 		int _rotationDirection;
 };
+
+#endif

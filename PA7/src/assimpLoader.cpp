@@ -75,7 +75,6 @@ void assimpLoader::orderVertices(){
                tempVert.uv[1] = 1-myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
             }
 
-
             //add to the final vec
             inOrderVertices.push_back( tempVert );
          }
