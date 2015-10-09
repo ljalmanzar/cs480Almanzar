@@ -20,23 +20,26 @@ class Planet{
 		~Planet();
 
 		// operators
-		void update(float dt, const Planet& );
+		void update(float dt);
+
 
 		// setters
 		bool initialize(const std::string &fileName);
 		void setGeometry();
+		void setTarget(const *Planet target);
 
 		// getters
 		std::string getTargetKey() const;
-		Vertex * getGeometry() const;
+		std::vector<Vertex> getGeometry() const;
 		glm::mat4 getModel() const;
 		
 	private:
 
-		void _setCenterOfRotation();
-
+		void _setCenterOfRotation(const std::string &fileName);
+		void _fileParser();
 		// variables
-		Vertex * _geometry; 
+		std::vector<Vertex> _geometry;
+
 		glm::mat4 _model;
 
 		Planet * _target;

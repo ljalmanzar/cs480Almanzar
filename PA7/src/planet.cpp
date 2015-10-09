@@ -1,6 +1,3 @@
-#ifndef __PLANET_CPP_
-#define __PLANET_CPP_
-
 #include "planet.h"
 #include <fstream>
 
@@ -13,13 +10,24 @@ Planet::Planet(const std::string &fileName){
 	initialize(fileName);
 }
 
-
 Planet::~Planet(){
 
 }
 
 bool Planet::initialize (const std::string &fileName){
-	// parse data from file
+	_fileParser(fileName);
+}
+
+void Planet::setTarget(const *Planet target){
+	_target = &target;
+}
+
+void Planet::update(float dt){
+
+}
+
+bool Planet::_fileParser (const std::string &fileName){
+// parse data from file
 	ifstream fin;
 	fin.open( fileName.c_str());
 	if (!fin.good()){
@@ -95,6 +103,7 @@ bool Planet::initialize (const std::string &fileName){
 				      return false;
 		}
 	}
+	
 	// exit file
 	fin.close();
 
@@ -105,12 +114,10 @@ std::string Planet::getTargetKey() const {
 	return _targetKey;
 }
 
-Vertex * Planet::getGeometry() const {
+std::vector<Vertex> Planet::getGeometry() const {
 	return _geometry;
 }
 
 glm::mat4 Planet::getModel() const {
 	return _model;
 }
-
-#endif
