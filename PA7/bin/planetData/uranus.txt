@@ -12,4 +12,6 @@ oradius 14
 ospeed 4
 # Planet Radius
 pradius 0.5
+# Texture file
+texture uranus_map.jpg
 end

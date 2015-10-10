@@ -21,9 +21,9 @@ void Planet::initialize(const std::string &fileName){
 	// do other shit BITCH
 
 	// assimp stuff
-	//assimpLoader AI_Obj( _objectFile, _textureFile);
-	//AI_Obj.orderVertices();
-	//_geometry = AI_Obj.getOrderedVertices();
+	assimpLoader AI_Obj( _objectFile, _textureFile );
+	AI_Obj.orderVertices();
+	_geometry = AI_Obj.getOrderedVertices();
 
 	// magick stuff
 
@@ -53,7 +53,7 @@ void Planet::update(float dt){
 bool Planet::_fileParser (const std::string &fileName){
 // parse data from file
 	ifstream fin;
-	fin.open( fileName.c_str());
+	fin.open( fileName.c_str() );
 	if (!fin.good()){
 		std::cerr << "ERROR: Cannot find file: "
 				   << fileName << std::endl;
@@ -65,9 +65,6 @@ bool Planet::_fileParser (const std::string &fileName){
 	while (fin.good()){
 		
 		std::getline(fin, line);
-//		cout << "RAW:" << line << endl;
-//		cout << "'" << line.substr(0,5) << "'" << endl;
-		cout << "-" << line << "-" << endl;
 		
 		// get object file name
 		if (line.substr(0,5) == "model"){ //string
@@ -138,17 +135,7 @@ bool Planet::_fileParser (const std::string &fileName){
 		} 
 
 	}
-	
 
-	cout << "My target Key is " << _targetKey << endl;
-	cout << "My object file is " << _objectFile << endl;
-	cout << "My Texture file is " << _textureFile << endl;
-	cout << "Rotation speed:" << _rotationSpeed << endl;
-	cout << "orbit radius:" << _orbitRadius << endl;
-	cout << "orbit speed :" << _orbitSpeed << endl;
-	cout << "planet radius: " << _planetRadius << endl;
-	cout << "WIN " << endl;
-	/**/
 	// exit file
 	fin.close();
 

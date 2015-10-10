@@ -9,7 +9,7 @@ assimpLoader::assimpLoader(){
 }
 
 // - Parameterized Constructor
-assimpLoader::assimpLoader( char * filename, char * textureFile ){
+assimpLoader::assimpLoader( const std::string& filename, const std::string& textureFile ){
    myScene = NULL;
    object_filename = std::string( filename );
    initialize( object_filename );

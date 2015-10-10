@@ -194,7 +194,7 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    Planet test( "../bin/planetData/neptune.txt" );
+    Planet test( "../bin/planetData/uranus.txt" );
 
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //

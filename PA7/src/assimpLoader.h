@@ -14,7 +14,7 @@ class assimpLoader{
    public:
       //Constructors and Destructors
       assimpLoader();
-      assimpLoader( char * filename, char * textureFile);
+      assimpLoader( const std::string& filename, const std::string& textureFile );
       ~assimpLoader();
 
       //Point to the file and make myScene

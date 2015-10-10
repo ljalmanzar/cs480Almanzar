@@ -23,7 +23,6 @@ class SolarSystem{
     private:
         // planets
         std::map<std::string, Planet*> _planets;
-        std::vector<std::string> _planetFileNames;
         std::vector<std::string> _planetNames;
         // singleton bodies
 };
