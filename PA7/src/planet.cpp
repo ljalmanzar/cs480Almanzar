@@ -24,6 +24,19 @@ void Planet::setTarget(const *Planet target){
 
 void Planet::update(float dt){
 	//dt = update bitches
+	static float planetOrbitAngle = 0.0;
+	static float planetRotateAngle = 0.0
+
+	planetOrbitAngle += dt * (M_PI/2) * _orbitSpeed ;
+	planetRotateAngle += dt * (M_PI/2) * _rotationSpeed ;
+
+	_model = glm::translate(_target.getModel()
+							, glm::vec3(3.0 * sin(planetOrbitAngle)
+									    , 0.0
+									    , 3.0 * cos(planetOrbitAngle)));
+	_model = glm::rotate(_model
+						, planetRotateAngle
+						, glm::vec3(0.0,1.0,0.0));
 }
 
 bool Planet::_fileParser (const std::string &fileName){
