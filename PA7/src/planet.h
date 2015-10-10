@@ -25,7 +25,7 @@ class Planet{
 		// setters
 		bool initialize(const std::string &fileName);
 		void setGeometry();
-		void setTarget(const *Planet target);
+		void setTarget(Planet* target);
 
 		// getters
 		std::string getTargetKey() const;
