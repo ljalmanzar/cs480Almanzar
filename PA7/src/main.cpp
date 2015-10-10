@@ -23,6 +23,11 @@ char * model_filename;
 char * texture_filename;
 int NUM_OF_VERTICIES = 0;
 
+//Camera position variables
+glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
+glm::vec3 CameraFocus( 0.0, 0.0, 0.0 );
+glm::vec3 CameraYaw( 0.0, 1.0, 0.0 );
+
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -189,6 +194,8 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
+    Planet test( "../bin/planetData/neptune.txt" );
+
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
@@ -290,9 +297,9 @@ bool initialize()
     //  if you will be having a moving camera the view matrix will need to more dynamic
     //  ...Like you should update it before you render more dynamic 
     //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -8.0), //Eye Position
-                        glm::vec3(0.0, 0.0, 0.0), //Focus point
-                        glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
+    view = glm::lookAt( CameraPosition, //Eye Position
+                        CameraFocus, //Focus point
+                        CameraYaw); //Positive Y is up
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
@@ -316,31 +323,38 @@ void cleanUp()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
-    static float CameraZoom = 8.0;
-    static glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
     // Handle keyboard input
     if(key == 27)//ESC
        {
            exit(0);
        }
     if(key == '+'){
-        CameraZoom -= .5f;
+        glm::vec3 newPositions(0.0);
+        newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
+        newPositions.x = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
+        newPositions.x = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
+        CameraPosition = newPositions;
 
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
-                            glm::vec3(0.0, 0.0, 0.0), //Focus point
-                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+        view = glm::lookAt( CameraPosition, //Eye Position
+                            CameraFocus, //Focus point
+                            CameraYaw ); //Positive Y is up        
     }
     if(key == '-'){
-        CameraZoom += .5f;
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
-                            glm::vec3(0.0, 0.0, 0.0), //Focus point
-                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+        glm::vec3 newPositions(0.0);
+        newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
+        newPositions.x = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
+        newPositions.x = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
+        CameraPosition = newPositions;
+
+        view = glm::lookAt( CameraPosition, //Eye Position
+                            CameraFocus, //Focus point
+                            CameraYaw ); //Positive Y is up   
     }
     else{
         switch( key ){
             case '1':
                 cout << "Numpad 1 pressed" << endl;
-                CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
+                //CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
                 break;
             case '3':
                 cout << "Numpad 3 pressed" << endl;

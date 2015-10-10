@@ -21,11 +21,12 @@ void Planet::initialize(const std::string &fileName){
 	// do other shit BITCH
 
 	// assimp stuff
-	assimpLoader AI_Obj( _objectFile, _texturefile);
-	AI_Obj.orderVertices();
-	_geometry = AI_Obj.getOrderedVertices();
+	//assimpLoader AI_Obj( _objectFile, _textureFile);
+	//AI_Obj.orderVertices();
+	//_geometry = AI_Obj.getOrderedVertices();
 
 	// magick stuff
+
 }
 
 void Planet::setTarget(Planet* target){
@@ -64,25 +65,28 @@ bool Planet::_fileParser (const std::string &fileName){
 	while (fin.good()){
 		
 		std::getline(fin, line);
+//		cout << "RAW:" << line << endl;
+//		cout << "'" << line.substr(0,5) << "'" << endl;
+		cout << "-" << line << "-" << endl;
 		
 		// get object file name
-		if (line.substr(0,5) == "model "){ //string
+		if (line.substr(0,5) == "model"){ //string
 			const char * temp = line.substr(5).c_str();
-			char buffer[50];
-			std::sscanf(temp, "%s", buffer);
-			std::string obj(buffer);
-			_textureFile = obj;
-		} 
-				// get texture file name
-		if (line.substr(0,7) == "texture "){ //string
-			const char * temp = line.substr(7).c_str();
 			char buffer[50];
 			std::sscanf(temp, "%s", buffer);
 			std::string obj(buffer);
 			_objectFile = obj;
 		} 
+				// get texture file name
+		else if (line.substr(0,7) == "texture"){ //string
+			const char * temp = line.substr(7).c_str();
+			char buffer[50];
+			std::sscanf(temp, "%s", buffer);
+			std::string obj(buffer);
+			_textureFile = obj;
+		} 
 		// get point of origin
-		else if (line.substr(0,6) == "planet "){ //string
+		else if (line.substr(0,6) == "planet"){ //string
 			const char * temp = line.substr(6).c_str();
 			char buffer[50];
 			std::sscanf(temp, "%s", buffer);
@@ -90,7 +94,7 @@ bool Planet::_fileParser (const std::string &fileName){
 			_targetKey = target;
 		} 
 		// get point of origin 
-		else if (line.substr(0,9) == "crotation "){
+		else if (line.substr(0,9) == "crotation"){
 			const char * temp = line.substr(9).c_str();
 			std::sscanf(temp, "%f %f %f"
 						, &_centerOfRotation.x
@@ -98,43 +102,53 @@ bool Planet::_fileParser (const std::string &fileName){
 						, &_centerOfRotation.z);
 		}
 		// get the direction scalar
-		else if (line.substr(0,3) == "dir "){ // int
+		else if (line.substr(0,3) == "dir"){ // int
 			const char * temp = line.substr(3).c_str();
 			std::sscanf(temp, "%i", &_rotationDirection);
 		} 
 		// get the speed of rotation
-		else if (line.substr(0,6) == "rspeed "){ // float
+		else if (line.substr(0,6) == "rspeed"){ // float
 			const char * temp = line.substr(6).c_str();
 			std::sscanf(temp,"%f", &_rotationSpeed);
 		}
 		// get the distance of orbit 
-		else if (line.substr(0,7) == "oradius "){ // float
+		else if (line.substr(0,7) == "oradius"){ // float
 			const char * temp = line.substr(7).c_str();
-			std::scanf(temp, "%f", &_orbitRadius);
+			std::sscanf(temp, "%f", &_orbitRadius);
 		} 
 		// get the speed/rate of orbit
-		else if (line.substr(0,6) == "ospeed "){ // float
+		else if (line.substr(0,6) == "ospeed"){ // float
 			const char * temp = line.substr(6).c_str();
-			std::scanf(temp, "%f", &_orbitSpeed);
+			std::sscanf(temp, "%f", &_orbitSpeed);
 		} 		
 		// get planet radius
-		else if (line.substr(0,6) == "pradius "){ // float
-			const char * temp = line.substr(6).c_str();
-			std::scanf(temp, "%f", &_planetRadius);
+		else if (line.substr(0,7) == "pradius"){ // float
+			const char * temp = line.substr(7).c_str();
+			std::sscanf(temp, "%f", &_planetRadius);
 		} 
 		// ignore for comments
-		else if (line.substr(0,1) == "# "){
+		else if (line.substr(0,1) == "#"){
 			// comment, so skip line aand do nothing
+			cout << "Ignoring this:" << line << endl;
 		} 
-		// error if unknown command
-		else{
-			// not a proper format.
-			std::cerr << "ERROR: Unkown keyword in line: " 
-				      << line << std::endl;
-				      return false;
-		}
+
+		else if (line.substr(0,3) == "end"){
+			// comment, so skip line aand do nothing
+			break;
+		} 
+
 	}
 	
+
+	cout << "My target Key is " << _targetKey << endl;
+	cout << "My object file is " << _objectFile << endl;
+	cout << "My Texture file is " << _textureFile << endl;
+	cout << "Rotation speed:" << _rotationSpeed << endl;
+	cout << "orbit radius:" << _orbitRadius << endl;
+	cout << "orbit speed :" << _orbitSpeed << endl;
+	cout << "planet radius: " << _planetRadius << endl;
+	cout << "WIN " << endl;
+	/**/
 	// exit file
 	fin.close();
 

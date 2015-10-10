@@ -5,10 +5,11 @@ planet Sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3f
+rspeed 3
 # Orbit Radius (float)
-oradius 14f
+oradius 14
 # Oribit speed (float)
-ospeed 4f
+ospeed 4
 # Planet Radius
-pradius .5f
+pradius 0.5
+end
