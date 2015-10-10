@@ -22,7 +22,6 @@ class Planet{
 		// operators
 		void update(float dt);
 
-
 		// setters
 		bool initialize(const std::string &fileName);
 		void setGeometry();
@@ -35,8 +34,8 @@ class Planet{
 		
 	private:
 
-		void _setCenterOfRotation(const std::string &fileName);
-		void _fileParser();
+		bool _fileParser(const std::string &fileName);
+
 		// variables
 		std::vector<Vertex> _geometry;
 

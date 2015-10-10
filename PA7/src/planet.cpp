@@ -23,7 +23,7 @@ void Planet::setTarget(const *Planet target){
 }
 
 void Planet::update(float dt){
-
+	//dt = update bitches
 }
 
 bool Planet::_fileParser (const std::string &fileName){
