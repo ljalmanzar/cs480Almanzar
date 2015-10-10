@@ -14,8 +14,18 @@ Planet::~Planet(){
 
 }
 
-bool Planet::initialize(const std::string &fileName){
-	return _fileParser(fileName);
+void Planet::initialize(const std::string &fileName){
+	// get all data
+	_fileParser(fileName);
+
+	// do other shit BITCH
+
+	// assimp stuff
+	assimpLoader AI_Obj( _objectFile, _texturefile);
+	AI_Obj.orderVertices();
+	_geometry = AI_Obj.getOrderedVertices();
+
+	// magick stuff
 }
 
 void Planet::setTarget(Planet* target){
@@ -25,12 +35,12 @@ void Planet::setTarget(Planet* target){
 void Planet::update(float dt){
 	//dt = update bitches
 	static float planetOrbitAngle = 0.0;
-	static float planetRotateAngle = 0.0
+	static float planetRotateAngle = 0.0;
 
 	planetOrbitAngle += dt * (M_PI/2) * _orbitSpeed ;
 	planetRotateAngle += dt * (M_PI/2) * _rotationSpeed ;
 
-	_model = glm::translate(_target.getModel()
+	_model = glm::translate(_target->getModel()
 							, glm::vec3(3.0 * sin(planetOrbitAngle)
 									    , 0.0
 									    , 3.0 * cos(planetOrbitAngle)));
@@ -58,6 +68,14 @@ bool Planet::_fileParser (const std::string &fileName){
 		// get object file name
 		if (line.substr(0,5) == "model "){ //string
 			const char * temp = line.substr(5).c_str();
+			char buffer[50];
+			std::sscanf(temp, "%s", buffer);
+			std::string obj(buffer);
+			_textureFile = obj;
+		} 
+				// get texture file name
+		if (line.substr(0,7) == "texture "){ //string
+			const char * temp = line.substr(7).c_str();
 			char buffer[50];
 			std::sscanf(temp, "%s", buffer);
 			std::string obj(buffer);
