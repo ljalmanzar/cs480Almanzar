@@ -14,12 +14,12 @@ Planet::~Planet(){
 
 }
 
-bool Planet::initialize (const std::string &fileName){
-	_fileParser(fileName);
+bool Planet::initialize(const std::string &fileName){
+	return _fileParser(fileName);
 }
 
-void Planet::setTarget(const *Planet target){
-	_target = &target;
+void Planet::setTarget(Planet* target){
+	_target = target;
 }
 
 void Planet::update(float dt){
