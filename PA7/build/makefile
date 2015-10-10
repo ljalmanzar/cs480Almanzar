@@ -5,7 +5,7 @@ MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
 # Linux
 CC=g++
 LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS)
-MODEL= ../bin/capsule.obj
+MODEL= ../bin/planet.obj
 TEXTURE= ../bin/capsule0.jpg
 
 # Compiler flags

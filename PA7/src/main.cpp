@@ -194,16 +194,19 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    Planet test( "../bin/planetData/uranus.txt" );
+    Planet test("../bin/planetData/uranus.txt", loc_texture);
+
+    //string txt = "../bin/planetData/uranus.txt";
+    //test.initialize(txt);
 
     // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( model_filename, texture_filename ); //
+    //assimpLoader AI_Obj( model_filename, texture_filename ); //
 
-    AI_Obj.orderVertices();
+    //AI_Obj.orderVertices();
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
-    v = AI_Obj.getOrderedVertices();
+    v = test.getGeometry();
 
     NUM_OF_VERTICIES = v.size();
 
@@ -216,7 +219,7 @@ bool initialize()
                 GL_STATIC_DRAW);
 
     // Text loading
-    AI_Obj.mapTextures(loc_texture);
+    //AI_Obj.mapTextures(loc_texture);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 

@@ -6,7 +6,7 @@ Planet::Planet(){
 
 }
 
-Planet::Planet(const std::string &fileName){
+Planet::Planet(const std::string &fileName, GLuint & returnTexture){
 	initialize(fileName);
 }
 
@@ -24,9 +24,6 @@ void Planet::initialize(const std::string &fileName){
 	assimpLoader AI_Obj( _objectFile, _textureFile );
 	AI_Obj.orderVertices();
 	_geometry = AI_Obj.getOrderedVertices();
-
-	// magick stuff
-
 }
 
 void Planet::setTarget(Planet* target){

@@ -16,7 +16,7 @@ class Planet{
 
 		// constructors/destructors
 		Planet();
-		Planet(const std::string &fileName);
+		Planet(const std::string &fileName,GLuint & returnTexture);
 		~Planet();
 
 		// operators

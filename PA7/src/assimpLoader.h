@@ -30,6 +30,8 @@ class assimpLoader{
       //load textures
       void mapTextures(GLuint& location);
 
+      void strcat(char firstString[], char secondString[]);
+
    private: 
       std::string object_filename;
       std::string texture_file; 

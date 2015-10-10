@@ -26,16 +26,18 @@ assimpLoader::~assimpLoader(){
 bool assimpLoader::initialize( const std::string& filename ){
    //check for file existence
    ifstream fin;
-   fin.open( filename.c_str() );
+
+   fin.open( "../bin/planet.obj" );
+
    if( !fin.good() ){
-      std::cerr << "File had problems opening." << std::endl;
+      std::cerr << "File had problems opening in initialize" << std::endl;
       return false;
    }
    fin.close();
 
    //Assign variables
-   object_filename = filename;
-   myScene = importer.ReadFile( filename, aiProcess_Triangulate );
+   object_filename = "../bin/planet.obj";
+   myScene = importer.ReadFile( "../bin/planet.obj", aiProcess_Triangulate );
    if( myScene == NULL ){
       std::cerr << "File contents had problems but was successfully opened." << std::endl;
       return false;
@@ -114,6 +116,33 @@ void assimpLoader::mapTextures(GLuint & location){
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
+}
+
+void assimpLoader::strcat (char firstString[], char secondString[])
+{
+  // variables
+    int ndxOne = 0;
+    int ndxTwo = 0;
+
+    // find spot to start
+    while (firstString[ndxOne] != '\0')
+       {
+        ndxOne++;
+     }
+
+    firstString[ndxOne] = ' ';
+    ndxOne ++;
+
+  // copy
+  while (secondString[ndxTwo] != '\0')
+     {
+          firstString[ndxOne] = secondString[ndxTwo];
+          ndxOne++;
+          ndxTwo++;
+     }
+
+    // add null
+    firstString[ndxOne] = '\0';
 }
 
 #endif
