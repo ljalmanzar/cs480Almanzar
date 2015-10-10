@@ -23,7 +23,7 @@ class Planet{
 		void update(float dt);
 
 		// setters
-		bool initialize(const std::string &fileName);
+		void initialize(const std::string &fileName);
 		void setGeometry();
 		void setTarget(Planet* target);
 
@@ -46,6 +46,7 @@ class Planet{
 		
 		std::string _targetKey;
 		std::string _objectFile;
+		std::string _textureFile;
 
 		float _rotationSpeed;
 		float _orbitRadius;
