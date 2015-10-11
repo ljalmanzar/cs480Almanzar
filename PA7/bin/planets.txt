@@ -1,0 +1,16 @@
+# Sun
+../bin/planetData/sun.txt
+# Planets
+../bin/planetData/mercury.txt
+../bin/planetData/venus.txt
+../bin/planetData/earth.txt
+../bin/planetData/mars.txt
+../bin/planetData/jupiter.txt
+../bin/planetData/saturn.txt
+../bin/planetData/uranus.txt
+../bin/planetData/neptune.txt
+../bin/planetData/pluto.txt
+# Moons
+../bin/planetData/earth_m1.txt
+../bin/planetData/mars_m1.txt
+../bin/planetData/mars_m2.txt

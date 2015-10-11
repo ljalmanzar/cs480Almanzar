@@ -334,41 +334,37 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     if(key == '+'){
         glm::vec3 newPositions(0.0);
         newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
-        newPositions.x = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
-        newPositions.x = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
+        newPositions.y = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
+        newPositions.z = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
         CameraPosition = newPositions;
-
-        view = glm::lookAt( CameraPosition, //Eye Position
-                            CameraFocus, //Focus point
-                            CameraYaw ); //Positive Y is up        
+      
     }
     if(key == '-'){
         glm::vec3 newPositions(0.0);
         newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
-        newPositions.x = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
-        newPositions.x = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
+        newPositions.y = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
+        newPositions.z = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
         CameraPosition = newPositions;
 
-        view = glm::lookAt( CameraPosition, //Eye Position
-                            CameraFocus, //Focus point
-                            CameraYaw ); //Positive Y is up   
     }
     else{
         switch( key ){
             case '1':
-                cout << "Numpad 1 pressed" << endl;
-                //CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
+                CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
                 break;
             case '3':
-                cout << "Numpad 3 pressed" << endl;
+                CameraPosition = glm::vec3( 0.0, -10.0, 0.0 );
                 break;
             case '7':
-                cout << "Numpad 7 pressed" << endl;
+                CameraPosition = glm::vec3( 10.0, 0.0, 0.0 );
                 break;
             default:
                 break;
         }
     }
+    view = glm::lookAt( CameraPosition, //Eye Position
+                        CameraFocus, //Focus point
+                        CameraYaw ); //Positive Y is up   
     glutPostRedisplay();
 }
 
