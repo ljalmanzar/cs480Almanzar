@@ -6,7 +6,7 @@ Planet::Planet(){
 
 }
 
-Planet::Planet(const std::string &fileName, GLuint & returnTexture){
+Planet::Planet(const std::string &fileName){
 	initialize(fileName);
 }
 

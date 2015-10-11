@@ -194,7 +194,7 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    Planet test("../bin/planetData/uranus.txt", loc_texture);
+    Planet test("../bin/planetData/uranus.txt");
 
     //string txt = "../bin/planetData/uranus.txt";
     //test.initialize(txt);

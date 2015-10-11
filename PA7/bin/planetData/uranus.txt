@@ -1,5 +1,5 @@
 # Geometry file (.obj)
-model planet.obj
+model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
 planet Sun
 # Direction of rotation (1 for clockwise -1 for counter)
