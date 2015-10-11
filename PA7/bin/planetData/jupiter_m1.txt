@@ -1,0 +1,17 @@
+# Geometry file (.obj)
+model moon.obj
+# Center of rotation (Planet or xyz floats)
+planet jupiter
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 1
+# Orbit Radius (float)
+oradius 0.75
+# Oribit speed (float)
+ospeed 1
+# Planet Radius
+pradius 0.75
+# Texture file
+texture ../bin/planetData/jupiter_m1_map.jpg
+end
