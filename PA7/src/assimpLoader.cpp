@@ -26,7 +26,7 @@ assimpLoader::~assimpLoader(){
 bool assimpLoader::initialize( const std::string& filename ){
    //check for file existence
    ifstream fin;
-std::cout << "INITIALIZE ASSIMP - " << filename;
+
    fin.open( filename );
 
    if( !fin.good() ){

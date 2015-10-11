@@ -42,6 +42,9 @@ glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
 
+// Solar System stuff
+SolarSystem solarsystem;
+
 //--GLUT Callbacks
 void render();
 void update();
@@ -88,7 +91,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Assimp Texture Loading");
+    glutCreateWindow("Solar System");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -129,42 +132,48 @@ void render()
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-    //premultiply the matrix for this example
-    mvp = projection * view * model;
-
     //enable the shader program
     glUseProgram(program);
 
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+    //go through and premultiple matricies
+    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
+        //premultiply the matrix for this example
+        model = solarsystem.getPlanetPointer(i) -> getModel();
+        model = glm::translate( model, glm::vec3(0.0, 0.0, i*2) );
+        mvp = projection * view * model;
 
-    //Bind each texture to the corresponding object
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
+        //upload the matrix to the shader
+        glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
-    //set up the Vertex Buffer Object so it can be drawn
-    glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_texture);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
+        //Bind each texture to the corresponding object
+        loc_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, loc_texture );
 
-    //set pointers into the vbo for each of the attributes(position and color)
-    glVertexAttribPointer( loc_position,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
+        //set up the Vertex Buffer Object so it can be drawn
+        glEnableVertexAttribArray(loc_position);
+        glEnableVertexAttribArray(loc_texture);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
+        glBindTexture( GL_TEXTURE_2D, loc_texture );
 
-    glVertexAttribPointer( loc_texture,
-                            2,
-                            GL_FLOAT,
-                            GL_FALSE,
-                            sizeof(Vertex),
-                            (void*)offsetof(Vertex,uv));
+        //set pointers into the vbo for each of the attributes(position and color)
+        glVertexAttribPointer( loc_position,//location of attribute
+                               3,//number of elements
+                               GL_FLOAT,//type
+                               GL_FALSE,//normalized?
+                               sizeof(Vertex),//stride
+                               0);//offset
 
-    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
+        glVertexAttribPointer( loc_texture,
+                                2,
+                                GL_FLOAT,
+                                GL_FALSE,
+                                sizeof(Vertex),
+                                (void*)offsetof(Vertex,uv));
+
+        glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
+    }
 
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -196,18 +205,14 @@ bool initialize()
 {
     Planet test("../bin/planetData/mars.txt");
 
-    //string txt = "../bin/planetData/uranus.txt";
-    //test.initialize(txt);
+    solarsystem.initialize("../bin/planets.txt");
 
-    // Initialize basic geometry and shaders for this example
-    //assimpLoader AI_Obj( model_filename, texture_filename ); //
-
-    //AI_Obj.orderVertices();
+    // master vectors
+    //std::vector< std::vector<Vertex> > allGeometries = Test.getAllGeometries();
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
     v = test.getGeometry();
-    //loc_texture = test.getLocTexture();
 
     NUM_OF_VERTICIES = v.size();
 

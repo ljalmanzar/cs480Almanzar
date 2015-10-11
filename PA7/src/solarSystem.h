@@ -19,6 +19,9 @@ class SolarSystem{
         bool initialize(const std::string& filename);
 
         // getters
+        int getNumOfPlanets() const;
+        std::vector< std::vector<Vertex> > getAllGeometries();
+        Planet * getPlanetPointer( unsigned int index );
         
     private:
         // planets

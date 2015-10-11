@@ -1,17 +1,17 @@
 # Geometry file (.obj)
-model moon.obj
+model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet saturn
+crotation 0 0 0
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 1
+rspeed 3
 # Orbit Radius (float)
-oradius 0.75
+oradius 0
 # Oribit speed (float)
-ospeed 1
+ospeed 4
 # Planet Radius
-pradius 0.75
+pradius 0.5
 # Texture file
-texture ../bin/planetData/saturn_m1_map.jpg
+texture ../bin/planetData/mars_map.jpg
 end
