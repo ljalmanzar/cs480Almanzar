@@ -24,6 +24,9 @@ void Planet::initialize(const std::string &fileName){
 	assimpLoader AI_Obj( _objectFile, _textureFile );
 	AI_Obj.orderVertices();
 	_geometry = AI_Obj.getOrderedVertices();
+
+	// Magick Stuff
+	AI_Obj.mapTextures(_locTexture);
 }
 
 void Planet::setTarget(Planet* target){
@@ -149,4 +152,8 @@ std::vector<Vertex> Planet::getGeometry() const {
 
 glm::mat4 Planet::getModel() const {
 	return _model;
+}
+
+GLuint Planet::getLocTexture() const {
+	return _locTexture;
 }

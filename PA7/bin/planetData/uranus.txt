@@ -1,7 +1,7 @@
 # Geometry file (.obj)
 model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet Sun
+planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
@@ -13,5 +13,5 @@ ospeed 4
 # Planet Radius
 pradius 0.5
 # Texture file
-texture uranus_map.jpg
+texture ../bin/planetData/uranus_map.jpg
 end
