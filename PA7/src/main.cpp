@@ -194,7 +194,7 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    Planet test("../bin/planetData/uranus.txt");
+    Planet test("../bin/planetData/mars.txt");
 
     //string txt = "../bin/planetData/uranus.txt";
     //test.initialize(txt);
@@ -207,6 +207,7 @@ bool initialize()
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
     v = test.getGeometry();
+    //loc_texture = test.getLocTexture();
 
     NUM_OF_VERTICIES = v.size();
 
