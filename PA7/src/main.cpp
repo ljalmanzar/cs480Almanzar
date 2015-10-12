@@ -341,9 +341,9 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
     if(key == '-'){
         glm::vec3 newPositions(0.0);
-        newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
-        newPositions.y = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
-        newPositions.z = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
+        newPositions.x = (.25)*(CameraFocus.x) + (1.25)*(CameraPosition.x);
+        newPositions.y = (.25)*(CameraFocus.y) + (1.25)*(CameraPosition.y);
+        newPositions.z = (.25)*(CameraFocus.z) + (1.25)*(CameraPosition.z);
         CameraPosition = newPositions;
 
     }
@@ -353,10 +353,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
                 break;
             case '3':
-                CameraPosition = glm::vec3( 0.0, -10.0, 0.0 );
+                CameraPosition = glm::vec3( -10.0, 0.0, 0.0 );
                 break;
             case '7':
-                CameraPosition = glm::vec3( 10.0, 0.0, 0.0 );
+                CameraPosition = glm::vec3( 0.0, 9.0, 0.0 );
                 break;
             default:
                 break;
