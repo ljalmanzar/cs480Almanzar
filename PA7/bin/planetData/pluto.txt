@@ -1,12 +1,17 @@
 # Geometry file (.obj)
-	model fooModel.obj
+model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-	planet Sun
+planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
-	dir -1
+dir 1
 # Rotation speed (float)
-	rotationSpd 35f
+rspeed 3
 # Orbit Radius (float)
-	orbitRad 18f
+oradius 18
 # Oribit speed (float)
-	orbitSpd 34f
+ospeed 4
+# Planet Radius
+pradius 0.5
+# Texture file
+texture ../bin/planetData/mars_map.jpg
+end

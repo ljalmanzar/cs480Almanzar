@@ -27,7 +27,7 @@ bool assimpLoader::initialize( const std::string& filename ){
    //check for file existence
    ifstream fin;
 
-   fin.open( "../bin/planet.obj" );
+   fin.open( filename );
 
    if( !fin.good() ){
       std::cerr << "File had problems opening in initialize" << std::endl;
@@ -36,8 +36,8 @@ bool assimpLoader::initialize( const std::string& filename ){
    fin.close();
 
    //Assign variables
-   object_filename = "../bin/planet.obj";
-   myScene = importer.ReadFile( "../bin/planet.obj", aiProcess_Triangulate );
+   object_filename = filename;
+   myScene = importer.ReadFile( filename, aiProcess_Triangulate );
    if( myScene == NULL ){
       std::cerr << "File contents had problems but was successfully opened." << std::endl;
       return false;

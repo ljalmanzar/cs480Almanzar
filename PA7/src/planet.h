@@ -31,12 +31,15 @@ class Planet{
 		std::string getTargetKey() const;
 		std::vector<Vertex> getGeometry() const;
 		glm::mat4 getModel() const;
+		GLuint getLocTexture() const; 
 		
 	private:
 
 		bool _fileParser(const std::string &fileName);
 
 		// variables
+		GLuint _locTexture;
+
 		std::vector<Vertex> _geometry;
 
 		glm::mat4 _model;

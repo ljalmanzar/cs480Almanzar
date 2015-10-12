@@ -64,4 +64,27 @@ bool SolarSystem::initialize( const std::string& filename ){
     return false;
 }
 
+int SolarSystem::getNumOfPlanets() const{
+    return _planetNames.size();
+}
+
+std::vector< std::vector<Vertex> > SolarSystem::getAllGeometries(){
+    Planet* currentPlanet;
+    std::vector< std::vector<Vertex> > result( _planetNames.size() );
+    for( unsigned int i = 0; i < _planetNames.size(); i++ ){
+
+        currentPlanet = _planets[ _planetNames[i] ];
+        result.push_back( currentPlanet->getGeometry() );
+    }
+    return result;   
+}
+
+Planet * SolarSystem::getPlanetPointer( unsigned int index ){
+    if( index >= _planetNames.size() ){
+        return NULL;
+    } else {
+        return _planets[ _planetNames[index] ];
+    }
+}
+
 #endif

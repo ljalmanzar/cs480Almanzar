@@ -24,6 +24,9 @@ void Planet::initialize(const std::string &fileName){
 	assimpLoader AI_Obj( _objectFile, _textureFile );
 	AI_Obj.orderVertices();
 	_geometry = AI_Obj.getOrderedVertices();
+
+	// Magick Stuff
+	AI_Obj.mapTextures(_locTexture);
 }
 
 void Planet::setTarget(Planet* target){
@@ -38,10 +41,13 @@ void Planet::update(float dt){
 	planetOrbitAngle += dt * (M_PI/2) * _orbitSpeed ;
 	planetRotateAngle += dt * (M_PI/2) * _rotationSpeed ;
 
-	_model = glm::translate(_target->getModel()
-							, glm::vec3(3.0 * sin(planetOrbitAngle)
-									    , 0.0
-									    , 3.0 * cos(planetOrbitAngle)));
+	if( _target != NULL ){	
+		_model = glm::translate(_target->getModel()
+								, glm::vec3(3.0 * sin(planetOrbitAngle)
+										    , 0.0
+										    , 3.0 * cos(planetOrbitAngle)));
+	}
+
 	_model = glm::rotate(_model
 						, planetRotateAngle
 						, glm::vec3(0.0,1.0,0.0));
@@ -149,4 +155,8 @@ std::vector<Vertex> Planet::getGeometry() const {
 
 glm::mat4 Planet::getModel() const {
 	return _model;
+}
+
+GLuint Planet::getLocTexture() const {
+	return _locTexture;
 }
