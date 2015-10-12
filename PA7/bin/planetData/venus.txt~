@@ -7,11 +7,11 @@ dir 1
 # Rotation speed (float)
 rspeed 3
 # Orbit Radius (float)
-oradius 18
+oradius 4
 # Oribit speed (float)
 ospeed 4
 # Planet Radius
 pradius 0.5
 # Texture file
-texture ../bin/planetData/pluto_map.jpg
+texture ../bin/planetData/mars_map.jpg
 end

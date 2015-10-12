@@ -13,5 +13,5 @@ ospeed 4
 # Planet Radius
 pradius 0.5
 # Texture file
-texture ../bin/planetData/mars_map.jpg
+texture ../bin/planetData/neptune_map.jpg
 end
