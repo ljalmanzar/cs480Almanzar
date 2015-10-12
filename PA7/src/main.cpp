@@ -27,6 +27,9 @@ int NUM_OF_VERTICIES = 0;
 glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
 glm::vec3 CameraFocus( 0.0, 0.0, 0.0 );
 glm::vec3 CameraYaw( 0.0, 1.0, 0.0 );
+glm::vec3 CameraDirection;
+glm::vec3 Camera_UP;
+glm::vec3 Camera_RIGHT;
 
 
 //uniform locations
@@ -315,6 +318,10 @@ bool initialize()
                                    0.01f, //Distance to the near plane, normally a small value like this
                                    100.0f); //Distance to the far plane, 
 
+    CameraDirection = glm::normalize( CameraPosition - CameraFocus );
+    Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );
+    Camera_UP = glm::cross(CameraDirection, Camera_RIGHT);
+
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -332,68 +339,86 @@ void cleanUp()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
+    float cam_speed = 0.75;
     // Handle keyboard input
     if(key == 27)//ESC
        {
            exit(0);
        }
-    if(key == '+'){
-        glm::vec3 newPositions(0.0);
-        newPositions.x = (.25)*(CameraFocus.x) + (.75)*(CameraPosition.x);
-        newPositions.y = (.25)*(CameraFocus.y) + (.75)*(CameraPosition.y);
-        newPositions.z = (.25)*(CameraFocus.z) + (.75)*(CameraPosition.z);
-        CameraPosition = newPositions;
-      
-    }
-    if(key == '-'){
-        glm::vec3 newPositions(0.0);
-        newPositions.x = (.25)*(CameraFocus.x) + (1.25)*(CameraPosition.x);
-        newPositions.y = (.25)*(CameraFocus.y) + (1.25)*(CameraPosition.y);
-        newPositions.z = (.25)*(CameraFocus.z) + (1.25)*(CameraPosition.z);
-        CameraPosition = newPositions;
-
-    }
     else{
         switch( key ){
+            //front view
             case '1':
                 CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
                 break;
+
+            //side (right) view
             case '3':
                 CameraPosition = glm::vec3( -10.0, 0.0, 0.0 );
                 break;
+            //slightly tilted top view
             case '7':
-                CameraPosition = glm::vec3( 0.0, 9.0, 0.0 );
+                CameraPosition = glm::vec3( 0.0, 10.0, -5.0 );
                 break;
+
+            //zoom in
+            case '+':
+                CameraPosition -= (CameraPosition - CameraFocus) * 0.25f;
+                break;       
+            //zoom out
+            case '-':
+                CameraPosition += (CameraPosition - CameraFocus) * 0.25f;
+                break;       
+            //move forward
+            case 'w':
+                CameraPosition += cam_speed * Camera_UP;
+                break;
+            //move backward
+            case 's':
+                CameraPosition -= cam_speed * Camera_UP;
+                break;
+            //move left   
+            case 'a':
+                CameraPosition -= cam_speed * Camera_RIGHT;
+                break;
+            //move right
+            case 'd':
+                CameraPosition += cam_speed * Camera_RIGHT;
             default:
                 break;
         }
     }
     view = glm::lookAt( CameraPosition, //Eye Position
                         CameraFocus, //Focus point
-                        CameraYaw ); //Positive Y is up   
+                        CameraYaw ); //Positive Y is up
+
+    CameraDirection = glm::normalize( CameraPosition - CameraFocus );
+    Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );
+    Camera_UP = glm::normalize( glm::cross(CameraDirection, Camera_RIGHT) );
+   
     glutPostRedisplay();
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
 {
-   switch(key)
-      {
-         case GLUT_KEY_LEFT:
-         model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
-         break;
+    switch(key)
+        {
+            case GLUT_KEY_LEFT:
+            model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
+            break;
 
-         case GLUT_KEY_RIGHT:
-         model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
-         break;
+            case GLUT_KEY_RIGHT:
+            model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
+            break;
 
-       case GLUT_KEY_UP:
-         model = glm::rotate(model, (.2f), glm::vec3(1.0,0.0,0.0));
-         break;
+            case GLUT_KEY_UP:
+            model = glm::rotate(model, (.2f), glm::vec3(1.0,0.0,0.0));
+            break;
 
-         case GLUT_KEY_DOWN:
-         model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
-         break;         
-      }
+            case GLUT_KEY_DOWN:
+            model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
+            break;         
+        }
 
     glutPostRedisplay();
 }
