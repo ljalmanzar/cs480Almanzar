@@ -5,13 +5,13 @@ planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3
+rspeed 0.15649
 # Orbit Radius (float)
-oradius 18
+oradius 39.52
 # Oribit speed (float)
-ospeed 4
+ospeed 0.159
 # Planet Radius
-pradius 0.5
+pradius 0.093
 # Texture file
 texture ../bin/planetData/pluto_map.png
 end

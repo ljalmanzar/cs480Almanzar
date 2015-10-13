@@ -5,13 +5,13 @@ planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3
+rspeed 2.41546
 # Orbit Radius (float)
-oradius 10
+oradius 5.203
 # Oribit speed (float)
-ospeed 4
+ospeed 0.434
 # Planet Radius
-pradius 0.5
+pradius 5.605
 # Texture file
 texture ../bin/planetData/jupiter_map.jpg
 end

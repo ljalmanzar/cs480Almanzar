@@ -5,13 +5,13 @@ planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3
+rspeed 1.3928
 # Orbit Radius (float)
-oradius 14
+oradius 19.18
 # Oribit speed (float)
-ospeed 4
+ospeed 0.228
 # Planet Radius
-pradius 0.5
+pradius 2.005
 # Texture file
 texture ../bin/planetData/uranus_map.jpg
 end

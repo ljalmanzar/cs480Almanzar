@@ -5,11 +5,11 @@ planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3
+rspeed 1
 # Orbit Radius (float)
-oradius 6
+oradius 1
 # Oribit speed (float)
-ospeed 4
+ospeed 1
 # Planet Radius
 pradius 0.5
 # Texture file

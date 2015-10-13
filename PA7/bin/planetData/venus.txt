@@ -5,13 +5,13 @@ planet sun
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 3
+rspeed 0.00086
 # Orbit Radius (float)
-oradius 4
+oradius 0.723
 # Oribit speed (float)
-ospeed 4
+ospeed 1.174
 # Planet Radius
-pradius 0.5
+pradius 0.4745
 # Texture file
 texture ../bin/planetData/venus_map.jpg
 end
