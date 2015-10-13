@@ -118,31 +118,4 @@ void assimpLoader::mapTextures(GLuint & location){
 
 }
 
-void assimpLoader::strcat (char firstString[], char secondString[])
-{
-  // variables
-    int ndxOne = 0;
-    int ndxTwo = 0;
-
-    // find spot to start
-    while (firstString[ndxOne] != '\0')
-       {
-        ndxOne++;
-     }
-
-    firstString[ndxOne] = ' ';
-    ndxOne ++;
-
-  // copy
-  while (secondString[ndxTwo] != '\0')
-     {
-          firstString[ndxOne] = secondString[ndxTwo];
-          ndxOne++;
-          ndxTwo++;
-     }
-
-    // add null
-    firstString[ndxOne] = '\0';
-}
-
 #endif
