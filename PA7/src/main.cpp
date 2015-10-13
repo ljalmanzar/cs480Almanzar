@@ -1,4 +1,5 @@
 #define GLM_FORCE_RADIANS
+#define MAX_FRAME 60
 #include <GL/glew.h> // glew must be included before the main gl libs
 #include <GL/glut.h> // doing otherwise causes compiler shouting
 #include <GL/freeglut.h> // extension to glut
@@ -18,18 +19,10 @@
 //Just for this example!
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry;// VBO handle for our geometry
+GLuint vbo_geometry[100];// VBO handle for our geometry
 char * model_filename;
 char * texture_filename;
 int NUM_OF_VERTICIES = 0;
-
-//Camera position variables
-glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
-glm::vec3 CameraFocus( 0.0, 0.0, 0.0 );
-glm::vec3 CameraYaw( 0.0, 1.0, 0.0 );
-glm::vec3 CameraDirection;
-glm::vec3 Camera_UP;
-glm::vec3 Camera_RIGHT;
 
 
 //uniform locations
@@ -47,6 +40,54 @@ glm::mat4 mvp;//premultiplied modelviewprojection
 
 // Solar System stuff
 SolarSystem solarsystem;
+
+//Camera position variables
+glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
+glm::vec3 CameraFocus( 0.0, 0.0, 0.0 );
+glm::vec3 CameraYaw( 0.0, 1.0, 0.0 );
+glm::vec3 CameraDirection;
+glm::vec3 Camera_UP;
+glm::vec3 Camera_RIGHT;
+struct {
+    glm::vec3 startingCameraPos;
+    glm::vec3 endingCameraPos;
+
+    glm::vec3 startingCameraFocus;
+    glm::vec3 endingCameraFocus;
+
+    int frame = MAX_FRAME;
+    struct {
+        glm::vec3 midCameraPos;
+        glm::vec3 midCameraFocus;
+    } keyframes [MAX_FRAME];
+
+    void setAllFrames() {        
+        for( int i = 0; i < MAX_FRAME; i++ ){
+            float ratio = float(i)/float(MAX_FRAME);
+            //fill in the intermediate keyframes
+            keyframes[i].midCameraPos = ((1-ratio) * startingCameraPos) + (ratio * endingCameraPos);
+            keyframes[i].midCameraFocus = ((1-ratio) * startingCameraFocus) + (ratio * endingCameraFocus);
+        }
+        frame = 0;
+    }
+
+    void updateCamera(){
+        if( frame < MAX_FRAME ){
+            CameraPosition = keyframes[frame].midCameraPos;
+            CameraFocus = keyframes[frame].midCameraFocus;
+            frame++;
+
+            view = glm::lookAt( CameraPosition, //Eye Position
+                        CameraFocus, //Focus point
+                        CameraYaw ); //Positive Y is up
+
+            CameraDirection = glm::normalize( CameraPosition - CameraFocus );
+            Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );
+            Camera_UP = glm::normalize( glm::cross(CameraDirection, Camera_RIGHT) );
+        }
+    }
+
+} CameraAnimation;
 
 //--GLUT Callbacks
 void render();
@@ -150,6 +191,7 @@ void render()
 
         //Bind each texture to the corresponding object
         loc_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
+        cout << loc_texture << endl;
         glActiveTexture( GL_TEXTURE0 );
         glBindTexture( GL_TEXTURE_2D, loc_texture );
 
@@ -157,8 +199,8 @@ void render()
         glEnableVertexAttribArray(loc_position);
         glEnableVertexAttribArray(loc_texture);
         
-        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-        glBindTexture( GL_TEXTURE_2D, loc_texture );
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
+        //glBindTexture( GL_TEXTURE_2D, loc_texture );
 
         //set pointers into the vbo for each of the attributes(position and color)
         glVertexAttribPointer( loc_position,//location of attribute
@@ -175,12 +217,13 @@ void render()
                                 sizeof(Vertex),
                                 (void*)offsetof(Vertex,uv));
 
-        glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
+        glDrawArrays(GL_TRIANGLES, 0, 
+        solarsystem.getPlanetPointer(i) -> getGeometry().size()*3);//mode, starting index, count
+        //clean up
+        glDisableVertexAttribArray(loc_position);
+        glDisableVertexAttribArray(loc_texture);
     }
 
-    //clean up
-    glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_texture);
                            
     //swap the buffers
     glutSwapBuffers();
@@ -190,6 +233,8 @@ void update()
 {
     //static float DT = getDT();
     //SolarSystem::
+    CameraAnimation.updateCamera();
+    glutPostRedisplay();
 }
 
 void reshape(int n_w, int n_h)
@@ -206,7 +251,7 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    Planet test("../bin/planetData/mars.txt");
+    //Planet test("../bin/planetData/mars.txt");
 
     solarsystem.initialize("../bin/planets.txt");
 
@@ -214,18 +259,20 @@ bool initialize()
     //std::vector< std::vector<Vertex> > allGeometries = Test.getAllGeometries();
 
     // V is where we keep all our info for the object
-    std::vector<Vertex> v;
-    v = test.getGeometry();
+    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
+        std::vector<Vertex> v;
+        v = solarsystem.getPlanetPointer(i)->getGeometry();
 
-    NUM_OF_VERTICIES = v.size();
+        NUM_OF_VERTICIES = v.size();
 
-    // Create a Vertex Buffer object to store this vertex info on the GPU
-    glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER,
-                v.size() * sizeof(Vertex),
-                &v.front(),
-                GL_STATIC_DRAW);
+        // Create a Vertex Buffer object to store this vertex info on the GPU
+        glGenBuffers(1, &vbo_geometry[i]); // 1st param-how many to create 2nd-address of array of GLuints
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
+        glBufferData(GL_ARRAY_BUFFER,
+                    v.size() * sizeof(Vertex),
+                    &v.front(),
+                    GL_STATIC_DRAW);
+    }
 
     // Text loading
     //AI_Obj.mapTextures(loc_texture);
@@ -334,7 +381,9 @@ void cleanUp()
 {
     // Clean up, Clean up
     glDeleteProgram(program);
-    glDeleteBuffers(1, &vbo_geometry);
+    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
+        glDeleteBuffers(1, &vbo_geometry[i]);
+    }
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
@@ -349,7 +398,13 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         switch( key ){
             //front view
             case '1':
-                CameraPosition = glm::vec3( 0.0, 0.0, -10.0 );
+                //pan over to the front view, from wherever
+                CameraAnimation.startingCameraPos = CameraPosition;
+                CameraAnimation.startingCameraFocus = CameraFocus;
+                CameraAnimation.endingCameraPos = glm::vec3( 0.0, 0.0, -10.0 );
+                CameraAnimation.endingCameraFocus = CameraFocus;
+
+                CameraAnimation.setAllFrames();
                 break;
 
             //side (right) view
