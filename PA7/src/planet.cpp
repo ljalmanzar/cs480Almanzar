@@ -1,5 +1,6 @@
 #include "planet.h"
 #include <fstream>
+#include <ctime>
 
 
 Planet::Planet(){
@@ -7,6 +8,9 @@ Planet::Planet(){
 }
 
 Planet::Planet(const std::string &fileName){
+	_target = NULL;
+	_model = glm::mat4(1.0f);
+	_centerOfRotation = glm::vec3(0.0);
 	initialize(fileName);
 }
 
@@ -27,6 +31,17 @@ void Planet::initialize(const std::string &fileName){
 
 	// Magick Stuff
 	AI_Obj.mapTextures(_locTexture);
+
+	//start them off with what they should be getting
+	if( _target != NULL ){
+		_target->getModel();
+	}
+
+	//set their original planetOrbit angle and Rotation Angle
+	srand( time(NULL) );
+	//planetOrbitAngle = rand();
+	//planetRotateAngle = rand();
+
 }
 
 void Planet::setTarget(Planet* target){
@@ -34,23 +49,23 @@ void Planet::setTarget(Planet* target){
 }
 
 void Planet::update(float dt){
-	//dt = update bitches
-	static float planetOrbitAngle = 0.0;
-	static float planetRotateAngle = 0.0;
-
-	planetOrbitAngle += dt * (M_PI/2) * _orbitSpeed ;
-	planetRotateAngle += dt * (M_PI/2) * _rotationSpeed ;
+	planetOrbitAngle += dt * (M_PI/2) * _orbitSpeed;
+	planetRotateAngle = dt * (M_PI/2) * _rotationSpeed;
 
 	if( _target != NULL ){	
-		_model = glm::translate(_target->getModel()
-								, glm::vec3(3.0 * sin(planetOrbitAngle)
-										    , 0.0
-										    , 3.0 * cos(planetOrbitAngle)));
+
+		_model = glm::translate(_target->_model, glm::vec3(
+			_orbitRadius * sin(planetOrbitAngle) + (_target->_orbitRadius * sin(_target->planetOrbitAngle)),
+			0,
+			_orbitRadius * cos(planetOrbitAngle) + (_target->_orbitRadius * sin(_target->planetOrbitAngle))
+		));
+
+		std::cout << "here: " << _orbitRadius << endl;
+		_model = glm::rotate(_model
+								, planetRotateAngle
+								, glm::vec3(0.0,1.0,0.0));
 	}
 
-	_model = glm::rotate(_model
-						, planetRotateAngle
-						, glm::vec3(0.0,1.0,0.0));
 }
 
 bool Planet::_fileParser (const std::string &fileName){
@@ -154,7 +169,7 @@ std::vector<Vertex> Planet::getGeometry() const {
 }
 
 glm::mat4 Planet::getModel() const {
-	return _model;
+	return glm::scale( _model,  glm::vec3(_planetRadius*.1f) );
 }
 
 GLuint Planet::getLocTexture() const {

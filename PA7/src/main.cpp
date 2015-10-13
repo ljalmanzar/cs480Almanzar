@@ -1,5 +1,5 @@
 #define GLM_FORCE_RADIANS
-#define MAX_FRAME 60
+#define MAX_FRAME 120
 #include <GL/glew.h> // glew must be included before the main gl libs
 #include <GL/glut.h> // doing otherwise causes compiler shouting
 #include <GL/freeglut.h> // extension to glut
@@ -183,7 +183,6 @@ void render()
     for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
-        model = glm::translate( model, glm::vec3(0.0, 0.0, i*2) );
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -191,7 +190,6 @@ void render()
 
         //Bind each texture to the corresponding object
         loc_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
-        cout << loc_texture << endl;
         glActiveTexture( GL_TEXTURE0 );
         glBindTexture( GL_TEXTURE_2D, loc_texture );
 
@@ -231,8 +229,10 @@ void render()
 
 void update()
 {
-    //static float DT = getDT();
+    float dt = 0.0;
+    dt += getDT() * .1f;
     //SolarSystem::
+    solarsystem.update( dt );
     CameraAnimation.updateCamera();
     glutPostRedisplay();
 }

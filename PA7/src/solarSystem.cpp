@@ -26,6 +26,7 @@ SolarSystem::~SolarSystem(){
 void SolarSystem::update( float dt ){
     Planet* currentPlanet;
     for( unsigned int i = 0; i < _planetNames.size(); i++ ){
+        //cout << "I just updated " << _planetNames[i] << endl;
         currentPlanet = _planets[ _planetNames[i] ];
         currentPlanet -> update(dt);
     }
@@ -60,6 +61,15 @@ bool SolarSystem::initialize( const std::string& filename ){
     }
 
     fin.close();
+
+    // set all the target pointers
+    for( unsigned int i = 1; i < _planetNames.size(); i++ ){
+        Planet* currentPlanet;
+        currentPlanet = _planets[ _planetNames[i] ];
+
+        currentPlanet->setTarget( _planets[currentPlanet->getTargetKey()]);
+
+    }
 
     return false;
 }

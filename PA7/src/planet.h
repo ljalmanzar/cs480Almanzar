@@ -46,6 +46,7 @@ class Planet{
 
 		Planet * _target;
 		glm::vec3 _centerOfRotation;
+		glm::vec3 _currentPosition;
 		
 		std::string _targetKey;
 		std::string _objectFile;
@@ -57,6 +58,9 @@ class Planet{
 		float _planetRadius;
 
 		int _rotationDirection;
+
+		float planetOrbitAngle;
+		float planetRotateAngle;
 };
 
 #endif
