@@ -16,14 +16,14 @@ class Planet{
 
 		// constructors/destructors
 		Planet();
-		Planet(const std::string &fileName);
+		Planet(const std::string &fileName, int indexOfPlanet);
 		~Planet();
 
 		// operators
 		void update(float dt);
 
 		// setters
-		void initialize(const std::string &fileName);
+		void initialize(const std::string &fileName, int indexOfPlanet);
 		void setGeometry();
 		void setTarget(Planet* target);
 

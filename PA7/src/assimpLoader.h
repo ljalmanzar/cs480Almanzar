@@ -28,7 +28,7 @@ class assimpLoader{
       std::vector<Vertex> getOrderedVertices() const;
 
       //load textures
-      void mapTextures(GLuint& location);
+      void mapTextures(GLuint& location, int indexOfTexture);
 
    private: 
       std::string object_filename;

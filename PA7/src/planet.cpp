@@ -7,18 +7,18 @@ Planet::Planet(){
 
 }
 
-Planet::Planet(const std::string &fileName){
+Planet::Planet(const std::string &fileName, int indexOfPlanet){
 	_target = NULL;
 	_model = glm::mat4(1.0f);
 	_centerOfRotation = glm::vec3(0.0);
-	initialize(fileName);
+	initialize(fileName, indexOfPlanet);
 }
 
 Planet::~Planet(){
 
 }
 
-void Planet::initialize(const std::string &fileName){
+void Planet::initialize(const std::string &fileName, int indexOfPlanet){
 	// get all data
 	_fileParser(fileName);
 
@@ -30,7 +30,7 @@ void Planet::initialize(const std::string &fileName){
 	_geometry = AI_Obj.getOrderedVertices();
 
 	// Magick Stuff
-	AI_Obj.mapTextures(_locTexture);
+	AI_Obj.mapTextures(_locTexture, indexOfPlanet );
 
 	//start them off with what they should be getting
 	if( _target != NULL ){

@@ -91,7 +91,7 @@ std::vector<Vertex> assimpLoader::getOrderedVertices() const {
    return inOrderVertices;
 }
 
-void assimpLoader::mapTextures(GLuint & location){
+void assimpLoader::mapTextures(GLuint & location, int indexOfTexture){
 
    using namespace Magick;
     //- Texture Image Handling

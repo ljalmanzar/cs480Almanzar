@@ -189,16 +189,15 @@ void render()
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
         //Bind each texture to the corresponding object
-        loc_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
+        int local_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
         glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, loc_texture );
+        glBindTexture( GL_TEXTURE_2D, local_texture );
 
         //set up the Vertex Buffer Object so it can be drawn
         glEnableVertexAttribArray(loc_position);
         glEnableVertexAttribArray(loc_texture);
         
         glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
-        //glBindTexture( GL_TEXTURE_2D, loc_texture );
 
         //set pointers into the vbo for each of the attributes(position and color)
         glVertexAttribPointer( loc_position,//location of attribute
@@ -404,6 +403,12 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
     else{
         switch( key ){  
+            case '+':
+                CameraPosition -= .75f * CameraDirection;
+                break;
+            case '-':
+                CameraPosition += .75f * CameraDirection;
+                break;
             //move forward
             case 'w':
                 CameraPosition += cam_speed * Camera_UP;
@@ -436,12 +441,13 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 
 void special_keyboard(int key, int x_pos, int y_pos)
 {
+    float cam_speed = 0.75f;
     switch(key)
         {
             case GLUT_KEY_LEFT:
-            model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
-            break;
-
+//                CameraPosition += glm::vec3();
+                model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
+                break;
             case GLUT_KEY_RIGHT:
             model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
             break;
@@ -454,6 +460,14 @@ void special_keyboard(int key, int x_pos, int y_pos)
             model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
             break;         
         }
+
+    view = glm::lookAt( CameraPosition, //Eye Position
+                        CameraFocus, //Focus point
+                        CameraYaw ); //Positive Y is up
+
+    CameraDirection = glm::normalize( CameraPosition - CameraFocus );
+    Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );
+    Camera_UP = glm::normalize( glm::cross(CameraDirection, Camera_RIGHT) );
 
     glutPostRedisplay();
 }

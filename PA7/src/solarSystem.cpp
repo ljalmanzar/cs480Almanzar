@@ -36,6 +36,7 @@ bool SolarSystem::initialize( const std::string& filename ){
     //declare variables
     ifstream fin;
     std::string line;
+    int counter = 0;
 
     //attempt to open file 
     fin.clear();
@@ -54,7 +55,7 @@ bool SolarSystem::initialize( const std::string& filename ){
         }
 
         //save the things
-        Planet * tempPlanet = new Planet( line );
+        Planet * tempPlanet = new Planet( line, counter++ );
         _planetNames.push_back( line );
         _planets.insert( std::pair<std::string, Planet*>( line, tempPlanet ) );
 
