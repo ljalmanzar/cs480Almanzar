@@ -167,8 +167,8 @@ std::vector<Vertex> Planet::getGeometry() const {
 }
 
 glm::mat4 Planet::getModel() const {
-	return _model;
-	//glm::scale( _model,  glm::vec3(_planetRadius*.1f) );
+	//return _model;
+	return glm::scale( _model,  glm::vec3(_planetRadius*.1f) );
 }
 
 GLuint Planet::getLocTexture() const {

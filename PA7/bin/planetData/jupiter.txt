@@ -10,8 +10,8 @@ rspeed 2.41546
 oradius 5.203
 # Oribit speed (float)
 ospeed 0.434
-# Planet Radius
-pradius 5.605
+# Planet Radius was 5.605
+pradius 2.5
 # Texture file
 texture ../bin/planetData/jupiter_map.jpg
 end
