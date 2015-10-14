@@ -11,7 +11,7 @@ oradius 0
 # Oribit speed (float)
 ospeed 0
 # Planet Radius was 54.563
-pradius 3.5
+pradius 3.1
 # Texture file
 texture ../bin/planetData/sun_map.jpg
 end

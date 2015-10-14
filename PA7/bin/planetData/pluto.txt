@@ -11,7 +11,7 @@ oradius 39.52
 # Oribit speed (float)
 ospeed 0.159
 # Planet Radius
-pradius 0.093
+pradius 0.2
 # Texture file
 texture ../bin/planetData/pluto_map.png
 end
