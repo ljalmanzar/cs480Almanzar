@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 
     // Initialize glut
     glutInit(&argc, argv); // just initializes
-
+/*
     // Saving obj file
     int filenamelength = strlen( argv[1] );
     model_filename = new char [filenamelength+1];
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
     filenamelength = strlen( argv[2] );
     texture_filename = new char [filenamelength+1];
     strcpy( texture_filename, argv[2] );
-
+*/
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -394,36 +394,16 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
        {
            exit(0);
        }
+    else if ( key >= '0' and key <= '9' ){
+        CameraAnimation.startingCameraPos = CameraPosition;
+        CameraAnimation.startingCameraFocus = CameraFocus;
+        //pan over to the front view, from wherever
+        CameraAnimation.endingCameraFocus = glm::vec3(solarsystem.getPlanetPointer( key - '0' )->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
+        CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, 8.0, -10.0 );
+        CameraAnimation.setAllFrames();   
+    }
     else{
-        switch( key ){
-            //front view
-            case '1':
-                //pan over to the front view, from wherever
-                CameraAnimation.startingCameraPos = CameraPosition;
-                CameraAnimation.startingCameraFocus = CameraFocus;
-                CameraAnimation.endingCameraPos = glm::vec3( 0.0, 0.0, -10.0 );
-                CameraAnimation.endingCameraFocus = CameraFocus;
-
-                CameraAnimation.setAllFrames();
-                break;
-
-            //side (right) view
-            case '3':
-                CameraPosition = glm::vec3( -10.0, 0.0, 0.0 );
-                break;
-            //slightly tilted top view
-            case '7':
-                CameraPosition = glm::vec3( 0.0, 10.0, -5.0 );
-                break;
-
-            //zoom in
-            case '+':
-                CameraPosition -= (CameraPosition - CameraFocus) * 0.25f;
-                break;       
-            //zoom out
-            case '-':
-                CameraPosition += (CameraPosition - CameraFocus) * 0.25f;
-                break;       
+        switch( key ){  
             //move forward
             case 'w':
                 CameraPosition += cam_speed * Camera_UP;

@@ -60,7 +60,6 @@ void Planet::update(float dt){
 			_orbitRadius * cos(planetOrbitAngle) + (_target->_orbitRadius * sin(_target->planetOrbitAngle))
 		));
 
-		std::cout << "here: " << _orbitRadius << endl;
 		_model = glm::rotate(_model
 								, planetRotateAngle
 								, glm::vec3(0.0,1.0,0.0));
@@ -144,7 +143,6 @@ bool Planet::_fileParser (const std::string &fileName){
 		// ignore for comments
 		else if (line.substr(0,1) == "#"){
 			// comment, so skip line aand do nothing
-			cout << "Ignoring this:" << line << endl;
 		} 
 
 		else if (line.substr(0,3) == "end"){
@@ -169,7 +167,8 @@ std::vector<Vertex> Planet::getGeometry() const {
 }
 
 glm::mat4 Planet::getModel() const {
-	return glm::scale( _model,  glm::vec3(_planetRadius*.1f) );
+	return _model;
+	//glm::scale( _model,  glm::vec3(_planetRadius*.1f) );
 }
 
 GLuint Planet::getLocTexture() const {
