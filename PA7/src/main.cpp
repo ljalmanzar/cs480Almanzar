@@ -442,24 +442,23 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 void special_keyboard(int key, int x_pos, int y_pos)
 {
     float cam_speed = 0.75f;
-    switch(key)
-        {
-            case GLUT_KEY_LEFT:
-//                CameraPosition += glm::vec3();
-                model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
-                break;
-            case GLUT_KEY_RIGHT:
-            model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
+    glm::vec3 offsetVector;
+    switch(key){
+        case GLUT_KEY_LEFT:
+            offsetVector = glm::vec3( cam_speed, 0, 0 );
             break;
-
-            case GLUT_KEY_UP:
-            model = glm::rotate(model, (.2f), glm::vec3(1.0,0.0,0.0));
+        case GLUT_KEY_RIGHT:
+            offsetVector = glm::vec3( -cam_speed, 0, 0 );
             break;
-
-            case GLUT_KEY_DOWN:
-            model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
-            break;         
-        }
+        case GLUT_KEY_UP:
+            offsetVector = glm::vec3( 0, 0, cam_speed );
+            break;
+        case GLUT_KEY_DOWN:
+            offsetVector = glm::vec3( 0, 0, -cam_speed );
+            break;      
+    }
+    CameraPosition += offsetVector;
+    CameraFocus += offsetVector;
 
     view = glm::lookAt( CameraPosition, //Eye Position
                         CameraFocus, //Focus point
