@@ -10,8 +10,8 @@ rspeed 2.25225
 oradius 9.539
 # Oribit speed (float)
 ospeed 0.323
-# Planet Radius
-pradius 4.725
+# Planet Radius 4.725
+pradius 2
 # Texture file
 texture ../bin/planetData/saturn_map.jpg
 end

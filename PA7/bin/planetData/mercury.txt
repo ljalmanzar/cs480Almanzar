@@ -10,8 +10,8 @@ rspeed .00057
 oradius 0.387
 # Oribit speed (float)
 ospeed 1.607
-# Planet Radius
-pradius 0.5
+# Planet Radius 0.5
+pradius 0.3
 # Texture file
 texture ../bin/planetData/mercury_map.jpg
 end
