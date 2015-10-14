@@ -1,5 +1,5 @@
-Assimp Model Loader
-==================
+Project 1 - Solar System
+========================
 Use this link guys:
 http://www.imagemagick.org/script/install-source.php
 
