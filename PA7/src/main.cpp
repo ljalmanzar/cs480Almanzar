@@ -1,5 +1,5 @@
 #define GLM_FORCE_RADIANS
-#define MAX_FRAME 120
+#define MAX_FRAME 240   
 #include <GL/glew.h> // glew must be included before the main gl libs
 #include <GL/glut.h> // doing otherwise causes compiler shouting
 #include <GL/freeglut.h> // extension to glut
@@ -20,10 +20,9 @@
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry[100];// VBO handle for our geometry
-char * model_filename;
-char * texture_filename;
+char * master_planet_filename;
 int NUM_OF_VERTICIES = 0;
-
+bool dt_flag = true;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -105,6 +104,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 //--I/O callbacks
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
+void menu_options( int id );
 
 /********
 --MAIN--
@@ -117,17 +117,11 @@ int main(int argc, char **argv)
 
     // Initialize glut
     glutInit(&argc, argv); // just initializes
-/*
     // Saving obj file
     int filenamelength = strlen( argv[1] );
-    model_filename = new char [filenamelength+1];
-    strcpy( model_filename, argv[1] );
+    master_planet_filename = new char [filenamelength+1];
+    strcpy( master_planet_filename, argv[1] );
 
-    // Saving texture
-    filenamelength = strlen( argv[2] );
-    texture_filename = new char [filenamelength+1];
-    strcpy( texture_filename, argv[2] );
-*/
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -136,6 +130,14 @@ int main(int argc, char **argv)
 
     // Name and create the Window
     glutCreateWindow("Solar System");
+
+    // Create menus
+    // sub menu creation
+    glutCreateMenu(menu_options);
+    glutAddMenuEntry("Start/Stop Movement", 1);
+    glutAddMenuEntry("Exit Program", 2);
+    glutAttachMenu( GLUT_RIGHT_BUTTON );
+
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -173,7 +175,7 @@ void render()
     //--Render the scene
 
     //clear the screen
-    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
+    glClearColor(0.0, 0.0, 0.0, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
     //enable the shader program
@@ -250,12 +252,8 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    //Planet test("../bin/planetData/mars.txt");
-
-    solarsystem.initialize("../bin/planets.txt");
-
-    // master vectors
-    //std::vector< std::vector<Vertex> > allGeometries = Test.getAllGeometries();
+    // file parsing from the data files for the planet
+    solarsystem.initialize( master_planet_filename );
 
     // V is where we keep all our info for the object
     for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
@@ -272,9 +270,6 @@ bool initialize()
                     &v.front(),
                     GL_STATIC_DRAW);
     }
-
-    // Text loading
-    //AI_Obj.mapTextures(loc_texture);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -398,7 +393,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         CameraAnimation.startingCameraFocus = CameraFocus;
         //pan over to the front view, from wherever
         CameraAnimation.endingCameraFocus = glm::vec3(solarsystem.getPlanetPointer( key - '0' )->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
-        CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, 8.0, -10.0 );
+        CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, 1.0, -1.0 );
         CameraAnimation.setAllFrames();   
     }
     else{
@@ -471,11 +466,25 @@ void special_keyboard(int key, int x_pos, int y_pos)
     glutPostRedisplay();
 }
 
+void menu_options( int id ){
+    //commands for each selection
+    switch( id ){
+        case 1:
+            dt_flag = !dt_flag;
+            break;
+        case 2:
+            exit(0);
+            break;
+    }
+}
+
 float getDT()
 {
-   float ret;
-   t2 = std::chrono::high_resolution_clock::now();
-   ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
-   t1 = std::chrono::high_resolution_clock::now();
-   return ret;
+    if( !dt_flag ) 
+        return 0.0f;
+    float ret;
+    t2 = std::chrono::high_resolution_clock::now();
+    ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
+    t1 = std::chrono::high_resolution_clock::now();
+    return ret;
 }
