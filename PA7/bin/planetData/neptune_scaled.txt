@@ -1,0 +1,17 @@
+# Geometry file (.obj)
+model ../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+planet ../bin/planetData/sun.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 1.49031
+# Orbit Radius (float)
+oradius 30.06
+# Oribit speed (float)
+ospeed 0.182
+# Planet Radius
+pradius 1.94
+# Texture file
+texture ../bin/planetData/neptune_map.jpg
+end
