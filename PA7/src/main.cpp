@@ -40,53 +40,7 @@ glm::mat4 mvp;//premultiplied modelviewprojection
 // Solar System stuff
 SolarSystem solarsystem;
 
-//Camera position variables
-glm::vec3 CameraPosition( 0.0, 8.0, -8.0 );
-glm::vec3 CameraFocus( 0.0, 0.0, 0.0 );
-glm::vec3 CameraYaw( 0.0, 1.0, 0.0 );
-glm::vec3 CameraDirection;
-glm::vec3 Camera_UP;
-glm::vec3 Camera_RIGHT;
-struct {
-    glm::vec3 startingCameraPos;
-    glm::vec3 endingCameraPos;
-
-    glm::vec3 startingCameraFocus;
-    glm::vec3 endingCameraFocus;
-
-    int frame = MAX_FRAME;
-    struct {
-        glm::vec3 midCameraPos;
-        glm::vec3 midCameraFocus;
-    } keyframes [MAX_FRAME];
-
-    void setAllFrames() {        
-        for( int i = 0; i < MAX_FRAME; i++ ){
-            float ratio = float(i)/float(MAX_FRAME);
-            //fill in the intermediate keyframes
-            keyframes[i].midCameraPos = ((1-ratio) * startingCameraPos) + (ratio * endingCameraPos);
-            keyframes[i].midCameraFocus = ((1-ratio) * startingCameraFocus) + (ratio * endingCameraFocus);
-        }
-        frame = 0;
-    }
-
-    void updateCamera(){
-        if( frame < MAX_FRAME ){
-            CameraPosition = keyframes[frame].midCameraPos;
-            CameraFocus = keyframes[frame].midCameraFocus;
-            frame++;
-
-            view = glm::lookAt( CameraPosition, //Eye Position
-                        CameraFocus, //Focus point
-                        CameraYaw ); //Positive Y is up
-
-            CameraDirection = glm::normalize( CameraPosition - CameraFocus );
-            Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );
-            Camera_UP = glm::normalize( glm::cross(CameraDirection, Camera_RIGHT) );
-        }
-    }
-
-} CameraAnimation;
+#include "camera_struct.cpp"
 
 //--GLUT Callbacks
 void render();
@@ -105,6 +59,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 void menu_options( int id );
+void draw_orbit_rings( int cx, int cy, float radius );
 
 /********
 --MAIN--
@@ -183,9 +138,11 @@ void render()
 
     //go through and premultiple matricies
     for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
+        
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
         mvp = projection * view * model;
+        draw_orbit_rings(0,0, 2*i);
 
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -218,6 +175,7 @@ void render()
 
         glDrawArrays(GL_TRIANGLES, 0, 
         solarsystem.getPlanetPointer(i) -> getGeometry().size()*3);//mode, starting index, count
+
         //clean up
         glDisableVertexAttribArray(loc_position);
         glDisableVertexAttribArray(loc_texture);
@@ -382,7 +340,7 @@ void cleanUp()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
-    float cam_speed = 0.75;
+    float cam_speed = 0.1;
     // Handle keyboard input
     if(key == 27)//ESC
        {
@@ -393,32 +351,69 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         CameraAnimation.startingCameraFocus = CameraFocus;
         //pan over to the front view, from wherever
         CameraAnimation.endingCameraFocus = glm::vec3(solarsystem.getPlanetPointer( key - '0' )->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
-        CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, 1.0, -1.0 );
+        CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, .5, -.5 );
         CameraAnimation.setAllFrames();   
     }
     else{
-        switch( key ){  
+        switch( key ){
+            case ')':
+                CameraAnimation.planetToTrack = 0;
+                break;
+            case '!':
+                CameraAnimation.planetToTrack = 1;
+                break;
+            case '@':
+                CameraAnimation.planetToTrack = 2;
+                break;
+            case '#':
+                CameraAnimation.planetToTrack = 3;
+                break;
+            case '$':
+                CameraAnimation.planetToTrack = 4;
+                break;
+            case '%':
+                CameraAnimation.planetToTrack = 5;
+                break;
+            case '^':
+                CameraAnimation.planetToTrack = 6;
+                break;
+            case '&':
+                CameraAnimation.planetToTrack = 7;
+                break;
+            case '*':
+                CameraAnimation.planetToTrack = 8;
+                break;
+            case '(':
+                CameraAnimation.planetToTrack = 9;
+                break;
+            //zoom in and out
             case '+':
-                CameraPosition -= .75f * CameraDirection;
+                CameraPosition -= cam_speed * CameraDirection;
+                CameraAnimation.planetToTrack = -1;
                 break;
             case '-':
-                CameraPosition += .75f * CameraDirection;
+                CameraPosition += cam_speed * CameraDirection;
+                CameraAnimation.planetToTrack = -1;
                 break;
             //move forward
             case 'w':
                 CameraPosition += cam_speed * Camera_UP;
+                CameraAnimation.planetToTrack = -1;
                 break;
             //move backward
             case 's':
                 CameraPosition -= cam_speed * Camera_UP;
+                CameraAnimation.planetToTrack = -1;
                 break;
             //move left   
             case 'a':
                 CameraPosition -= cam_speed * Camera_RIGHT;
+                CameraAnimation.planetToTrack = -1;
                 break;
             //move right
             case 'd':
                 CameraPosition += cam_speed * Camera_RIGHT;
+                CameraAnimation.planetToTrack = -1;
             default:
                 break;
         }
@@ -434,9 +429,27 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     glutPostRedisplay();
 }
 
+void draw_orbit_rings( int cx, int cy, float radius ){
+    if( radius <= 0 ){
+        return;
+    }
+
+    float twice_pi = 2.0 * M_PI;
+
+    glBegin(GL_LINE_LOOP);
+    for( int i = 0; i < 100; i++ ){
+        glVertex3f(
+            cx + (radius * cos(i * twice_pi / 100) ),
+            0,
+            cy + (radius * sin(i * twice_pi / 100) )
+        );
+    }
+    glEnd();
+}
+
 void special_keyboard(int key, int x_pos, int y_pos)
 {
-    float cam_speed = 0.75f;
+    float cam_speed = 0.1f;
     glm::vec3 offsetVector;
     switch(key){
         case GLUT_KEY_LEFT:
@@ -480,9 +493,9 @@ void menu_options( int id ){
 
 float getDT()
 {
-    if( !dt_flag ) 
-        return 0.0f;
     float ret;
+    if( !dt_flag ) 
+        t1 = std::chrono::high_resolution_clock::now();
     t2 = std::chrono::high_resolution_clock::now();
     ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
     t1 = std::chrono::high_resolution_clock::now();
