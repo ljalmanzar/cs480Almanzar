@@ -65,7 +65,6 @@ void Planet::update(float dt){
                             planetRotateAngle,
                             glm::vec3(0.0,1.0,0.0));
     }
-    cout << "orbiting around " << _targetKey << " with speed of " << planetRotateAngle << endl;
 }
 
 bool Planet::_fileParser (const std::string &fileName){
