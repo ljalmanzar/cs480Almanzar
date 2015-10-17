@@ -38,10 +38,9 @@ void Planet::initialize(const std::string &fileName, int indexOfPlanet){
     }
 
     //set their original planetOrbit angle and Rotation Angle
-    srand( time(NULL) );
-    //planetOrbitAngle = rand();
-    //planetRotateAngle = rand();
-
+    //srand( time(NULL) );
+    //planetOrbitAngle = abs( rand() );
+    //planetRotateAngle = abs( rand() );
 }
 
 void Planet::setTarget(Planet* target){
