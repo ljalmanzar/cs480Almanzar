@@ -11,7 +11,7 @@ oradius 0
 # Oribit speed (float)
 ospeed 0
 # Planet Radius
-pradius 500
+pradius 750
 # Texture file
 texture ../bin/planetData/star_map.jpg
 end

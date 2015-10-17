@@ -205,7 +205,7 @@ void reshape(int n_w, int n_h)
 
     //Update the projection matrix as well
     //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 200.0f);
 }
 
 bool initialize()
