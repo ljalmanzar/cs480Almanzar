@@ -5,7 +5,7 @@ planet ../bin/planetData/earth.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed .05
+rspeed 2
 # Orbit Radius (float)
 oradius .2
 # Oribit speed (float)
