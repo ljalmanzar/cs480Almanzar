@@ -6,6 +6,7 @@ MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
 CC=g++
 LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS)
 MODEL= ../bin/planets.txt
+SCALE_MODEL= ../bin/planets_scaled.txt
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
@@ -22,4 +23,7 @@ clean:
 	rm ../bin/$(PROGRAMNAME) -f
 
 run: ../bin/$(PROGRAMNAME)
-	../bin/$(PROGRAMNAME) $(MODEL) $(TEXTURE)
+	../bin/$(PROGRAMNAME) $(MODEL)
+
+scale: ../bin/$(PROGRAMNAME)
+	../bin/$(PROGRAMNAME) $(SCALE_MODEL)
