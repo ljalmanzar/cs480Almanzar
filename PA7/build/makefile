@@ -23,7 +23,4 @@ clean:
 	rm ../bin/$(PROGRAMNAME) -f
 
 run: ../bin/$(PROGRAMNAME)
-	../bin/$(PROGRAMNAME) $(MODEL)
-
-scale: ../bin/$(PROGRAMNAME)
-	../bin/$(PROGRAMNAME) $(SCALE_MODEL)
+	../bin/$(PROGRAMNAME) $(MODEL) $(SCALE_MODEL)

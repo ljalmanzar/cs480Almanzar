@@ -5,7 +5,7 @@ crotation 0 0 0
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 0	
+rspeed .0001	
 # Orbit Radius (float)
 oradius 0
 # Oribit speed (float)

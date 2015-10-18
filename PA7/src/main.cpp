@@ -20,7 +20,7 @@
 int w = 800, h = 800;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry[100];// VBO handle for our geometry
-char * master_planet_filename;
+string master_system_filenames[4];
 int NUM_OF_VERTICIES = 0;
 bool dt_flag = true;
 
@@ -38,7 +38,7 @@ glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
 
 // Solar System stuff
-SolarSystem solarsystem[1];
+SolarSystem solarsystem[2];
 unsigned int indexOfSystem = 0;
 
 #include "camera_struct.cpp"
@@ -74,9 +74,8 @@ int main(int argc, char **argv)
     // Initialize glut
     glutInit(&argc, argv); // just initializes
     // Saving obj file
-    int filenamelength = strlen( argv[1] );
-    master_planet_filename = new char [filenamelength+1];
-    strcpy( master_planet_filename, argv[1] );
+    master_system_filenames[0] = string( argv[1] );
+    master_system_filenames[1] = string( argv[2] );
 
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
@@ -89,9 +88,14 @@ int main(int argc, char **argv)
 
     // Create menus
     // sub menu creation
+    GLuint system_selection_menu = glutCreateMenu(menu_options);
+    glutAddMenuEntry("Non-Scaled", 2);
+    glutAddMenuEntry("Scaled", 3);
+
     glutCreateMenu(menu_options);
-    glutAddMenuEntry("Start/Stop Movement", 1);
-    glutAddMenuEntry("Exit Program", 2);
+    glutAddSubMenu("Scale of Solar System", system_selection_menu);
+    glutAddMenuEntry("Stop/Start Rotation", 4);
+    glutAddMenuEntry("Exit Program", 1);
     glutAttachMenu( GLUT_RIGHT_BUTTON );
 
 
@@ -218,24 +222,27 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    // file parsing from the data files for the planet
-    solarsystem[indexOfSystem].initialize( master_planet_filename );
+    for( indexOfSystem = 0; indexOfSystem < 2; indexOfSystem++ ){    
+        // file parsing from the data files for the planet
+        solarsystem[indexOfSystem].initialize( master_system_filenames[indexOfSystem].c_str() );
 
-    // V is where we keep all our info for the object
-    for( int i = 0; i < solarsystem[indexOfSystem].getNumOfPlanets(); i++ ){
-        std::vector<Vertex> v;
-        v = solarsystem[indexOfSystem].getPlanetPointer(i)->getGeometry();
+        // V is where we keep all our info for the object
+        for( int i = 0; i < solarsystem[indexOfSystem].getNumOfPlanets(); i++ ){
+            std::vector<Vertex> v;
+            v = solarsystem[indexOfSystem].getPlanetPointer(i)->getGeometry();
 
-        NUM_OF_VERTICIES = v.size();
+            NUM_OF_VERTICIES = v.size();
 
-        // Create a Vertex Buffer object to store this vertex info on the GPU
-        glGenBuffers(1, &vbo_geometry[i]); // 1st param-how many to create 2nd-address of array of GLuints
-        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
-        glBufferData(GL_ARRAY_BUFFER,
-                    v.size() * sizeof(Vertex),
-                    &v.front(),
-                    GL_STATIC_DRAW);
+            // Create a Vertex Buffer object to store this vertex info on the GPU
+            glGenBuffers(1, &vbo_geometry[i]); // 1st param-how many to create 2nd-address of array of GLuints
+            glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
+            glBufferData(GL_ARRAY_BUFFER,
+                        v.size() * sizeof(Vertex),
+                        &v.front(),
+                        GL_STATIC_DRAW);
+        }
     }
+    indexOfSystem = 0;
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -493,10 +500,16 @@ void menu_options( int id ){
     //commands for each selection
     switch( id ){
         case 1:
-            dt_flag = !dt_flag;
+            exit(0);
             break;
         case 2:
-            exit(0);
+            indexOfSystem = 0;
+            break;
+        case 3:
+            indexOfSystem = 1;
+            break;
+        case 4:
+            dt_flag = !dt_flag;
             break;
     }
 }
