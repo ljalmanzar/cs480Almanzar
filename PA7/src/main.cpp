@@ -139,18 +139,20 @@ void render()
  
     glm::mat4 sun_trans = solarsystem.getPlanetPointer(0) -> getModel();
 
-       //go through and premultiple matricies
-    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
-        
+    //go through and premultiple matricies
+    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
         mvp = projection * view * model;
 
-        if (i < 10)
-          draw_orbit_rings(sun_trans, solarsystem.getPlanetPointer(i)->getOrbitRadius());
-
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+        
+        if( i == 0 ){
+            for( int j = 1; j < 10; j++ ){       
+                draw_orbit_rings(sun_trans, solarsystem.getPlanetPointer(j)->getOrbitRadius()*3.2265);
+            }
+        }
 
         //Bind each texture to the corresponding object
         int local_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
