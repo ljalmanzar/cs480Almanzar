@@ -2,9 +2,11 @@
 MAGICKLIBS= `Magick++-config --ldflags --libs`
 MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
 
+BULLETLIBS= -I/usr/include/bullet -lBulletDynamics -lBulletSoftBody -lBulletCollision -lLinearMath
+
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS)
+LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS) $(BULLETLIBS)
 MODEL= ../bin/box.obj
 TEXTURE= ../bin/metal.jpg
 

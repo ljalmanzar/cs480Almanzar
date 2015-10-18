@@ -12,6 +12,9 @@
 #include "shaderLoader.cpp"
 #include "assimpLoader.cpp"
 
+#include "btBulletDynamicsCommon.h"
+#include <stdio.h>
+
 //--Evil Global variables
 //Just for this example!
 int w = 800, h = 800;// Window size
