@@ -38,7 +38,8 @@ glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
 
 // Solar System stuff
-SolarSystem solarsystem;
+SolarSystem solarsystem[1];
+unsigned int indexOfSystem = 0;
 
 #include "camera_struct.cpp"
 
@@ -137,12 +138,12 @@ void render()
     glUseProgram(program);
 
  
-    glm::mat4 sun_trans = solarsystem.getPlanetPointer(0) -> getModel();
+    glm::mat4 sun_trans = solarsystem[indexOfSystem].getPlanetPointer(0) -> getModel();
 
     //go through and premultiple matricies
-    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
+    for( int i = 0; i < solarsystem[indexOfSystem].getNumOfPlanets(); i++ ){
         //premultiply the matrix for this example
-        model = solarsystem.getPlanetPointer(i) -> getModel();
+        model = solarsystem[indexOfSystem].getPlanetPointer(i) -> getModel();
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -150,12 +151,12 @@ void render()
         
         if( i == 0 ){
             for( int j = 1; j < 10; j++ ){       
-                draw_orbit_rings(sun_trans, solarsystem.getPlanetPointer(j)->getOrbitRadius()*3.2265);
+                draw_orbit_rings(sun_trans, solarsystem[indexOfSystem].getPlanetPointer(j)->getOrbitRadius()*3.2265);
             }
         }
 
         //Bind each texture to the corresponding object
-        int local_texture = solarsystem.getPlanetPointer(i)->getLocTexture();
+        int local_texture = solarsystem[indexOfSystem].getPlanetPointer(i)->getLocTexture();
         glActiveTexture( GL_TEXTURE0 );
         glBindTexture( GL_TEXTURE_2D, local_texture );
 
@@ -181,7 +182,7 @@ void render()
                                 (void*)offsetof(Vertex,uv));
 
         glDrawArrays(GL_TRIANGLES, 0, 
-        solarsystem.getPlanetPointer(i) -> getGeometry().size()*3);//mode, starting index, count
+        solarsystem[indexOfSystem].getPlanetPointer(i) -> getGeometry().size()*3);//mode, starting index, count
 
         //clean up
         glDisableVertexAttribArray(loc_position);
@@ -198,7 +199,7 @@ void update()
     float dt = 0.0;
     dt += getDT() * .1f;
     //SolarSystem::
-    solarsystem.update( dt );
+    solarsystem[indexOfSystem].update( dt );
     CameraAnimation.updateCamera();
     glutPostRedisplay();
 }
@@ -218,12 +219,12 @@ void reshape(int n_w, int n_h)
 bool initialize()
 {
     // file parsing from the data files for the planet
-    solarsystem.initialize( master_planet_filename );
+    solarsystem[indexOfSystem].initialize( master_planet_filename );
 
     // V is where we keep all our info for the object
-    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
+    for( int i = 0; i < solarsystem[indexOfSystem].getNumOfPlanets(); i++ ){
         std::vector<Vertex> v;
-        v = solarsystem.getPlanetPointer(i)->getGeometry();
+        v = solarsystem[indexOfSystem].getPlanetPointer(i)->getGeometry();
 
         NUM_OF_VERTICIES = v.size();
 
@@ -340,7 +341,7 @@ void cleanUp()
 {
     // Clean up, Clean up
     glDeleteProgram(program);
-    for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){
+    for( int i = 0; i < solarsystem[indexOfSystem].getNumOfPlanets(); i++ ){
         glDeleteBuffers(1, &vbo_geometry[i]);
     }
 }
@@ -357,7 +358,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         CameraAnimation.startingCameraPos = CameraPosition;
         CameraAnimation.startingCameraFocus = CameraFocus;
         //pan over to the front view, from wherever
-        CameraAnimation.endingCameraFocus = glm::vec3(solarsystem.getPlanetPointer( key - '0' )->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
+        CameraAnimation.endingCameraFocus = glm::vec3(solarsystem[indexOfSystem].getPlanetPointer( key - '0' )->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
         CameraAnimation.endingCameraPos = CameraAnimation.endingCameraFocus + glm::vec3( 0.0, .5, -.5 );
         CameraAnimation.setAllFrames();   
     }

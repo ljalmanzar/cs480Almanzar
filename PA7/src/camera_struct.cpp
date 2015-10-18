@@ -36,7 +36,7 @@ struct {
     void updateCamera(){
         if( planetToTrack >= 0 ){
             //get that model's thing and update all the time
-            CameraFocus = glm::vec3( solarsystem.getPlanetPointer(planetToTrack)->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
+            CameraFocus = glm::vec3( solarsystem[indexOfSystem].getPlanetPointer(planetToTrack)->getModel() * glm::vec4(0.0, 0.0, 0.0, 1.0));
             CameraPosition = CameraFocus + glm::vec3( 0.0, .5, -.5 );
         }
         else if( frame < MAX_FRAME ){
