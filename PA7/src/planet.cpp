@@ -177,3 +177,7 @@ GLuint Planet::getLocTexture() const {
 float Planet::getOrbitRadius() const {
     return _orbitRadius;
 }
+
+float Planet::getPlanetRadius() const {
+    return _planetRadius;
+}

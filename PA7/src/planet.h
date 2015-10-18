@@ -33,6 +33,7 @@ class Planet{
 		glm::mat4 getModel() const;
 		GLuint getLocTexture() const; 
 		float getOrbitRadius() const;
+		float getPlanetRadius() const;
 
 	private:
 		bool _fileParser(const std::string &fileName);
