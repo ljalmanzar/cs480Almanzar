@@ -59,7 +59,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 void menu_options( int id );
-void draw_orbit_rings( int cx, int cy, float radius );
+void draw_orbit_rings(glm:mat4, float radius );
 
 /********
 --MAIN--
@@ -136,13 +136,18 @@ void render()
     //enable the shader program
     glUseProgram(program);
 
-    //go through and premultiple matricies
+ 
+    Planet *sun = solarSystem -> getModel("../bin/planetData/sun.txt");
+
+       //go through and premultiple matricies
     for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
         
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
         mvp = projection * view * model;
-        draw_orbit_rings(0,0, 2*i);
+
+        if (i < 10)
+          draw_orbit_rings(sun, model -> getPlanetRadius);
 
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -429,19 +434,21 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     glutPostRedisplay();
 }
 
-void draw_orbit_rings( int cx, int cy, float radius ){
+void draw_orbit_rings( glm::mat4 origin, float radius ){
     if( radius <= 0 ){
         return;
     }
+    glm::vec3 pos = glm::vec3( origin[3] );
 
     float twice_pi = 2.0 * M_PI;
 
     glBegin(GL_LINE_LOOP);
+
     for( int i = 0; i < 100; i++ ){
         glVertex3f(
-            cx + (radius * cos(i * twice_pi / 100) ),
+            pos.x + (radius * cos(i * twice_pi / 100) ),
             0,
-            cy + (radius * sin(i * twice_pi / 100) )
+            pos.y + (radius * sin(i * twice_pi / 100) )
         );
     }
     glEnd();

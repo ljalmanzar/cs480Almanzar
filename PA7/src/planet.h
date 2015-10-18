@@ -32,6 +32,7 @@ class Planet{
 		std::vector<Vertex> getGeometry() const;
 		glm::mat4 getModel() const;
 		GLuint getLocTexture() const; 
+		float getPlanetRadius() const;
 		
 	private:
 

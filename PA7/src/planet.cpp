@@ -173,3 +173,7 @@ glm::mat4 Planet::getModel() const {
 GLuint Planet::getLocTexture() const {
     return _locTexture;
 }
+
+float Planet::getPlanetRadius() const {
+    return _planetRadius;
+}
