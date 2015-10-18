@@ -59,7 +59,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 void menu_options( int id );
-void draw_orbit_rings(glm:mat4, float radius );
+void draw_orbit_rings( glm::mat4, float radius );
 
 /********
 --MAIN--
@@ -137,7 +137,7 @@ void render()
     glUseProgram(program);
 
  
-    Planet *sun = solarSystem -> getModel("../bin/planetData/sun.txt");
+    glm::mat4 sun_trans = solarsystem.getPlanetPointer(0) -> getModel();
 
        //go through and premultiple matricies
     for( int i = 0; i < solarsystem.getNumOfPlanets(); i++ ){            
@@ -148,7 +148,7 @@ void render()
         mvp = projection * view * model;
 
         if (i < 10)
-          draw_orbit_rings(sun, model -> getPlanetRadius);
+          draw_orbit_rings(sun_trans, solarsystem.getPlanetPointer(i)->getOrbitRadius());
 
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
