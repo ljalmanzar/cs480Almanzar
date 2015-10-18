@@ -14,4 +14,8 @@ ospeed 1
 pradius 0.75
 # Texture file
 texture ../bin/planetData/pluto_m1_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
 end

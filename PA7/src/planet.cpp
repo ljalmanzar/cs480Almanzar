@@ -139,6 +139,14 @@ bool Planet::_fileParser (const std::string &fileName){
             const char * temp = line.substr(7).c_str();
             std::sscanf(temp, "%f", &_planetRadius);
         } 
+        else if (line.substr(0,4) == "ring"){ // float
+            const char * temp = line.substr(4).c_str();
+            std::sscanf(temp, "%f", &_hasRing);
+        } 
+        else if (line.substr(0,4) == "tilt"){ // float
+            const char * temp = line.substr(4).c_str();
+            std::sscanf(temp, "%f", &_planetTilt);
+        } 
         // ignore for comments
         else if (line.substr(0,1) == "#"){
             // comment, so skip line aand do nothing

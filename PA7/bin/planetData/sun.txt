@@ -14,4 +14,8 @@ ospeed 0
 pradius 3.1
 # Texture file
 texture ../bin/planetData/sun_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
 end

@@ -14,4 +14,8 @@ ospeed 1
 pradius 0.5
 # Texture file
 texture ../bin/planetData/earth_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0.4101
 end

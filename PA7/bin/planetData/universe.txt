@@ -14,4 +14,8 @@ ospeed 0
 pradius 750
 # Texture file
 texture ../bin/planetData/star_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
 end
