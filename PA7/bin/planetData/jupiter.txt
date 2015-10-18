@@ -14,4 +14,8 @@ ospeed 0.434
 pradius 2.5
 # Texture file
 texture ../bin/planetData/jupiter_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
 end

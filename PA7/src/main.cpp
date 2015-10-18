@@ -17,7 +17,7 @@
 
 //--Evil Global variables
 //Just for this example!
-int w = 640, h = 480;// Window size
+int w = 800, h = 800;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry[100];// VBO handle for our geometry
 char * master_planet_filename;

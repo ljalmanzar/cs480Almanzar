@@ -61,6 +61,10 @@ class Planet{
 
 		float planetOrbitAngle;
 		float planetRotateAngle;
+
+		bool _hasRing;
+
+		float _planetTilt;
 };
 
 #endif

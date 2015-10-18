@@ -14,4 +14,8 @@ ospeed 0.323
 pradius 4.725
 # Texture file
 texture ../bin/planetData/saturn_map.jpg
+# Rings?
+ring 1
+# Tilt
+tilt 0.4712
 end

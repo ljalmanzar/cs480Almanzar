@@ -14,4 +14,8 @@ ospeed 0.228
 pradius 2.005
 # Texture file
 texture ../bin/planetData/uranus_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 1.7104
 end

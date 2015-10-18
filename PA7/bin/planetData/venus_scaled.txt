@@ -14,4 +14,8 @@ ospeed 1.174
 pradius 0.4745
 # Texture file
 texture ../bin/planetData/venus_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 3.089
 end

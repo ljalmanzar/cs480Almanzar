@@ -14,4 +14,8 @@ ospeed 1.607
 pradius 0.3
 # Texture file
 texture ../bin/planetData/mercury_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
 end

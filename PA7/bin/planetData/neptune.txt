@@ -14,4 +14,8 @@ ospeed 0.182
 pradius 1.94
 # Texture file
 texture ../bin/planetData/neptune_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0.4942
 end

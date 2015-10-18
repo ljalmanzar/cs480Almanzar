@@ -14,4 +14,8 @@ ospeed 0.802
 pradius 0.266
 # Texture file
 texture ../bin/planetData/mars_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0.4363
 end
