@@ -60,9 +60,9 @@ void Planet::update(float dt){
             tar_pos.y,
             _orbitRadius * cos(planetOrbitAngle) + tar_pos.z
         ));
-    _model = glm::rotate(_model,
-                            planetRotateAngle,
-                            glm::vec3(0.0,1.0,0.0));
+        _model = glm::rotate(_model,
+                                planetRotateAngle,
+                                glm::vec3(0.0,1.0,0.0));
     }
 }
 
@@ -180,4 +180,12 @@ glm::mat4 Planet::getModel() const {
 
 GLuint Planet::getLocTexture() const {
     return _locTexture;
+}
+
+float Planet::getOrbitRadius() const {
+    return _orbitRadius;
+}
+
+float Planet::getPlanetRadius() const {
+    return _planetRadius;
 }

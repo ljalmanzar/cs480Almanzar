@@ -32,9 +32,10 @@ class Planet{
 		std::vector<Vertex> getGeometry() const;
 		glm::mat4 getModel() const;
 		GLuint getLocTexture() const; 
-		
-	private:
+		float getOrbitRadius() const;
+		float getPlanetRadius() const;
 
+	private:
 		bool _fileParser(const std::string &fileName);
 
 		// variables

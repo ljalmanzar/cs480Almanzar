@@ -1,21 +1,17 @@
 # Geometry file (.obj)
-model ../bin/planetData/planet.obj
+model ../bin/planetData/saturn_ring.obj
 # Center of rotation (Planet or xyz floats)
-crotation 0 0 0
+planet ../bin/planetData/saturn.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 0
+rspeed 0.01
 # Orbit Radius (float)
 oradius 0
 # Oribit speed (float)
 ospeed 0
-# Planet Radius was 54.563
-pradius 3.1
+# Planet Radius 4.725
+pradius 3.5
 # Texture file
-texture ../bin/planetData/sun_map.jpg
-# Rings?
-ring 0
-# Tilt
-tilt 0
+texture ../bin/planetData/saturn_ring_map.png
 end
