@@ -1,0 +1,13 @@
+Quick Start
+===========
+To run program... 
+cd PA7/build
+make run
+
+Controls
+========
+To move around 
+	-Arrow keys 
+		- Up, down, left, right 
+
+Pan 

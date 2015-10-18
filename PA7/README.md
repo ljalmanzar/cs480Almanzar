@@ -4,15 +4,20 @@ Use this link guys:
 http://www.imagemagick.org/script/install-source.php
 
 How to run
-==========
+----------
 Navigate to build
 --> make 
 --> make run 
 
-*obj file is hardcoded into the initialize function within the main. can just change the file name if your obj file is put into bin* 
+Extra Credit
+------------
+-Orbital path rings added
 
-Controls (extra credit)
-==================
+-Panning to planets by pressing 1-9
+	*also following individual planets by pressing shift 1-9 
+
+Controls
+--------
 
 | Button | Operation |
 | ------ | ---------|
