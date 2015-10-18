@@ -141,6 +141,7 @@ void render()
         
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
+        
         mvp = projection * view * model;
         draw_orbit_rings(0,0, 2*i);
 
