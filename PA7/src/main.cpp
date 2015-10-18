@@ -144,7 +144,6 @@ void render()
         
         //premultiply the matrix for this example
         model = solarsystem.getPlanetPointer(i) -> getModel();
-        
         mvp = projection * view * model;
 
         if (i < 10)
