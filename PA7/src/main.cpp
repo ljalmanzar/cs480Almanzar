@@ -155,7 +155,7 @@ void render()
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
         
-        if( i == 0 ){
+        if( (i == 0) && (indexOfSystem == 0)){
             for( int j = 1; j < 10; j++ ){       
                 draw_orbit_rings(sun_trans, solarsystem[indexOfSystem].getPlanetPointer(j)->getOrbitRadius()*3.2265);
             }
