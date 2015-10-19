@@ -10,4 +10,3 @@
 ../bin/planetData/15thCentury/pluto.txt
 ../bin/planetData/15thCentury/earth_m1.txt
 ../bin/planetData/15thCentury/saturn_ring.txt
-../bin/planetData/universe.txt
