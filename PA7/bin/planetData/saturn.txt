@@ -17,5 +17,5 @@ texture ../bin/planetData/saturn_map.jpg
 # Rings?
 ring 1
 # Tilt
-tilt 0.4712
+tilt 15.25
 end
