@@ -17,6 +17,8 @@ Extra Credit
 
 -Following individual planets by pressing shift 1-9 
 
+-Planets Titled
+
 Controls
 --------
 

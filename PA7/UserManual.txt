@@ -43,3 +43,15 @@ Mouse Controls
 --------------
 Right click for option to pause/resume 
 Switching between scaled and non scaled
+
+Extra Credit
+------------
+-Orbital path rings added
+
+-Going from actual to scaled added
+
+-Panning animation to planets by pressing 1-9
+
+-Following individual planets by pressing shift 1-9 
+
+-Planets Titled
