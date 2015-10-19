@@ -22,7 +22,7 @@
 ../bin/planetData/_scaledMoons/neptune_m3.txt
 ../bin/planetData/_scaledMoons/neptune_m4.txt
 ../bin/planetData/_scaledMoons/pluto_m1.txt
-../bin/planetData/_scaledMoons/plute_m2.txt
+../bin/planetData/_scaledMoons/pluto_m2.txt
 ../bin/planetData/_scaledMoons/saturn_m1.txt
 ../bin/planetData/_scaledMoons/saturn_m2.txt
 ../bin/planetData/_scaledMoons/saturn_m3.txt
