@@ -8,8 +8,8 @@
 ../bin/planetData/uranus.txt
 ../bin/planetData/neptune.txt
 ../bin/planetData/pluto.txt
-../bin/planetData/universe.txt
 ../bin/planetData/saturn_ring.txt
+../bin/planetData/universe.txt
 ../bin/planetData/earth_m1.txt
 ../bin/planetData/mars_m1.txt
 ../bin/planetData/mars_m2.txt

@@ -8,8 +8,7 @@
 ../bin/planetData/uranus_scaled.txt
 ../bin/planetData/neptune_scaled.txt
 ../bin/planetData/pluto_scaled.txt
-../bin/planetData/saturn_ring_scaled.txt
-../bin/planetData/universe_scaled.txt
+../bin/planetData/saturn_ring.txt
 ../bin/planetData/_scaledMoons/earth_m1.txt
 ../bin/planetData/_scaledMoons/jupiter_m1.txt
 ../bin/planetData/_scaledMoons/jupiter_m2.txt
@@ -34,3 +33,4 @@
 ../bin/planetData/_scaledMoons/uranus_m1.txt
 ../bin/planetData/_scaledMoons/uranus_m2.txt
 ../bin/planetData/_scaledMoons/uranus_m3.txt
+../bin/planetData/universe.txt

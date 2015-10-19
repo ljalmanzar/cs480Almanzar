@@ -218,7 +218,7 @@ void reshape(int n_w, int n_h)
 
     //Update the projection matrix as well
     //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 200.0f);
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 2000.0f);
 }
 
 bool initialize()
@@ -331,7 +331,7 @@ bool initialize()
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
                                    0.01f, //Distance to the near plane, normally a small value like this
-                                   100.0f); //Distance to the far plane, 
+                                   2000.0f); //Distance to the far plane, 
 
     CameraDirection = glm::normalize( CameraPosition - CameraFocus );
     Camera_RIGHT = glm::normalize( glm::cross(CameraYaw, CameraDirection) );

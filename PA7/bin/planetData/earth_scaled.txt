@@ -7,7 +7,7 @@ dir 1
 # Rotation speed (float)
 rspeed 1
 # Orbit Radius (float)
-oradius 10
+oradius 20
 # Oribit speed (float)
 ospeed 1
 # Planet Radius
