@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+planet ../bin/planetData/jupiter_scaled.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 1.2
+# Orbit Radius (float)
+oradius .65
+# Oribit speed (float)
+ospeed 9
+# Planet Radius
+pradius 0.35
+# Texture file
+texture ../bin/planetData/earth_m1_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
+end

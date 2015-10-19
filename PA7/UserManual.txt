@@ -1,13 +1,45 @@
 Quick Start
 ===========
-To run program... 
+To run Solar System Simulation program... 
 cd PA7/build
-make run
+then 'make run'
 
 Controls
 ========
-To move around 
-	-Arrow keys 
-		- Up, down, left, right 
+Zoom
+----
++ (Plus key): Zoom in
+- (Minus key): Zoom out
 
-Pan 
+To move around 
+--------------
+Arrow keys 
+   Up, down, left, right 
+
+Changing direction you are facing
+---------------------------------
+WASD
+   W: rotate up (look down)
+   A: rotate left (look right)
+   S: rotate down (look up)
+   D: rotate right (look left)
+
+Navigating to planets
+---------------------
+0: Go to Sun
+1: Go to Mercury
+2: Go to Venus
+3: Go to Earth
+4: Go to Mars
+5: Go to Jupiter
+6: Go to Saturn
+7: Go to Uranus
+8: Go to Neptune
+9: Go to Pluto 
+
+To follow the planets around: Shift + any of the above planets
+
+Mouse Controls
+--------------
+Right click for option to pause/resume 
+Switching between scaled and non scaled
