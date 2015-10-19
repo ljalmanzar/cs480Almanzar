@@ -76,7 +76,6 @@ int main(int argc, char **argv)
     // Saving obj file
     master_system_filenames[0] = string( argv[1] );
     master_system_filenames[1] = string( argv[2] );
-    master_system_filenames[2] = string( argv[3] );
 
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
@@ -92,7 +91,7 @@ int main(int argc, char **argv)
     GLuint system_selection_menu = glutCreateMenu(menu_options);
     glutAddMenuEntry("Non-Scaled", 2);
     glutAddMenuEntry("Scaled", 3);
-    glutAddMenuEntry("15th Century", 4);
+    //glutAddMenuEntry("15th Century", 4);
 
     glutCreateMenu(menu_options);
     glutAddSubMenu("Scale of Solar System", system_selection_menu);
@@ -224,7 +223,7 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
-    for( indexOfSystem = 0; indexOfSystem < 3; indexOfSystem++ ){    
+    for( indexOfSystem = 0; indexOfSystem < 2; indexOfSystem++ ){
         // file parsing from the data files for the planet
         solarsystem[indexOfSystem].initialize( master_system_filenames[indexOfSystem].c_str() );
 
