@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+planet ../../bin/planetData/15thCentury/earth.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 1.3928
+# Orbit Radius (float)
+oradius 19.18
+# Oribit speed (float)
+ospeed 0.228
+# Planet Radius
+pradius 2.005
+# Texture file
+texture ../../bin/planetData/uranus_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 1.7104
+end

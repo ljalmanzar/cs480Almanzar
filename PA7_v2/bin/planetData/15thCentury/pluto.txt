@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+planet ../bin/planetData/15thCentury/earth.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 0.15649
+# Orbit Radius (float)
+oradius 39.52
+# Oribit speed (float)
+ospeed 0.159
+# Planet Radius
+pradius 0.2
+# Texture file
+texture ../bin/planetData/pluto_map.png
+# Rings?
+ring 0
+# Tilt
+tilt 0.2967
+end
