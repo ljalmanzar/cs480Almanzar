@@ -1,15 +1,15 @@
 # Geometry file (.obj)
 model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet ../bin/planetData/pluto.txt
+planet ../bin/planetData/mars.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed .1
+rspeed .8
 # Orbit Radius (float)
-oradius 0.75
+oradius 0.05
 # Oribit speed (float)
-ospeed 12.3
+ospeed 16
 # Planet Radius
 pradius 0.05
 # Texture file

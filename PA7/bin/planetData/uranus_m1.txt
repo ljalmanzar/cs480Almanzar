@@ -1,19 +1,19 @@
 # Geometry file (.obj)
-model moon.obj
+model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet uranus
+planet ../bin/planetData/uranus.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 1
+rspeed 1.5
 # Orbit Radius (float)
-oradius 0.75
+oradius 0.85
 # Oribit speed (float)
-ospeed 1
+ospeed 15
 # Planet Radius
-pradius 0.75
+pradius 0.15
 # Texture file
-texture ../bin/planetData/uranus_m1_map.jpg
+texture ../bin/planetData/earth_m1_map.jpg
 # Rings?
 ring 0
 # Tilt

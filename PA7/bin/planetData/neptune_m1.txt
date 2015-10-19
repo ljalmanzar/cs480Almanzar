@@ -1,19 +1,19 @@
 # Geometry file (.obj)
-model moon.obj
+model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet neptune
+planet ../bin/planetData/neptune.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 1
+rspeed .21
 # Orbit Radius (float)
-oradius 0.75
+oradius .25
 # Oribit speed (float)
-ospeed 1
+ospeed 6
 # Planet Radius
-pradius 0.75
+pradius 0.15
 # Texture file
-texture ../bin/planetData/neptune_m1_map.jpg
+texture ../bin/planetData/earth_m1_map.jpg
 # Rings?
 ring 0
 # Tilt
