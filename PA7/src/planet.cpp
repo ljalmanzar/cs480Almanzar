@@ -54,12 +54,17 @@ void Planet::update(float dt){
     if( _target != NULL ){
         //get target's position
         glm::vec3 tar_pos = glm::vec3( _target->_model * glm::vec4(0,0,0,1) );   
+        /*
+        */
         //move the planet to where it should be in orbit
         _model = glm::translate( glm::mat4(1.0f), glm::vec3(
             _orbitRadius * sin(planetOrbitAngle) + tar_pos.x,
             tar_pos.y,
             _orbitRadius * cos(planetOrbitAngle) + tar_pos.z
         ));
+        _model = glm::rotate(_model,
+                                float(_planetTilt * M_PI / 180),
+                                glm::vec3(0.0,0.0,1.0) );
         _model = glm::rotate(_model,
                                 planetRotateAngle,
                                 glm::vec3(0.0,1.0,0.0));
@@ -141,7 +146,9 @@ bool Planet::_fileParser (const std::string &fileName){
         } 
         else if (line.substr(0,4) == "ring"){ // float
             const char * temp = line.substr(4).c_str();
-            std::sscanf(temp, "%f", &_hasRing);
+            int temp_int;
+            std::sscanf(temp, "%i", &temp_int);
+            _hasRing = (temp == 0)? false : true;
         } 
         else if (line.substr(0,4) == "tilt"){ // float
             const char * temp = line.substr(4).c_str();

@@ -5,7 +5,7 @@ planet ../bin/planetData/saturn.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
-rspeed 0.01
+rspeed 0.1
 # Orbit Radius (float)
 oradius 0
 # Oribit speed (float)
@@ -14,4 +14,8 @@ ospeed 0
 pradius 3.5
 # Texture file
 texture ../bin/planetData/saturn_ring_map.png
+# Rings?
+ring 1
+# Tilt
+tilt 15.25
 end
