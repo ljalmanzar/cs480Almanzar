@@ -24,4 +24,4 @@ clean:
 	rm ../bin/$(PROGRAMNAME) -f
 
 run: ../bin/$(PROGRAMNAME)
-	../bin/$(PROGRAMNAME) $(MODEL) $(SCALE_MODEL) $(15CENTURY_MODEL)
+	../bin/$(PROGRAMNAME) $(MODEL) $(SCALE_MODEL)

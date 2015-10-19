@@ -30,7 +30,7 @@ bool assimpLoader::initialize( const std::string& filename ){
    fin.open( filename );
 
    if( !fin.good() ){
-      std::cerr << "File had problems opening in initialize" << std::endl;
+      std::cerr << "File had problems opening in initialize: " << filename << std::endl;
       return false;
    }
    fin.close();
