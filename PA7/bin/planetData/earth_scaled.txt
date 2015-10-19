@@ -1,13 +1,13 @@
 # Geometry file (.obj)
 model ../bin/planetData/planet.obj
 # Center of rotation (Planet or xyz floats)
-planet ../bin/planetData/sun.txt
+planet ../bin/planetData/sun_scaled.txt
 # Direction of rotation (1 for clockwise -1 for counter)
 dir 1
 # Rotation speed (float)
 rspeed 1
 # Orbit Radius (float)
-oradius 1
+oradius 10
 # Oribit speed (float)
 ospeed 1
 # Planet Radius

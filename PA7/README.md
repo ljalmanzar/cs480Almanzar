@@ -1,7 +1,5 @@
 Project 1 - Solar System
 ========================
-Use this link guys:
-http://www.imagemagick.org/script/install-source.php
 
 How to run
 ----------
@@ -13,8 +11,11 @@ Extra Credit
 ------------
 -Orbital path rings added
 
--Panning to planets by pressing 1-9
-	*also following individual planets by pressing shift 1-9 
+-Going from actual to scaled added
+
+-Panning animation to planets by pressing 1-9
+
+-Following individual planets by pressing shift 1-9 
 
 Controls
 --------
@@ -42,8 +43,8 @@ Controls
 | 8 | **goto** Neptune |
 | 9 | **goto** Pluto |
 
-This program will use the Assimp model loader to load files that will be found in another directory.
-This is a group project where, although we all have the source code, we will be using one person's GitHub Repository for submission
+This program will use the Assimp model loader, with the image loader Magick to load objects with textures to create a simulation of a solar system which you will be able to navigate around.
+
 This group consists of
  * Luis Almanzar *(Repo Holder)*
  * Gunnar Wambaugh
