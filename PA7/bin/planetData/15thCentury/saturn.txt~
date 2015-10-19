@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+planet ../../bin/planetData/15thCentury/earth.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 2.25225
+# Orbit Radius (float)
+oradius 9.539
+# Oribit speed (float)
+ospeed 0.323
+# Planet Radius 4.725
+pradius 2
+# Texture file
+texture ../../bin/planetData/saturn_map.jpg
+# Rings?
+ring 1
+# Tilt
+tilt 15.25
+end
