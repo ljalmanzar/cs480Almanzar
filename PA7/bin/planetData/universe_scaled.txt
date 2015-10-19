@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../bin/planetData/planet.obj
+# Center of rotation (Planet or xyz floats)
+crotation 0 0 0
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed .0001	
+# Orbit Radius (float)
+oradius 0
+# Oribit speed (float)
+ospeed 0
+# Planet Radius
+pradius 1000
+# Texture file
+texture ../bin/planetData/star_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
+end
