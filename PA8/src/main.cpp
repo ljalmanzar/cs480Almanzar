@@ -54,6 +54,16 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 
+// BULLET STUFF
+//check for collisions
+btBroadphaseInterface *broadphase;
+// collision algorithm
+btDefaultCollisionConfiguration *collisionConfiguration;
+// param: collisionConfig pointer, used for collision algorithm, sends events to obj
+btCollisionDispatcher *dispatcher; 
+// makes everything work well, forces & shit. world & obj 
+btSequentialImpulseConstraintSolver *solver;
+
 /********
 --MAIN--
 ********/
