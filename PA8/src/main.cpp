@@ -19,10 +19,10 @@
 //Just for this example!
 int w = 800, h = 800;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry;// VBO handle for our geometry
+GLuint vbo_geometry[2];// VBO handle for our geometry
 char * model_filename;
 char * texture_filename;
-int NUM_OF_VERTICIES = 0;
+int NUM_OF_VERTICIES[2];
 
 
 //uniform locations
@@ -63,6 +63,8 @@ btDefaultCollisionConfiguration *collisionConfiguration;
 btCollisionDispatcher *dispatcher; 
 // makes everything work well, forces & shit. world & obj 
 btSequentialImpulseConstraintSolver *solver;
+// the world
+btDiscreteDynamicsWorld *dynamicsWorld;
 
 /********
 --MAIN--
@@ -121,104 +123,63 @@ int main(int argc, char **argv)
     }
 
     // Clean up after ourselves
+    broadphase = NULL;
+	collisionConfiguration = NULL;
+	dispatcher = NULL; 
+	solver = NULL;
     cleanUp();
     return 0;
 }
 
 //--Implementations
-void render()
-{
-    //--Render the scene
-
-    //clear the screen
-    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-
-    //premultiply the matrix for this example
-    mvp = projection * view * model;
-
-    //enable the shader program
-    glUseProgram(program);
-
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-
-    //Bind each texture to the corresponding object
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-
-    //set up the Vertex Buffer Object so it can be drawn
-    glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_texture);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-
-    //set pointers into the vbo for each of the attributes(position and color)
-    glVertexAttribPointer( loc_position,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
-
-    glVertexAttribPointer( loc_texture,
-                            2,
-                            GL_FLOAT,
-                            GL_FALSE,
-                            sizeof(Vertex),
-                            (void*)offsetof(Vertex,uv));
-
-    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
-
-    //clean up
-    glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_texture);
-                           
-    //swap the buffers
-    glutSwapBuffers();
-}
-
-void update()
-{
-
-}
-
-void reshape(int n_w, int n_h)
-{
-    w = n_w;
-    h = n_h;
-    //Change the viewport to be correct
-    glViewport( 0, 0, w, h);
-
-    //Update the projection matrix as well
-    //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
-}
-
 bool initialize()
 {
+	//bullet allocating stuff
+	broadphase = new btDbvtBroadphase();
+	collisionConfiguration = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfiguration); 
+	solver = new btSequentialImpulseConstraintSolver;
+
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
+												solver, collisionConfiguration);	
+	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
+    assimpLoader second_Obj("../bin/hockey_table.obj","../bin/ice.jpg");
+
     AI_Obj.orderVertices();
+    second_Obj.orderVertices();
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
     v = AI_Obj.getOrderedVertices();
 
-    NUM_OF_VERTICIES = v.size();
+    std::vector<Vertex> u;
+    u = second_Obj.getOrderedVertices();
+
+    NUM_OF_VERTICIES[0] = v.size();
+    NUM_OF_VERTICIES[1] = u.size();
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
-    glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
+    glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[0]);
     glBufferData(GL_ARRAY_BUFFER,
                 v.size() * sizeof(Vertex),
                 &v.front(),
                 GL_STATIC_DRAW);
 
+    glGenBuffers(1, &vbo_geometry[1]); // 1st param-how many to create 2nd-address of array of GLuints
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[1]);
+    glBufferData(GL_ARRAY_BUFFER,
+                u.size() * sizeof(Vertex),
+                &u.front(),
+                GL_STATIC_DRAW);
+
     // Text loading
     AI_Obj.mapTextures(loc_texture);
+   // second_Obj.mapTextures(loc_texture[1]);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -316,11 +277,81 @@ bool initialize()
     return true;
 }
 
+void render()
+{
+    //--Render the scene
+
+    //clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+
+    //premultiply the matrix for this example
+    mvp = projection * view * model;
+
+    //enable the shader program
+    glUseProgram(program);
+
+    //upload the matrix to the shader
+    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+
+    //Bind each texture to the corresponding object
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
+
+    //set up the Vertex Buffer Object so it can be drawn
+    glEnableVertexAttribArray(loc_position);
+    glEnableVertexAttribArray(loc_texture);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[0]);
+    glBindTexture( GL_TEXTURE_2D, loc_texture );
+
+    //set pointers into the vbo for each of the attributes(position and color)
+    glVertexAttribPointer( loc_position,//location of attribute
+                           3,//number of elements
+                           GL_FLOAT,//type
+                           GL_FALSE,//normalized?
+                           sizeof(Vertex),//stride
+                           0);//offset
+
+    glVertexAttribPointer( loc_texture,
+                            2,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            sizeof(Vertex),
+                            (void*)offsetof(Vertex,uv));
+
+    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES[0]*3);//mode, starting index, count
+
+    //clean up
+    glDisableVertexAttribArray(loc_position);
+    glDisableVertexAttribArray(loc_texture);
+                           
+    //swap the buffers
+    glutSwapBuffers();
+}
+
+void update()
+{
+
+}
+
+void reshape(int n_w, int n_h)
+{
+    w = n_w;
+    h = n_h;
+    //Change the viewport to be correct
+    glViewport( 0, 0, w, h);
+
+    //Update the projection matrix as well
+    //See the init function for an explaination
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
+}
+
 void cleanUp()
 {
     // Clean up, Clean up
     glDeleteProgram(program);
-    glDeleteBuffers(1, &vbo_geometry);
+    glDeleteBuffers(1, &vbo_geometry[0]);
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)

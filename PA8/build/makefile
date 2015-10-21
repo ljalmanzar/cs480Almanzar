@@ -13,13 +13,13 @@ TEXTURE= ../bin/metal.jpg
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
-all: ../bin/Assimp2
+all: ../bin/Bullet1
 
-../bin/Assimp2: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp2 $(LIBS)
+../bin/Bullet1: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Bullet1 $(LIBS)
 
 clean:
-	rm ../bin/Assimp2 -f
+	rm ../bin/Bullet1 -f
 
-run: ../bin/Assimp2
-	../bin/Assimp2 $(MODEL) $(TEXTURE)
+run: ../bin/Bullet1
+	../bin/Bullet1 $(MODEL) $(TEXTURE)
