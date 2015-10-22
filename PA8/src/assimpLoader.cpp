@@ -69,7 +69,9 @@ void assimpLoader::orderVertices(){
             //get position 
             for (int j = 0; j < 3; ++j){
                tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
+               //triArray[j] = btVector3(tempVert.position[j].x, tempVert.position[j].y, tempVert.position[j].z);
             }
+
             if( myScene->mMeshes[meshIndex]->mNormals != NULL && myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
                tempVert.uv[0] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
                tempVert.uv[1] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;

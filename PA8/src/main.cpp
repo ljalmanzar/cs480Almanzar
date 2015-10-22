@@ -48,6 +48,7 @@ bool initialize();
 void cleanUp();
 
 //--Random time things
+float getDT();
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 
 //--I/O callbacks
@@ -65,6 +66,10 @@ btCollisionDispatcher *dispatcher;
 btSequentialImpulseConstraintSolver *solver;
 // the world
 btDiscreteDynamicsWorld *dynamicsWorld;
+// triangle mesh 
+btTriangleMesh *objTriMesh;
+// the rigid body..
+btRigidBody *rigidBody;
 
 /********
 --MAIN--
@@ -139,10 +144,31 @@ bool initialize()
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration); 
 	solver = new btSequentialImpulseConstraintSolver;
+	objTriMesh = new btTriangleMesh();
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 												solver, collisionConfiguration);	
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+
+	//get triArray from OBJ
+	btVector3 tempTri[3];
+
+	objTriMesh->addTriangle(tempTri[0],tempTri[1],tempTri[2]);
+
+	// collision pointer
+	btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
+
+	// object characteristics & creation of the rigid body
+	btDefaultMotionState *shapeMotionState = NULL;
+	shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(1, 1, 1)));
+	btScalar mass(1);
+	btVector3 inertia(1, 1, 1);
+	shape->calculateLocalInertia(mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
+	rigidBody = new btRigidBody(shapeRigidBodyCI);
+
+	// dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
+	dynamicsWorld->addRigidBody(rigidBody);
 
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
@@ -332,7 +358,14 @@ void render()
 
 void update()
 {
+	btTransform trans;
+	btScalar m[16];
+	dynamicsWorld->stepSimulation(getDT(), 10);
+	rigidBody->getMotionState()->getWorldTransform(trans);
+	trans.getOpenGLMatrix(m);
+	model = glm::make_mat4(m);
 
+	glutPostRedisplay();
 }
 
 void reshape(int n_w, int n_h)
@@ -352,6 +385,16 @@ void cleanUp()
     // Clean up, Clean up
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo_geometry[0]);
+}
+
+//returns the time delta
+float getDT()
+{
+    float ret;
+    t2 = std::chrono::high_resolution_clock::now();
+    ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
+    t1 = std::chrono::high_resolution_clock::now();
+    return ret;
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include "vertex.cpp"
+#include "btBulletDynamicsCommon.h"
 
 class assimpLoader{
    public:
@@ -36,6 +37,8 @@ class assimpLoader{
 
       Assimp::Importer importer;
       const aiScene* myScene;
+
+      btVector3 triArray[3];
 
       std::vector<Vertex> inOrderVertices;
 };

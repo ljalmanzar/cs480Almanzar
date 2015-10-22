@@ -7,8 +7,8 @@ BULLETLIBS= -I/usr/include/bullet -lBulletDynamics -lBulletSoftBody -lBulletColl
 # Linux
 CC=g++
 LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS) $(BULLETLIBS)
-MODEL= ../bin/peeps_model.obj
-TEXTURE= ../bin/metal.jpg
+MODEL= ../bin/planet.obj
+TEXTURE= ../bin/ice.jpg
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
