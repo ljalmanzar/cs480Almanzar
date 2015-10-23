@@ -1,3 +1,6 @@
+#ifndef __PLAYER_H_
+#define __PLAYER_H_
+
 #include "GLD.cpp"
 
 class Player{
@@ -20,3 +23,5 @@ class Player{
 		int _score;
 		GLD _paddle;
 };
+
+#endif

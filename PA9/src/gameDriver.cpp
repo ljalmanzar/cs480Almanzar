@@ -1,14 +1,17 @@
-#include "gameDriver"
+#ifndef __GAMEDRIVER_CPP_
+#define __GAMEDRIVER_CPP_
+
+#include "gameDriver.h"
 
 GameDriver::GameDriver(){
-
+	
 }
 
 GameDriver::~GameDriver(){
 
 }
 
-void initGame(){
+void GameDriver::initGame(){
 	// create players
 	// assign AI
 	//
@@ -25,6 +28,8 @@ Player GameDriver::getPlayer2() const{
 	return _player2;
 }
 
-std::std::vector<GLD> getPucks() const{
+std::vector<GLD> GameDriver::getPucks() const{
 	return _pucks;
 }
+
+#endif

@@ -12,6 +12,10 @@
 #include "shaderLoader.cpp"
 #include "assimpLoader.cpp"
 
+#include "gameDriver.cpp"
+#include "player.cpp"
+#include "powerup.cpp"
+
 //--Evil Global variables
 //Just for this example!
 int w = 640, h = 480;// Window size

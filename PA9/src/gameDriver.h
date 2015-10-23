@@ -1,7 +1,14 @@
+#ifndef __GAMEDRIVER_H_
+#define __GAMEDRIVER_H_
+
 #include "player.cpp"
 #include "GLD.cpp"
 #include "powerup.cpp"
 #include <iostream>
+
+#ifndef __PLAYER_H_
+class Player;
+#endif
 
 class GameDriver{
 	public:
@@ -24,3 +31,5 @@ class GameDriver{
 		GLD _table;
 		std::vector<GLD> _pucks;
 };
+
+#endif

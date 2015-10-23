@@ -1,3 +1,6 @@
+#ifndef __PLAYER_CPP_
+#define __PLAYER_CPP_
+
 #include "player.h"
 
 Player::Player(){
@@ -33,3 +36,5 @@ int Player::getScore() const{
 GLD Player::getPaddle() const{
 	return _paddle;
 }
+
+#endif
