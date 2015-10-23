@@ -169,7 +169,7 @@ bool initialize()
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
-    assimpLoader second_Obj("../bin/hockey_table.obj","../bin/metal.jpg");
+    assimpLoader second_Obj("../bin/casket_uv.obj","../bin/metal.jpg");
 
     AI_Obj.orderVertices( objTriMesh[0] );
     second_Obj.orderVertices( objTriMesh[1] );
@@ -223,7 +223,7 @@ bool initialize()
 
     // Text loading
     AI_Obj.mapTextures(loc_texture);
-   // second_Obj.mapTextures(loc_texture[1]);
+    second_Obj.mapTextures(loc_texture);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
