@@ -67,9 +67,16 @@ btSequentialImpulseConstraintSolver *solver;
 // the world
 btDiscreteDynamicsWorld *dynamicsWorld;
 // triangle mesh 
-btTriangleMesh *objTriMesh;
+btTriangleMesh *objTriMesh[2];
 // the rigid body..
-btRigidBody *rigidBody;
+btRigidBody *rigidBody[2];
+
+#define BIT(x) (1<<(x))
+enum collisiontypes{
+	COL_NOTHING = 0,
+	COL_TABLE = BIT(0),
+	COL_BALL = BIT(1)
+};
 
 /********
 --MAIN--
@@ -144,7 +151,8 @@ bool initialize()
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration); 
 	solver = new btSequentialImpulseConstraintSolver;
-	objTriMesh = new btTriangleMesh();
+	objTriMesh[0] = new btTriangleMesh();
+	objTriMesh[1] = new btTriangleMesh();
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 												solver, collisionConfiguration);	
@@ -155,8 +163,8 @@ bool initialize()
 
     assimpLoader second_Obj("../bin/hockey_table.obj","../bin/metal.jpg");
 
-    AI_Obj.orderVertices( objTriMesh );
-    second_Obj.orderVertices( NULL );
+    AI_Obj.orderVertices( objTriMesh[0] );
+    second_Obj.orderVertices( objTriMesh[1] );
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
@@ -169,7 +177,8 @@ bool initialize()
     NUM_OF_VERTICIES[1] = u.size();
 
     // collision pointer
-    btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
+    btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh[0], true);
+    btCollisionShape *shape2 = new btBvhTriangleMeshShape(objTriMesh[1], true);
 
     // object characteristics & creation of the rigid body
     btDefaultMotionState *shapeMotionState = NULL;
@@ -177,11 +186,17 @@ bool initialize()
     btScalar mass(1);
     btVector3 inertia(1, 1, 1);
     shape->calculateLocalInertia(mass, inertia);
+    shape2->calculateLocalInertia(mass, inertia);
     btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
-    rigidBody = new btRigidBody(shapeRigidBodyCI);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(mass, shapeMotionState, shape2, inertia);
+    rigidBody[0] = new btRigidBody(shapeRigidBodyCI);
+    rigidBody[1] = new btRigidBody(shapeRigidBodyCI2);
 
     // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
-    dynamicsWorld->addRigidBody(rigidBody);
+    int ballCollideWith = COL_TABLE;
+    int tableCollideWith = COL_BALL;
+    dynamicsWorld->addRigidBody(rigidBody[0], COL_BALL, ballCollideWith);
+    dynamicsWorld->addRigidBody(rigidBody[1], COL_TABLE, tableCollideWith);
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
@@ -358,7 +373,7 @@ void update()
 	btTransform trans;
 	btScalar m[16];
 	dynamicsWorld->stepSimulation(getDT(), 10);
-	rigidBody->getMotionState()->getWorldTransform(trans);
+	rigidBody[0]->getMotionState()->getWorldTransform(trans);
 	trans.getOpenGLMatrix(m);
 	model[0] = glm::make_mat4(m);
 
@@ -422,7 +437,7 @@ void special_keyboard(int key, int x_pos, int y_pos)
 {
    switch(key)
       {
-/*
+		/*
          case GLUT_KEY_LEFT:
              model[1] = glm::rotate(model[1, (.2f), glm::vec3(0.0,1.0,0.0));
              break;
@@ -438,7 +453,7 @@ void special_keyboard(int key, int x_pos, int y_pos)
          case GLUT_KEY_DOWN:
          model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
          break;         
-*/
+		*/
       }
 
     glutPostRedisplay();
