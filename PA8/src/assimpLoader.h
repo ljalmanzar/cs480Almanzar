@@ -31,6 +31,9 @@ class assimpLoader{
       //load textures
       void mapTextures(GLuint & location);
 
+      //get that location in the buffer
+      GLuint getLocTexture() const;
+
    private: 
       std::string object_filename;
       std::string texture_file; 
@@ -39,6 +42,8 @@ class assimpLoader{
       const aiScene* myScene;
 
       std::vector<Vertex> inOrderVertices;
+
+      GLuint locationOfTexture;
 };
 
 #endif

@@ -113,15 +113,20 @@ void assimpLoader::mapTextures(GLuint & location){
     myImage.write( &blob );
 
     // Some more stuff for gpu
-    glGenTextures(1, &location);
+    glGenTextures(1, &locationOfTexture);
     glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, location );
+    glBindTexture( GL_TEXTURE_2D, locationOfTexture );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
                           0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
+    location = locationOfTexture;
+}
+
+GLuint assimpLoader::getLocTexture() const {
+    return locationOfTexture;
 }
 
 #endif

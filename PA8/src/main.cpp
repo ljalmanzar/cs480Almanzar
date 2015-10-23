@@ -31,6 +31,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLuint loc_texture;
+GLuint pic_textures[2];
 
 //transform matrices
 glm::mat4 model[2];//obj->world each object should have its own model matrix
@@ -188,22 +189,22 @@ bool initialize()
     btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh[0], true);
     btCollisionShape *shape2 = new btBvhTriangleMeshShape(objTriMesh[1], true);
     btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-    btCollisionShape* fallShape = new btSphereShape(1);
+    btCollisionShape *fallShape = new btSphereShape(1);
 
     btScalar mass(1);
-    btVector3 inertia(1, 1, 1);
+    btVector3 inertia(1, 2, 10);
    
     // object characteristics & creation of the rigid body
     btDefaultMotionState *shapeMotionState = NULL;
-    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(1, 10, 1)));
+    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(2.8, 5, 0)));
     fallShape->calculateLocalInertia(mass, inertia);
     btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, fallShape, inertia);
     rigidBody[0] = new btRigidBody(shapeRigidBodyCI);
    
     btDefaultMotionState *groundMotionState = NULL;
-    groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
-    groundShape->calculateLocalInertia(mass, inertia);
-    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(0, groundMotionState, groundShape, inertia);
+    groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+    shape2->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(0, groundMotionState, shape2, inertia);
     rigidBody[1] = new btRigidBody(shapeRigidBodyCI2);
 
     // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
@@ -232,8 +233,12 @@ bool initialize()
                 GL_STATIC_DRAW);
 
     // Text loading
-    AI_Obj.mapTextures(loc_texture);
-    second_Obj.mapTextures(loc_texture);
+    AI_Obj.mapTextures(pic_textures[0]);
+    second_Obj.mapTextures(pic_textures[1]);
+
+    //get picture texture location
+    pic_textures[0] = AI_Obj.getLocTexture();
+    pic_textures[1] = second_Obj.getLocTexture();
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -350,8 +355,8 @@ void render()
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
         //Bind each texture to the corresponding object
-        glActiveTexture( GL_TEXTURE0+i );
-        glBindTexture( GL_TEXTURE_2D, loc_texture );
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, pic_textures[i] );
 
         //set up the Vertex Buffer Object so it can be drawn
         glEnableVertexAttribArray(loc_position);
