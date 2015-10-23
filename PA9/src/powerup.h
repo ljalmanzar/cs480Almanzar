@@ -9,8 +9,25 @@ class Powerup{
 		Powerup();
 		~Powerup();
 		
+		void init();
+
+		void spawnRandPU();
+
+		// getters
+
+		// setters
+
 	private:
-		
+
+		// powerup hub
+		GLD _mysteryPU;
+
+		// powerup types
+		GLD _multiPuck;
+		GLD _heavyPuck;
+		GLD _lightPuck;
+		GLD _iceRing;
+		GLD _putinPaddle;
 };
 
 #endif
