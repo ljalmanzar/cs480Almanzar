@@ -19,7 +19,7 @@
 //Just for this example!
 int w = 800, h = 800;// Window size
 GLuint program;// The GLSL program handle
-GLuint vbo_geometry[2];// VBO handle for our geometry
+GLuint vbo_geometry[3];// VBO handle for our geometry
 char * model_filename;
 char * texture_filename;
 int NUM_OF_VERTICIES[3];
@@ -31,10 +31,10 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLuint loc_texture;
-GLuint pic_textures[2];
+GLuint pic_textures[3];
 
 //transform matrices
-glm::mat4 model[2];//obj->world each object should have its own model matrix
+glm::mat4 model[3];//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
@@ -186,12 +186,12 @@ bool initialize()
     std::vector<Vertex> u;
     u = second_Obj.getOrderedVertices();
 
-    std::vector<Vertex> v;
-    w = third_Obj.orderVertices();
+    std::vector<Vertex> thirdVec;
+    thirdVec = third_Obj.getOrderedVertices();
 
     NUM_OF_VERTICIES[0] = v.size();
     NUM_OF_VERTICIES[1] = u.size();
-    NUM_OF_VERTICIES[2] = w.size();
+    NUM_OF_VERTICIES[2] = thirdVec.size();
 
     // collision pointer
     btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh[0], true);
@@ -231,6 +231,7 @@ bool initialize()
     */
     dynamicsWorld->addRigidBody(rigidBody[0]);
     dynamicsWorld->addRigidBody(rigidBody[1]);
+    dynamicsWorld->addRigidBody(rigidBody[2]);
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
@@ -254,6 +255,7 @@ bool initialize()
     //get picture texture location
     pic_textures[0] = AI_Obj.getLocTexture();
     pic_textures[1] = second_Obj.getLocTexture();
+    pic_textures[2] = third_Obj.getLocTexture();
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -359,7 +361,7 @@ void render()
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-    for( int i = 0; i < 2; i++ ){    
+    for( int i = 0; i < 3; i++ ){    
         //premultiply the matrix for this example
         mvp = projection * view * model[i];
 
