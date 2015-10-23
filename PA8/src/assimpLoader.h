@@ -23,7 +23,7 @@ class assimpLoader{
       bool initialize( const std::string& filename );
 
       //changes inOrderVertices to match faces
-      void orderVertices();
+      void orderVertices( btTriangleMesh * bullet_obj );
 
       //returns vector to user
       std::vector<Vertex> getOrderedVertices() const;
@@ -37,8 +37,6 @@ class assimpLoader{
 
       Assimp::Importer importer;
       const aiScene* myScene;
-
-      btVector3 triArray[3];
 
       std::vector<Vertex> inOrderVertices;
 };

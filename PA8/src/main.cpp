@@ -33,7 +33,7 @@ GLint loc_position;
 GLuint loc_texture;
 
 //transform matrices
-glm::mat4 model;//obj->world each object should have its own model matrix
+glm::mat4 model[2];//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
@@ -150,33 +150,13 @@ bool initialize()
 												solver, collisionConfiguration);	
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-	//get triArray from OBJ
-	btVector3 tempTri[3];
-
-	objTriMesh->addTriangle(tempTri[0],tempTri[1],tempTri[2]);
-
-	// collision pointer
-	btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
-
-	// object characteristics & creation of the rigid body
-	btDefaultMotionState *shapeMotionState = NULL;
-	shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(1, 1, 1)));
-	btScalar mass(1);
-	btVector3 inertia(1, 1, 1);
-	shape->calculateLocalInertia(mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
-	rigidBody = new btRigidBody(shapeRigidBodyCI);
-
-	// dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
-	dynamicsWorld->addRigidBody(rigidBody);
-
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
-    assimpLoader second_Obj("../bin/hockey_table.obj","../bin/ice.jpg");
+    assimpLoader second_Obj("../bin/hockey_table.obj","../bin/metal.jpg");
 
-    AI_Obj.orderVertices();
-    second_Obj.orderVertices();
+    AI_Obj.orderVertices( objTriMesh );
+    second_Obj.orderVertices( NULL );
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
@@ -187,6 +167,21 @@ bool initialize()
 
     NUM_OF_VERTICIES[0] = v.size();
     NUM_OF_VERTICIES[1] = u.size();
+
+    // collision pointer
+    btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
+
+    // object characteristics & creation of the rigid body
+    btDefaultMotionState *shapeMotionState = NULL;
+    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(1, 10, 1)));
+    btScalar mass(1);
+    btVector3 inertia(1, 1, 1);
+    shape->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
+    rigidBody = new btRigidBody(shapeRigidBodyCI);
+
+    // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
+    dynamicsWorld->addRigidBody(rigidBody);
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
@@ -311,42 +306,44 @@ void render()
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-    //premultiply the matrix for this example
-    mvp = projection * view * model;
+    for( int i = 0; i < 2; i++ ){    
+        //premultiply the matrix for this example
+        mvp = projection * view * model[i];
 
-    //enable the shader program
-    glUseProgram(program);
+        //enable the shader program
+        glUseProgram(program);
 
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+        //upload the matrix to the shader
+        glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
-    //Bind each texture to the corresponding object
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
+        //Bind each texture to the corresponding object
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, loc_texture );
 
-    //set up the Vertex Buffer Object so it can be drawn
-    glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_texture);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[0]);
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
+        //set up the Vertex Buffer Object so it can be drawn
+        glEnableVertexAttribArray(loc_position);
+        glEnableVertexAttribArray(loc_texture);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[i]);
+        glBindTexture( GL_TEXTURE_2D, loc_texture );
 
-    //set pointers into the vbo for each of the attributes(position and color)
-    glVertexAttribPointer( loc_position,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
+        //set pointers into the vbo for each of the attributes(position and color)
+        glVertexAttribPointer( loc_position,//location of attribute
+                               3,//number of elements
+                               GL_FLOAT,//type
+                               GL_FALSE,//normalized?
+                               sizeof(Vertex),//stride
+                               0);//offset
 
-    glVertexAttribPointer( loc_texture,
-                            2,
-                            GL_FLOAT,
-                            GL_FALSE,
-                            sizeof(Vertex),
-                            (void*)offsetof(Vertex,uv));
+        glVertexAttribPointer( loc_texture,
+                                2,
+                                GL_FLOAT,
+                                GL_FALSE,
+                                sizeof(Vertex),
+                                (void*)offsetof(Vertex,uv));
 
-    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES[0]*3);//mode, starting index, count
+        glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES[i]*3);//mode, starting index, count
+    }
 
     //clean up
     glDisableVertexAttribArray(loc_position);
@@ -363,7 +360,7 @@ void update()
 	dynamicsWorld->stepSimulation(getDT(), 10);
 	rigidBody->getMotionState()->getWorldTransform(trans);
 	trans.getOpenGLMatrix(m);
-	model = glm::make_mat4(m);
+	model[0] = glm::make_mat4(m);
 
 	glutPostRedisplay();
 }
@@ -425,9 +422,10 @@ void special_keyboard(int key, int x_pos, int y_pos)
 {
    switch(key)
       {
+/*
          case GLUT_KEY_LEFT:
-         model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
-         break;
+             model[1] = glm::rotate(model[1, (.2f), glm::vec3(0.0,1.0,0.0));
+             break;
 
          case GLUT_KEY_RIGHT:
          model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
@@ -440,6 +438,7 @@ void special_keyboard(int key, int x_pos, int y_pos)
          case GLUT_KEY_DOWN:
          model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
          break;         
+*/
       }
 
     glutPostRedisplay();
