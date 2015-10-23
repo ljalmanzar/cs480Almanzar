@@ -22,7 +22,7 @@ GLuint program;// The GLSL program handle
 GLuint vbo_geometry[2];// VBO handle for our geometry
 char * model_filename;
 char * texture_filename;
-int NUM_OF_VERTICIES[2];
+int NUM_OF_VERTICIES[3];
 
 
 //uniform locations
@@ -68,9 +68,9 @@ btSequentialImpulseConstraintSolver *solver;
 // the world
 btDiscreteDynamicsWorld *dynamicsWorld;
 // triangle mesh 
-btTriangleMesh *objTriMesh[2];
+btTriangleMesh *objTriMesh[3];
 // the rigid body..
-btRigidBody *rigidBody[2];
+btRigidBody *rigidBody[3];
 
 #define BIT(x) (1<<(x))
 enum collisiontypes{
@@ -162,6 +162,7 @@ bool initialize()
 	solver = new btSequentialImpulseConstraintSolver;
 	objTriMesh[0] = new btTriangleMesh();
 	objTriMesh[1] = new btTriangleMesh();
+	objTriMesh[2] = new btTriangleMesh();
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 												solver, collisionConfiguration);	
@@ -172,8 +173,11 @@ bool initialize()
 
     assimpLoader second_Obj("../bin/casket_uv.obj","../bin/metal.jpg");
 
+    assimpLoader third_Obj("../bin/ramp.obj", "../bin/ice.jpg");
+
     AI_Obj.orderVertices( objTriMesh[0] );
     second_Obj.orderVertices( objTriMesh[1] );
+    third_Obj.orderVertices( objTriMesh[2] );
 
     // V is where we keep all our info for the object
     std::vector<Vertex> v;
@@ -182,12 +186,17 @@ bool initialize()
     std::vector<Vertex> u;
     u = second_Obj.getOrderedVertices();
 
+    std::vector<Vertex> v;
+    w = third_Obj.orderVertices();
+
     NUM_OF_VERTICIES[0] = v.size();
     NUM_OF_VERTICIES[1] = u.size();
+    NUM_OF_VERTICIES[2] = w.size();
 
     // collision pointer
     btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh[0], true);
     btCollisionShape *shape2 = new btBvhTriangleMeshShape(objTriMesh[1], true);
+    btCollisionShape *shape3 = new btBvhTriangleMeshShape(objTriMesh[2], true);
     btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
     btCollisionShape *fallShape = new btSphereShape(1);
 
@@ -206,6 +215,12 @@ bool initialize()
     shape2->calculateLocalInertia(mass, inertia);
     btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(0, groundMotionState, shape2, inertia);
     rigidBody[1] = new btRigidBody(shapeRigidBodyCI2);
+
+	btDefaultMotionState *triangleMotionState = NULL;
+    triangleMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+    shape3->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI3(mass, groundMotionState, shape3, inertia);
+    rigidBody[2] = new btRigidBody(shapeRigidBodyCI3);    
 
     // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
     /*
