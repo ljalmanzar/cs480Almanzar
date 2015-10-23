@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Assimp Texture Loading");
+    glutCreateWindow("Bullet Part I");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -135,10 +135,18 @@ int main(int argc, char **argv)
     }
 
     // Clean up after ourselves
+    delete broadphase;
     broadphase = NULL;
-	collisionConfiguration = NULL;
-	dispatcher = NULL; 
+
+    delete collisionConfiguration;
+    collisionConfiguration = NULL;
+    
+    delete dispatcher;
+    dispatcher = NULL; 
+    
+    delete solver;
 	solver = NULL;
+    
     cleanUp();
     return 0;
 }
