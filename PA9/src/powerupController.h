@@ -1,5 +1,3 @@
-
-
 // This class controls the main overal flow of a game.
 class PowerupController{
 	public:

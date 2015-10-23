@@ -100,7 +100,7 @@ void assimpLoader::mapTextures(GLuint & location){
     // Get size
     int imageWidth = myImage.columns();
     int imageHeight = myImage.rows();
-    // Not too sure what this stuff is.. 
+    // convert image data to blob for easier manipulation
     Blob blob;
     myImage.magick("RGBA");
     myImage.write( &blob );
