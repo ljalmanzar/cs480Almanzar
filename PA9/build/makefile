@@ -1,23 +1,32 @@
+# Model Loader
+ASSIMP= -lassimp
+
 # Image Loader
 MAGICKLIBS= `Magick++-config --ldflags --libs`
 MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
 
+# Bullet
+BULLETLIBS= -I/usr/include/bullet -lBulletDynamics -lBulletSoftBody -lBulletCollision -lLinearMath
+
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS)
+LIBS= -lglut -lGLEW -lGL $(ASSIMP) $(MAGICKLIBS) $(BULLETLIBS)
 MODEL= ../bin/capsule.obj
 TEXTURE= ../bin/capsule0.jpg
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
-all: ../bin/Assimp2
+all: ../bin/AirHockey
 
-../bin/Assimp2: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/Assimp2 $(LIBS)
+../bin/AirHockey: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/AirHockey $(LIBS)
+
+test: ../src/GLD.h ../src/GLD.cpp
+	$(CC) $(CXXFLAGS) -c ../src/GLD.cpp 
 
 clean:
-	rm ../bin/Assimp2 -f
+	rm ../bin/AirHockey -f
 
-run: ../bin/Assimp2
-	../bin/Assimp2 $(MODEL) $(TEXTURE)
+run: ../bin/AirHockey
+	../bin/AirHockey $(MODEL) $(TEXTURE)
