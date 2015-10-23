@@ -6,4 +6,5 @@ class Powerup{
 		Powerup();
 		~Powerup();
 	private:
+		
 };
