@@ -217,21 +217,21 @@ bool initialize()
     rigidBody[1] = new btRigidBody(shapeRigidBodyCI2);
 
 	btDefaultMotionState *triangleMotionState = NULL;
-    triangleMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+    triangleMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(0, 5, -2.2)));
     shape3->calculateLocalInertia(mass, inertia);
-    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI3(mass, groundMotionState, shape3, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI3(mass, triangleMotionState, shape3, inertia);
     rigidBody[2] = new btRigidBody(shapeRigidBodyCI3);    
 
     // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
-    /*
     int ballCollideWith = COL_TABLE;
     int tableCollideWith = COL_BALL;
     dynamicsWorld->addRigidBody(rigidBody[0], COL_BALL, ballCollideWith);
     dynamicsWorld->addRigidBody(rigidBody[1], COL_TABLE, tableCollideWith);
-    */
+    /*
     dynamicsWorld->addRigidBody(rigidBody[0]);
     dynamicsWorld->addRigidBody(rigidBody[1]);
     dynamicsWorld->addRigidBody(rigidBody[2]);
+    */
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
@@ -248,9 +248,18 @@ bool initialize()
                 &u.front(),
                 GL_STATIC_DRAW);
 
+    glGenBuffers(1, &vbo_geometry[2]); // 1st param-how many to create 2nd-address of array of GLuints
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry[2]);
+    glBufferData(GL_ARRAY_BUFFER,
+                thirdVec.size() * sizeof(Vertex),
+                &thirdVec.front(),
+                GL_STATIC_DRAW);
+
     // Text loading
     AI_Obj.mapTextures(pic_textures[0]);
     second_Obj.mapTextures(pic_textures[1]);
+    third_Obj.mapTextures(pic_textures[2]);
+
 
     //get picture texture location
     pic_textures[0] = AI_Obj.getLocTexture();
