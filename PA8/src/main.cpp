@@ -128,10 +128,18 @@ int main(int argc, char **argv)
     }
 
     // Clean up after ourselves
+    delete broadphase;
     broadphase = NULL;
-	collisionConfiguration = NULL;
-	dispatcher = NULL; 
+
+    delete collisionConfiguration;
+    collisionConfiguration = NULL;
+    
+    delete dispatcher;
+    dispatcher = NULL; 
+    
+    delete solver;
 	solver = NULL;
+    
     cleanUp();
     return 0;
 }
