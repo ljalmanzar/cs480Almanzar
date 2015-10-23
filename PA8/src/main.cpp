@@ -187,24 +187,34 @@ bool initialize()
     // collision pointer
     btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh[0], true);
     btCollisionShape *shape2 = new btBvhTriangleMeshShape(objTriMesh[1], true);
+    btCollisionShape *groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+    btCollisionShape* fallShape = new btSphereShape(1);
 
+    btScalar mass(1);
+    btVector3 inertia(1, 1, 1);
+   
     // object characteristics & creation of the rigid body
     btDefaultMotionState *shapeMotionState = NULL;
     shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(1, 10, 1)));
-    btScalar mass(1);
-    btVector3 inertia(1, 1, 1);
-    shape->calculateLocalInertia(mass, inertia);
-    shape2->calculateLocalInertia(mass, inertia);
-    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
-    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(mass, shapeMotionState, shape2, inertia);
+    fallShape->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, fallShape, inertia);
     rigidBody[0] = new btRigidBody(shapeRigidBodyCI);
+   
+    btDefaultMotionState *groundMotionState = NULL;
+    groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -1, 0)));
+    groundShape->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI2(0, groundMotionState, groundShape, inertia);
     rigidBody[1] = new btRigidBody(shapeRigidBodyCI2);
 
     // dynamicsWorld->addRigidBody(rigidBody,COLLIDE_MASK, CollidesWith); COLLIDE_MASK & Collision... IDK
+    /*
     int ballCollideWith = COL_TABLE;
     int tableCollideWith = COL_BALL;
     dynamicsWorld->addRigidBody(rigidBody[0], COL_BALL, ballCollideWith);
     dynamicsWorld->addRigidBody(rigidBody[1], COL_TABLE, tableCollideWith);
+    */
+    dynamicsWorld->addRigidBody(rigidBody[0]);
+    dynamicsWorld->addRigidBody(rigidBody[1]);
 
     // Create a Vertex Buffer object to store this vertex info on the GPU
     glGenBuffers(1, &vbo_geometry[0]); // 1st param-how many to create 2nd-address of array of GLuints
@@ -340,7 +350,7 @@ void render()
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
         //Bind each texture to the corresponding object
-        glActiveTexture( GL_TEXTURE0 );
+        glActiveTexture( GL_TEXTURE0+i );
         glBindTexture( GL_TEXTURE_2D, loc_texture );
 
         //set up the Vertex Buffer Object so it can be drawn
@@ -381,10 +391,11 @@ void update()
 	btTransform trans;
 	btScalar m[16];
 	dynamicsWorld->stepSimulation(getDT(), 10);
-	rigidBody[0]->getMotionState()->getWorldTransform(trans);
+	
+    rigidBody[0]->getMotionState()->getWorldTransform(trans);
 	trans.getOpenGLMatrix(m);
-	model[0] = glm::make_mat4(m);
-
+    model[0] = glm::make_mat4(m);
+    
 	glutPostRedisplay();
 }
 
