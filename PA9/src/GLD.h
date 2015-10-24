@@ -68,8 +68,8 @@ class GLD{
 		// Bullet
 		btTriangleMesh * _objMesh;
 		btRigidBody * _rigidBody;
-		btScalar mass;
-		btVector3 inertia;
+		btScalar _mass;
+		btVector3 _inertia;
 };
 
 #endif
