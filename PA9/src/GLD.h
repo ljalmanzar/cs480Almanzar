@@ -26,7 +26,7 @@ class GLD{
 	public:
 		// constructors, deconstructors and such
 		GLD();
-		GLD( const std::string& geometry_file, const std::string& texture_file )
+		GLD( const std::string& geometry_file, const std::string& texture_file );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
@@ -42,7 +42,7 @@ class GLD{
 		glm::mat4 getModel() const;
 		GLuint getVBO() const;
 		GLuint getPicTexture() const;
-		GLuint getNumOfVerticies const;
+		GLuint getNumOfVerticies() const;
 		btRigidBody* getRigidBody() const;
 		btScalar getMass() const;
 		std::vector<Vertex> getOrderedVerticies() const;

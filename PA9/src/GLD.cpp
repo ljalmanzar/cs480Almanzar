@@ -83,7 +83,8 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 }
 
 GLD::~GLD(){
-	//stub
+	delete _objMesh;
+	delete _rigidBody;
 }
 /*
 class GLD{
@@ -178,31 +179,32 @@ void GLD::orderVerticies(){
 	int numMeshes;
 	Vertex tempVert;
 	btVector3 triArray[3];
+	_geometry = std::vector<Vertex> (0);
 
 	// obtain the number of meshes
 	numMeshes = _myScene -> mNumMeshes;
 
 	// 
 	for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){
-		int numFacesInMesh = myScene->mMeshes[meshIndex]->mNumFaces;
+		int numFacesInMesh = _myScene->mMeshes[meshIndex]->mNumFaces;
 		//iterate through faces
 		for( int faceIndex = 0; faceIndex < numFacesInMesh; faceIndex++ ){
 			//get val from faces' mIndeces array
 			for( int i = 0; i < 3; i++ ){
 				//go to aiMesh's mVertices Array
-				int vertice_index = myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
+				int vertice_index = _myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
 				//get position 
 				for (int j = 0; j < 3; ++j){
-					tempVert.position[j] = myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
+					tempVert.position[j] = _myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
 				}
-				if( myScene->mMeshes[meshIndex]->mNormals != NULL && myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
-					tempVert.uv[0] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
-					tempVert.uv[1] = myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
+				if( _myScene->mMeshes[meshIndex]->mNormals != NULL && _myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
+					tempVert.uv[0] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
+					tempVert.uv[1] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
 				}
 
 
 				//add to the final vec
-				inOrderVertices.push_back( tempVert );
+				_geometry.push_back( tempVert );
 				if( _objMesh != NULL ){
 					_objMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
 				}
@@ -216,35 +218,35 @@ void GLD::mapTextures(){
 }
 
 glm::mat4 GLD::getModel() const{
-
+	return glm::mat4(1.0f);
 }
 
 GLuint GLD::getVBO() const{
-
+	return 0;
 }
 
 GLuint GLD::getPicTexture() const{
-
+	return 0;
 }
 
-GLuint GLD::getNumOfVerticies const{
-
+GLuint GLD::getNumOfVerticies() const{
+	return 0;
 }
 
 btRigidBody* GLD::getRigidBody() const{
-
+	return NULL;
 }
 
 btScalar GLD::getMass() const{
-
+	return 0;
 }
 
 std::vector<Vertex> GLD::getOrderedVerticies() const{
-
+	return std::vector<Vertex> (0);
 }
 
 bool GLD::setModel( const glm::mat4& incomingModel ){
-
+	return false;
 }
 
 #endif
