@@ -214,13 +214,14 @@ bool initialize()
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-	btRigidBody *rigidBodyHolder;
-
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
-    objectController = new GLD("../bin/capsule.obj","ice.jpg");
+    objectController = new GLD("../bin/capsule.obj","../bin/ice.jpg");
+    cout << "this now has " << objectController->getNumOfVerticies() << " verticies" << endl;
     objectController->addPhysics();
+    
+
     //objectController->orderVerticies();
     //objectController->mapTextures();
 

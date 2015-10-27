@@ -16,7 +16,7 @@ GLD::GLD(){
 	_mass = 1;
 	_inertia = btVector3(0,0,0);
 	_myScene = NULL;
-	_objMesh = NULL;
+	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
 	_cShape = NULL;
 }
@@ -35,13 +35,12 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 	_mass = 1;
 	_inertia = btVector3(0,0,0);
 	_myScene = NULL;
+	_objMesh = new btTriangleMesh();
+	_rigidBody = NULL;
+	_cShape = NULL;
 	
 	//initialize the scene from Assimp and textures
 	this->initialize(  _geometryFile, _textureFile );
-
-	_objMesh = NULL;
-	_rigidBody = NULL;
-	_cShape = NULL;
 
 	std::cout << "SEG FAULT AFTER" << endl;
 }
@@ -59,7 +58,7 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 	// clear allocated memory( to not worry overwriting )
 	delete _objMesh;
 	delete _rigidBody;
-	glDeleteBuffers(1, &srcGLD._vboGeometry);
+	glDeleteBuffers(1, &this->_vboGeometry);
 
 
 	// copy over from other object	
@@ -161,7 +160,7 @@ void GLD::orderVerticies(){
 	// obtain the number of meshes
 	numMeshes = _myScene -> mNumMeshes;
 
-	// 
+	// iterate through the meshes and go through
 	for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){
 		int numFacesInMesh = _myScene->mMeshes[meshIndex]->mNumFaces;
 		//iterate through faces
@@ -174,20 +173,24 @@ void GLD::orderVerticies(){
 				for (int j = 0; j < 3; ++j){
 					tempVert.position[j] = _myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
 				}
+				triArray[i] = btVector3( tempVert.position[0], tempVert.position[1], tempVert.position[2] );
+
 				if( _myScene->mMeshes[meshIndex]->mNormals != NULL && _myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
 					tempVert.uv[0] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
 					tempVert.uv[1] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
 				}
-
-
-				//add to the final vec
-				_geometry.push_back( tempVert );
-				if( _objMesh != NULL ){
-					_objMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
-				}
+			}
+			//add to the final vec
+			_geometry.push_back( tempVert );
+			if( _objMesh != NULL ){
+				_objMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
 			}
 		}
 	}
+
+	// save the number of verticies
+	_numOfVerticies = _geometry.size();
+
 }
 
 void GLD::mapTextures(){
@@ -217,21 +220,12 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
-std::cout << "start of function" << endl;
-	_objMesh = new btTriangleMesh();
-
-	this->orderVerticies();
-std::cout << "b4 cshpae" << endl;
- btCollisionShape *shape = new btBvhTriangleMeshShape((_objMesh), true);
-	//_cShape = new btBvhTriangleMeshShape(_objMesh, true);
-std::cout << "after cshape" << endl;
-	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(2.6, 15, 0)));
-std::cout << "b4 inertia" << endl;
+	std::cout << "start of function" << endl;
+	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
+	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 	_cShape->calculateLocalInertia(_mass,_inertia);
-
 	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _cShape, _inertia);
 	_rigidBody = new btRigidBody(shapeRigidBodyCI);
-
 	std::cout << "end of function" << endl;
 }
 
