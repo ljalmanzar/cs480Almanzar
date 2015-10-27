@@ -14,6 +14,31 @@ Powerup::~Powerup(){
 
 void Powerup::init(){
 
+	// init powerups
+	// (geometry file, texture file) 
+	_mysteryBox.initialize("../bin/capsule.obj"
+						 ,"../bin/capsule0.jpg");
+
+	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
+						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
+
+	_heavyPuck.initialize("../bin/powerup/weight.obj"
+						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
+
+	_lightPuck.initialize("feather.obj"
+						 ,"feather.jpg");
+
+	_iceRing.initialize("../bin/powerup/snowflake.obj"
+						 ,"../bin/ice.jpg");
+
+	_health.initialize("../bin/powerup/health.obj"
+						 ,"../bin/powerup/firstaid.jpg");
+
+	_putinPaddle.initialize("../bin/powerup/putin.obj"
+						 ,"putin.jpg");
+
+	// init powerup starting location
+
 }
 
 void spawnRandPU(){
@@ -65,6 +90,31 @@ void spawnRandPU(){
 
 		// set properties 
 	}
+}
+
+// getters
+GLD* getMysteryBox() const {
+	return &_mysteryBox;
+}
+
+GLD* Powerup::getMultiPuck() const {
+	return &_multiPuck;
+}
+
+GLD* Powerup::getHeavyPuck() const {
+	return &_heavyPuck;
+}
+
+GLD* Powerup::getLightPuck() const {
+	return &_lightPuck;
+}
+
+GLD* Powerup::getIceRing() const {
+	return &_iceRing;
+}
+
+GLD* Powerup::getPutinPaddle() const {
+	return &_putinPaddle;
 }
 
 #endif
