@@ -220,13 +220,9 @@ bool initialize()
     objectController = new GLD("../bin/capsule.obj","../bin/ice.jpg");
     cout << "this now has " << objectController->getNumOfVerticies() << " verticies" << endl;
     objectController->addPhysics();
+    objectController->mapTextures();
     
-
-    //objectController->orderVerticies();
-    //objectController->mapTextures();
-
-    //rigidBodyHolder = objectController->getRigidBody();
-   // dynamicsWorld->addRigidBody(rigidBodyHolder);
+    dynamicsWorld->addRigidBody( objectController->getRigidBody() );
 
     AI_Obj.orderVertices();
 
