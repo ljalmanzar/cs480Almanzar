@@ -18,9 +18,11 @@ GLD::GLD(){
 	_myScene = NULL;
 	_objMesh = NULL;
 	_rigidBody = NULL;
+	_cShape = NULL;
 }
 
 GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
+	std::cout << "SEG FAULT BEFORE" << endl;
 	//assign variables, allocate memory
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
@@ -39,6 +41,9 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 
 	_objMesh = NULL;
 	_rigidBody = NULL;
+	_cShape = NULL;
+
+	std::cout << "SEG FAULT AFTER" << endl;
 }
 
 GLD::GLD( const GLD& srcGLD ){
@@ -212,16 +217,22 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
-
+std::cout << "start of function" << endl;
 	_objMesh = new btTriangleMesh();
-	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
 
+	this->orderVerticies();
+std::cout << "b4 cshpae" << endl;
+ btCollisionShape *shape = new btBvhTriangleMeshShape((_objMesh), true);
+	//_cShape = new btBvhTriangleMeshShape(_objMesh, true);
+std::cout << "after cshape" << endl;
 	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(2.6, 15, 0)));
-
+std::cout << "b4 inertia" << endl;
 	_cShape->calculateLocalInertia(_mass,_inertia);
 
 	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _cShape, _inertia);
 	_rigidBody = new btRigidBody(shapeRigidBodyCI);
+
+	std::cout << "end of function" << endl;
 }
 
 glm::mat4 GLD::getModel() const{

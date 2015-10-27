@@ -33,6 +33,8 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 
+GLD *objectController;
+
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
@@ -138,6 +140,7 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
     //premultiply the matrix for this example
+   // model = objectController->getModel();
     mvp = projection * view * model;
 
     //enable the shader program
@@ -216,13 +219,13 @@ bool initialize()
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
 
-    GLD testGLD ("../bin/capsule.obj","capsule0.jpg");
-    testGLD.addPhysics();
-    testGLD.orderVerticies();
-    testGLD.mapTextures();
+    objectController = new GLD("../bin/capsule.obj","ice.jpg");
+    objectController->addPhysics();
+    //objectController->orderVerticies();
+    //objectController->mapTextures();
 
-    rigidBodyHolder = testGLD.getRigidBody();
-    dynamicsWorld->addRigidBody(rigidBodyHolder);
+    //rigidBodyHolder = objectController->getRigidBody();
+   // dynamicsWorld->addRigidBody(rigidBodyHolder);
 
     AI_Obj.orderVertices();
 
