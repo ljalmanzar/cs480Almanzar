@@ -37,7 +37,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 	//initialize the scene from Assimp and textures
 	this->initialize(  _geometryFile, _textureFile );
 
-	_objMesh = new btTriangleMesh();
+	_objMesh = NULL;
 	_rigidBody = NULL;
 }
 
@@ -83,37 +83,9 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 }
 
 GLD::~GLD(){
-	delete _objMesh;
-	delete _rigidBody;
+	//delete _objMesh;
+	//delete _rigidBody;
 }
-/*
-class GLD{
-	public:
-
-	private:
-		// OpenGL attributes
-		glm::mat4 _model;
-		GLuint _vboGeometry;
-		GLuint _picTexture;
-		int _numOfVerticies;
-		std::vector<Vertex> _geometry;
-
-		// Assimp
-		std::string _geometryFile;
-		Assimp::Importer _importer;
-		const aiScene * _myScene;
-
-		// Magick++ Stuff
-		std::string _textureFile;
-
-		// Bullet
-		btTriangleMesh * _objMesh;
-		btRigidBody * _rigidBody;
-		btScalar _mass;
-		btVector3 _inertia;
-};
-
-*/
 
 bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file ){
 	// check for string existance consistancy
@@ -215,38 +187,82 @@ void GLD::orderVerticies(){
 
 void GLD::mapTextures(){
 
+	using namespace Magick;
+    //- Texture Image Handling
+    Image myImage;
+    // Get image
+     myImage.read( _textureFile );
+    // Get size
+    int imageWidth = myImage.columns();
+    int imageHeight = myImage.rows();
+    // Not too sure what this stuff is.. 
+    Blob blob;
+    myImage.magick("RGBA");
+    myImage.write( &blob );
+
+    // Some more stuff for gpu
+    glGenTextures(1, &_picTexture);
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, _picTexture );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 
+                          0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data() );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+}
+
+void GLD::addPhysics(){
+
+	_objMesh = new btTriangleMesh();
+	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
+
+	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(2.6, 15, 0)));
+
+	_cShape->calculateLocalInertia(_mass,_inertia);
+
+	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _cShape, _inertia);
+	_rigidBody = new btRigidBody(shapeRigidBodyCI);
 }
 
 glm::mat4 GLD::getModel() const{
-	return glm::mat4(1.0f);
+	return _model;
 }
 
 GLuint GLD::getVBO() const{
-	return 0;
+	return _vboGeometry;
 }
 
 GLuint GLD::getPicTexture() const{
-	return 0;
+	return _picTexture;
 }
 
 GLuint GLD::getNumOfVerticies() const{
-	return 0;
+	return _numOfVerticies;
 }
 
 btRigidBody* GLD::getRigidBody() const{
-	return NULL;
+	return _rigidBody;
 }
 
 btScalar GLD::getMass() const{
-	return 0;
+	return _mass;
+}
+
+btVector3 GLD::getInertia() const{
+	return _inertia;
 }
 
 std::vector<Vertex> GLD::getOrderedVerticies() const{
-	return std::vector<Vertex> (0);
+	return _geometry;
 }
 
 bool GLD::setModel( const glm::mat4& incomingModel ){
-	return false;
+	_model = incomingModel;
+	return true;
+}
+
+void GLD::setMass(int incomingMass){
+	_mass = incomingMass;
 }
 
 #endif

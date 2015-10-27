@@ -38,6 +38,8 @@ class GLD{
 		void orderVerticies();
 		void mapTextures();
 
+		void addPhysics();
+
 		// getters
 		glm::mat4 getModel() const;
 		GLuint getVBO() const;
@@ -45,10 +47,12 @@ class GLD{
 		GLuint getNumOfVerticies() const;
 		btRigidBody* getRigidBody() const;
 		btScalar getMass() const;
+		btVector3 getInertia() const;
 		std::vector<Vertex> getOrderedVerticies() const;
 
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
+		void setMass(int incomingMass);
 	private:
 		// OpenGL attributes
 		glm::mat4 _model;
@@ -67,6 +71,8 @@ class GLD{
 
 		// Bullet
 		btTriangleMesh * _objMesh;
+		btCollisionShape * _cShape;
+		btDefaultMotionState * _shapeMotionState;
 		btRigidBody * _rigidBody;
 		btScalar _mass;
 		btVector3 _inertia;

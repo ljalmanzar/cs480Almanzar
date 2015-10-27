@@ -15,6 +15,7 @@
 #include "gameDriver.cpp"
 #include "player.cpp"
 #include "powerup.cpp"
+#include "GLD.cpp"
 
 //--Evil Global variables
 //Just for this example!
@@ -24,7 +25,6 @@ GLuint vbo_geometry;// VBO handle for our geometry
 char * model_filename;
 char * texture_filename;
 int NUM_OF_VERTICIES = 0;
-
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -54,6 +54,18 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 //--I/O callbacks
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
+
+// BULLET STUFF
+//check for collisions
+btBroadphaseInterface *broadphase;
+// collision algorithm
+btDefaultCollisionConfiguration *collisionConfiguration;
+// param: collisionConfig pointer, used for collision algorithm, sends events to obj
+btCollisionDispatcher *dispatcher; 
+// makes everything work well, forces & shit. world & obj 
+btSequentialImpulseConstraintSolver *solver;
+// the world
+btDiscreteDynamicsWorld *dynamicsWorld;
 
 /********
 --MAIN--
@@ -189,8 +201,28 @@ void reshape(int n_w, int n_h)
 
 bool initialize()
 {
+	//bullet allocating stuff
+	broadphase = new btDbvtBroadphase();
+	collisionConfiguration = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfiguration); 
+	solver = new btSequentialImpulseConstraintSolver;
+
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
+												solver, collisionConfiguration);
+	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+
+	btRigidBody *rigidBodyHolder;
+
     // Initialize basic geometry and shaders for this example
     assimpLoader AI_Obj( model_filename, texture_filename ); //
+
+    GLD testGLD ("../bin/capsule.obj","capsule0.jpg");
+    testGLD.addPhysics();
+    testGLD.orderVerticies();
+    testGLD.mapTextures();
+
+    rigidBodyHolder = testGLD.getRigidBody();
+    dynamicsWorld->addRigidBody(rigidBodyHolder);
 
     AI_Obj.orderVertices();
 
