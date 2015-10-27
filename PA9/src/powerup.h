@@ -14,19 +14,27 @@ class Powerup{
 		void spawnRandPU();
 
 		// getters
+		GLD* getMysteryBox()const;
+		GLD* getMultiPuck()const;
+		GLD* getHeavyPuck()const;
+		GLD* getLightPuck()const;
+		GLD* getIceRing()const;
+		GLD* getHealth()const;
+		GLD* getPutinPaddle()const;
 
 		// setters
 
 	private:
 
 		// powerup hub
-		GLD _mysteryPU;
+		GLD _mysteryBox;
 
 		// powerup types
 		GLD _multiPuck;
 		GLD _heavyPuck;
 		GLD _lightPuck;
 		GLD _iceRing;
+		GLD _health;
 		GLD _putinPaddle;
 };
 

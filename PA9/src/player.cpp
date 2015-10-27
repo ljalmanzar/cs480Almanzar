@@ -11,6 +11,10 @@ Player::~Player(){
 
 }
 
+void Player::init(){
+	resetScore();
+}
+
 //setters
 void Player::incrementScore(int amount){
 	_score = _score + amount;
@@ -33,8 +37,8 @@ int Player::getScore() const{
 	return _score;
 }
 
-GLD Player::getPaddle() const{
-	return _paddle;
+GLD* Player::getPaddle() const{
+	return &_paddle;
 }
 
 #endif

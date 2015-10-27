@@ -9,6 +9,8 @@ class Player{
 		Player();
 		~Player();
 
+		void init();
+
 		// setters
 		void incrementScore(int amount);
 		void setScore(int score);
@@ -17,7 +19,7 @@ class Player{
 
 		//getters 
 		int getScore() const;
-		GLD getPaddle() const;
+		GLD* getPaddle() const;
 
 	private:
 		int _score;
