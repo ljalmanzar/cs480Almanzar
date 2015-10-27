@@ -135,11 +135,12 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 	glGenBuffers(1, &_vboGeometry);
 	glBindBuffer(GL_ARRAY_BUFFER, _vboGeometry);
 	glBufferData(GL_ARRAY_BUFFER,
-		_numOfVerticies * sizeof(Vertex),
+		_geometry.size() * sizeof(Vertex),
 		&_geometry.front(),
 		GL_STATIC_DRAW);
 
 	// load the magick++ stuff
+	this->mapTextures();
 
 	// Success!
 	return true;
@@ -159,6 +160,7 @@ void GLD::orderVerticies(){
 
 	// obtain the number of meshes
 	numMeshes = _myScene -> mNumMeshes;
+	std::cout << "Num of meshes" << numMeshes << endl;
 
 	// iterate through the meshes and go through
 	for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){

@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Assimp Texture Loading");
+    glutCreateWindow("Air Hockey");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -130,78 +130,6 @@ int main(int argc, char **argv)
     return 0;
 }
 
-//--Implementations
-void render()
-{
-    //--Render the scene
-
-    //clear the screen
-    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-
-    //premultiply the matrix for this example
-   // model = objectController->getModel();
-    mvp = projection * view * model;
-
-    //enable the shader program
-    glUseProgram(program);
-
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
-
-    //Bind each texture to the corresponding object
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-
-    //set up the Vertex Buffer Object so it can be drawn
-    glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_texture);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBindTexture( GL_TEXTURE_2D, loc_texture );
-
-    //set pointers into the vbo for each of the attributes(position and color)
-    glVertexAttribPointer( loc_position,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
-
-    glVertexAttribPointer( loc_texture,
-                            2,
-                            GL_FLOAT,
-                            GL_FALSE,
-                            sizeof(Vertex),
-                            (void*)offsetof(Vertex,uv));
-
-    glDrawArrays(GL_TRIANGLES, 0, NUM_OF_VERTICIES*3);//mode, starting index, count
-
-    //clean up
-    glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_texture);
-                           
-    //swap the buffers
-    glutSwapBuffers();
-}
-
-void update()
-{
-
-}
-
-void reshape(int n_w, int n_h)
-{
-    w = n_w;
-    h = n_h;
-    //Change the viewport to be correct
-    glViewport( 0, 0, w, h);
-
-    //Update the projection matrix as well
-    //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
-}
-
 bool initialize()
 {
 	//bullet allocating stuff
@@ -214,34 +142,11 @@ bool initialize()
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-    // Initialize basic geometry and shaders for this example
-    assimpLoader AI_Obj( model_filename, texture_filename ); //
-
-    objectController = new GLD("../bin/capsule.obj","../bin/ice.jpg");
+    objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     cout << "this now has " << objectController->getNumOfVerticies() << " verticies" << endl;
-    objectController->addPhysics();
-    objectController->mapTextures();
+    //objectController->addPhysics();
     
-    dynamicsWorld->addRigidBody( objectController->getRigidBody() );
-
-    AI_Obj.orderVertices();
-
-    // V is where we keep all our info for the object
-    std::vector<Vertex> v;
-    v = AI_Obj.getOrderedVertices();
-
-    NUM_OF_VERTICIES = v.size();
-
-    // Create a Vertex Buffer object to store this vertex info on the GPU
-    glGenBuffers(1, &vbo_geometry); // 1st param-how many to create 2nd-address of array of GLuints
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_geometry);
-    glBufferData(GL_ARRAY_BUFFER,
-                v.size() * sizeof(Vertex),
-                &v.front(),
-                GL_STATIC_DRAW);
-
-    // Text loading
-    AI_Obj.mapTextures(loc_texture);
+    //dynamicsWorld->addRigidBody( objectController->getRigidBody() );
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -338,6 +243,78 @@ bool initialize()
     //and its done
     return true;
 }
+
+//--Implementations
+void render()
+{
+    //--Render the scene
+
+    //clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+
+    //premultiply the matrix for this example
+    model = objectController->getModel();
+    mvp = projection * view * model;
+
+    //enable the shader program
+    glUseProgram(program);
+
+    //upload the matrix to the shader
+    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+
+    //Bind each texture to the corresponding object
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, objectController->getPicTexture() );
+
+    //set up the Vertex Buffer Object so it can be drawn
+    glEnableVertexAttribArray(loc_position);
+    glEnableVertexAttribArray(loc_texture);
+
+    glBindBuffer(GL_ARRAY_BUFFER, objectController->getVBO());
+
+    //set pointers into the vbo for each of the attributes(position and color)
+    glVertexAttribPointer( loc_position,//location of attribute
+                           3,//number of elements
+                           GL_FLOAT,//type
+                           GL_FALSE,//normalized?
+                           sizeof(Vertex),//stride
+                           0);//offset
+
+    glVertexAttribPointer( loc_texture,
+                            2,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            sizeof(Vertex),
+                            (void*)offsetof(Vertex,uv));
+
+    glDrawArrays(GL_TRIANGLES, 0, (objectController->getNumOfVerticies()*3));//mode, starting index, count
+
+    //clean up
+    glDisableVertexAttribArray(loc_position);
+    glDisableVertexAttribArray(loc_texture);
+                           
+    //swap the buffers
+    glutSwapBuffers();
+}
+
+void update()
+{
+
+}
+
+void reshape(int n_w, int n_h)
+{
+    w = n_w;
+    h = n_h;
+    //Change the viewport to be correct
+    glViewport( 0, 0, w, h);
+
+    //Update the projection matrix as well
+    //See the init function for an explaination
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
+}
+
 
 void cleanUp()
 {
