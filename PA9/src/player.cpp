@@ -37,7 +37,7 @@ int Player::getScore() const{
 	return _score;
 }
 
-GLD* Player::getPaddle() const{
+GLD* Player::getPaddle(){
 	return &_paddle;
 }
 

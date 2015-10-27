@@ -93,27 +93,27 @@ void spawnRandPU(){
 }
 
 // getters
-GLD* getMysteryBox() const {
+GLD* Powerup::getMysteryBox(){
 	return &_mysteryBox;
 }
 
-GLD* Powerup::getMultiPuck() const {
+GLD* Powerup::getMultiPuck(){
 	return &_multiPuck;
 }
 
-GLD* Powerup::getHeavyPuck() const {
+GLD* Powerup::getHeavyPuck(){
 	return &_heavyPuck;
 }
 
-GLD* Powerup::getLightPuck() const {
+GLD* Powerup::getLightPuck(){
 	return &_lightPuck;
 }
 
-GLD* Powerup::getIceRing() const {
+GLD* Powerup::getIceRing(){
 	return &_iceRing;
 }
 
-GLD* Powerup::getPutinPaddle() const {
+GLD* Powerup::getPutinPaddle(){
 	return &_putinPaddle;
 }
 

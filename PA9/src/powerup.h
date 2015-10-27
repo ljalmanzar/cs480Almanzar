@@ -14,13 +14,13 @@ class Powerup{
 		void spawnRandPU();
 
 		// getters
-		GLD* getMysteryBox()const;
-		GLD* getMultiPuck()const;
-		GLD* getHeavyPuck()const;
-		GLD* getLightPuck()const;
-		GLD* getIceRing()const;
-		GLD* getHealth()const;
-		GLD* getPutinPaddle()const;
+		GLD* getMysteryBox();
+		GLD* getMultiPuck();
+		GLD* getHeavyPuck();
+		GLD* getLightPuck();
+		GLD* getIceRing();
+		GLD* getHealth();
+		GLD* getPutinPaddle();
 
 		// setters
 

@@ -2,6 +2,7 @@
 #define __PLAYER_H_
 
 #include "GLD.cpp"
+#include <iostream>
 
 class Player{
 	public:
@@ -19,7 +20,7 @@ class Player{
 
 		//getters 
 		int getScore() const;
-		GLD* getPaddle() const;
+		GLD* getPaddle();
 
 	private:
 		int _score;
