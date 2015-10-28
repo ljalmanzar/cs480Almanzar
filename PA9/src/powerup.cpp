@@ -113,6 +113,10 @@ GLD* Powerup::getIceRing(){
 	return &_iceRing;
 }
 
+GLD* Powerup::getHealth(){
+	return &_health;
+}
+
 GLD* Powerup::getPutinPaddle(){
 	return &_putinPaddle;
 }
