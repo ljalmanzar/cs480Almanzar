@@ -22,7 +22,6 @@ GLD::GLD(){
 }
 
 GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
-	std::cout << "SEG FAULT BEFORE" << endl;
 	//assign variables, allocate memory
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
@@ -41,8 +40,6 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 	
 	//initialize the scene from Assimp and textures
 	this->initialize(  _geometryFile, _textureFile );
-
-	std::cout << "SEG FAULT AFTER" << endl;
 }
 
 GLD::GLD( const GLD& srcGLD ){
@@ -160,7 +157,6 @@ void GLD::orderVerticies(){
 
 	// obtain the number of meshes
 	numMeshes = _myScene -> mNumMeshes;
-	std::cout << "Num of meshes" << numMeshes << endl;
 
 	// iterate through the meshes and go through
 	for( int meshIndex = 0; meshIndex < numMeshes; meshIndex++ ){
@@ -224,13 +220,11 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
-	std::cout << "start of function" << endl;
 	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
 	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 	_cShape->calculateLocalInertia(_mass,_inertia);
 	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _cShape, _inertia);
 	_rigidBody = new btRigidBody(shapeRigidBodyCI);
-	std::cout << "end of function" << endl;
 }
 
 glm::mat4 GLD::getModel() const{

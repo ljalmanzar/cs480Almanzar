@@ -32,7 +32,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 
-GLD *objectController;
+std::vector<GLD> allObjects;
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
@@ -140,12 +140,14 @@ bool initialize()
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+	GLD objectController("../bin/peeps_model.obj","../bin/metal.jpg");
 
-    objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
-    cout << "this now has " << objectController->getNumOfVerticies() << " verticies" << endl;
+	allObjects.push_back(objectController);
+
+    //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     
-    //dynamicsWorld->addRigidBody( objectController->getRigidBody() );
+   // dynamicsWorld->addRigidBody( objectController->getRigidBody() );
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -253,7 +255,7 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
     //premultiply the matrix for this example
-    model = objectController->getModel();
+    model = allObjects[0].getModel();
     mvp = projection * view * model;
 
     //enable the shader program
@@ -264,13 +266,13 @@ void render()
 
     //Bind each texture to the corresponding object
     glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, objectController->getPicTexture() );
+    glBindTexture( GL_TEXTURE_2D, allObjects[0].getPicTexture() );
 
     //set up the Vertex Buffer Object so it can be drawn
     glEnableVertexAttribArray(loc_position);
     glEnableVertexAttribArray(loc_texture);
 
-    glBindBuffer(GL_ARRAY_BUFFER, objectController->getVBO());
+    glBindBuffer(GL_ARRAY_BUFFER, allObjects[0].getVBO());
 
     //set pointers into the vbo for each of the attributes(position and color)
     glVertexAttribPointer( loc_position,//location of attribute
@@ -287,7 +289,7 @@ void render()
                             sizeof(Vertex),
                             (void*)offsetof(Vertex,uv));
 
-    glDrawArrays(GL_TRIANGLES, 0, (objectController->getNumOfVerticies()*3));//mode, starting index, count
+    glDrawArrays(GL_TRIANGLES, 0, (allObjects[0].getNumOfVerticies()));//mode, starting index, count
 
     //clean up
     glDisableVertexAttribArray(loc_position);
