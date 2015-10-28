@@ -1,6 +1,3 @@
-# Model Loader
-ASSIMP= -lassimp
-
 # Image Loader
 MAGICKLIBS= `Magick++-config --ldflags --libs`
 MAGICKFLAGS= `Magick++-config --cxxflags --cppflags`
@@ -10,7 +7,7 @@ BULLETLIBS= -I/usr/include/bullet -lBulletDynamics -lBulletSoftBody -lBulletColl
 
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL $(ASSIMP) $(MAGICKLIBS) $(BULLETLIBS)
+LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS) $(BULLETLIBS)
 MODEL= ../bin/capsule.obj
 TEXTURE= ../bin/capsule0.jpg
 
@@ -19,7 +16,7 @@ CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
 all: ../bin/AirHockey
 
-../bin/AirHockey: ../src/main.cpp ../src/assimpLoader.h ../src/assimpLoader.cpp
+../bin/AirHockey: ../src/main.cpp
 	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/AirHockey $(LIBS)
 
 test: ../src/GLD.h ../src/GLD.cpp

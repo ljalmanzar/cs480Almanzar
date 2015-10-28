@@ -10,7 +10,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 #include "shaderLoader.cpp"
-#include "assimpLoader.cpp"
 
 #include "gameDriver.cpp"
 #include "player.cpp"

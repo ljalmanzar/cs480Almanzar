@@ -181,9 +181,11 @@ void GLD::orderVerticies(){
 					tempVert.uv[0] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
 					tempVert.uv[1] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
 				}
+				
+				//add to the final vec
+				_geometry.push_back( tempVert );
 			}
-			//add to the final vec
-			_geometry.push_back( tempVert );
+
 			if( _objMesh != NULL ){
 				_objMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
 			}
