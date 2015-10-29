@@ -13,6 +13,15 @@ Player::~Player(){
 
 void Player::init(){
 	resetScore();
+
+
+	// init paddle by color
+	if (_playerNumber == 1)
+		_paddle.initialize("../bin/paddle_red.obj"
+						 ,"../bin/blue_while_red.png");
+	else
+		_paddle.initialize("../bin/paddle_blue"
+						  ,"../bin/blue_while_red.png");
 }
 
 //setters
@@ -28,8 +37,8 @@ void Player::resetScore(){
 	_score = 0;
 }
 
-void Player::setPaddle(GLD paddle){
-	_paddle = paddle;
+void Player::setPlayerNumber(int playerNumber){
+	_playerNumber = playerNumber;
 }
 
 // getters
