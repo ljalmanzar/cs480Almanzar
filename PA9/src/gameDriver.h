@@ -26,7 +26,7 @@ class GameDriver{
 		Player getPlayer1()const;
 		Player getPlayer2()const; 
 		std::vector<GLD> getPucks()const;
-		std::vector<GLD*> getAllObjects()const;
+		std::vector<GLD*> getAllObjects();
 
 	private:
 		Player _player1;

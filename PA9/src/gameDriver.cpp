@@ -56,7 +56,7 @@ std::vector<GLD> GameDriver::getPucks() const{
 	return _pucks;
 }
 
-std::vector<GLD*> GameDriver::getAllObjects() const{
+std::vector<GLD*> GameDriver::getAllObjects(){
 	return _allObjects;
 }
 
