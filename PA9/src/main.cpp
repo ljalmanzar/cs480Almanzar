@@ -267,7 +267,7 @@ void render()
 
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
         //premultiply the matrix for this example
-        model = allObjects[objIndex].getModel();
+        model = allObjects[objIndex]->getModel();
         mvp = projection * view * model;
 
         //enable the shader program
@@ -278,13 +278,13 @@ void render()
 
         //Bind each texture to the corresponding object
         glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, allObjects[objIndex].getPicTexture() );
+        glBindTexture( GL_TEXTURE_2D, allObjects[objIndex]->getPicTexture() );
 
         //set up the Vertex Buffer Object so it can be drawn
         glEnableVertexAttribArray(loc_position);
         glEnableVertexAttribArray(loc_texture);
 
-        glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex].getVBO());
+        glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex]->getVBO());
 
         //set pointers into the vbo for each of the attributes(position and color)
         glVertexAttribPointer( loc_position,//location of attribute
@@ -301,7 +301,7 @@ void render()
                                 sizeof(Vertex),
                                 (void*)offsetof(Vertex,uv));
 
-        glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
+        glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex]->getNumOfVerticies()));//mode, starting index, count
 
         //clean up
         glDisableVertexAttribArray(loc_position);
@@ -314,6 +314,8 @@ void render()
 
 void update()
 {
+
+	glutPostRedisplay();
 
 }
 
