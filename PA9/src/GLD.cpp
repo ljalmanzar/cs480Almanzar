@@ -107,6 +107,8 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 		_numOfVerticies * sizeof(Vertex),
 		&_geometry.front(),
 		GL_STATIC_DRAW);
+	// map the textures
+	this->mapTextures();
 
 	// done
 	return * this;

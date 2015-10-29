@@ -21,8 +21,6 @@
 int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
-char * model_filename;
-char * texture_filename;
 int NUM_OF_VERTICIES = 0;
 
 //uniform locations
@@ -80,16 +78,6 @@ int main(int argc, char **argv)
     // Initialize glut
     glutInit(&argc, argv); // just initializes
 
-    // Saving obj file
-    int filenamelength = strlen( argv[1] );
-    model_filename = new char [filenamelength+1];
-    strcpy( model_filename, argv[1] );
-
-    // Saving texture
-    filenamelength = strlen( argv[2] );
-    texture_filename = new char [filenamelength+1];
-    strcpy( texture_filename, argv[2] );
-
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -140,6 +128,7 @@ bool initialize()
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+
 	GLD objectController("../bin/peeps_model.obj","../bin/metal.jpg");
     GLD someotherObject("../bin/mario_mystery_box.obj", "../bin/Color_icon_yellow.png");
     glm::mat4 transformMatrix = glm::translate( 
@@ -152,10 +141,20 @@ bool initialize()
         );
     someotherObject.setModel( transformMatrix );
 
+    GLD aThirdObject("../bin/feather.obj", "../bin/26-soft-white-nice-feather-texture.jpg");
+    transformMatrix = glm::translate( 
+        someotherObject.getModel(),
+        glm::vec3(4.0f, 0.0, 0.0) 
+        );
+    transformMatrix = glm::scale(
+        transformMatrix,
+        glm::vec3(.4f, .4f, .4f)
+        );
+    someotherObject.setModel( transformMatrix );
 
-	allObjects.push_back(objectController);
+    allObjects.push_back(objectController);
     allObjects.push_back(someotherObject);
-
+    allObjects.push_back(aThirdObject);
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     

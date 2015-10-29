@@ -8,8 +8,6 @@ BULLETLIBS= -I/usr/include/bullet -lBulletDynamics -lBulletSoftBody -lBulletColl
 # Linux
 CC=g++
 LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS) $(BULLETLIBS)
-MODEL= ../bin/capsule.obj
-TEXTURE= ../bin/capsule0.jpg
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
@@ -26,4 +24,4 @@ clean:
 	rm ../bin/AirHockey -f
 
 run: ../bin/AirHockey
-	../bin/AirHockey $(MODEL) $(TEXTURE)
+	../bin/AirHockey
