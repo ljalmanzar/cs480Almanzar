@@ -30,7 +30,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 
-std::vector<GLD> allObjects;
+std::vector<GLD*> allObjects;
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix

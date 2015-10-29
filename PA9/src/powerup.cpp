@@ -16,8 +16,8 @@ void Powerup::init(){
 
 	// init powerups
 	// (geometry file, texture file) 
-	_mysteryBox.initialize("../bin/capsule.obj"
-						 ,"../bin/capsule0.jpg");
+	_mysteryBox.initialize("../bin/powerup/mario_mystery_box.obj"
+						 ,"../bin/powerup/Color_icon_yellow.png");
 
 	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
