@@ -39,6 +39,7 @@ void Powerup::init(){
 
 	// init powerup starting location
 		// all below the table
+	//_mysteryBox
 
 }
 

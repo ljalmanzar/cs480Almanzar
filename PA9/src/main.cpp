@@ -152,9 +152,9 @@ bool initialize()
         );
     someotherObject.setModel( transformMatrix );
 
-    allObjects.push_back(objectController);
-    allObjects.push_back(someotherObject);
-    allObjects.push_back(aThirdObject);
+    allObjects.push_back(&objectController);
+    allObjects.push_back(&someotherObject);
+    allObjects.push_back(&aThirdObject);
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     
