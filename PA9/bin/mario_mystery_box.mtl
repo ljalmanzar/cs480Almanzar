@@ -1,10 +1,10 @@
-# Blender MTL File: 'myster_box_3_uv.blend'
+# Blender MTL File: 'None'
 # Material Count: 2
 
 newmtl box_mat
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.710339 0.477762 0.002185
+Kd 0.568271 0.382210 0.001748
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
@@ -12,9 +12,9 @@ illum 2
 map_Kd Color_icon_yellow.png
 
 newmtl question_mat
-Ns 96.078431
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.800000 0.800000 0.792500
+Kd 0.640000 0.640000 0.634000
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
