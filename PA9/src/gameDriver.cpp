@@ -39,6 +39,10 @@ void GameDriver::addPowerups(){
 }
 
 // setters
+void stepPhysicsAnimation( float dt ){
+	
+}
+
 // getters
 Player GameDriver::getPlayer1() const{
 	return _player1;

@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#define MAX_ANIMATION_FRAMES 60
+
 // this class is the parent class for all powerup types.s
 class Powerup{
 	public:
@@ -36,6 +38,10 @@ class Powerup{
 		GLD _iceRing;
 		GLD _health;
 		GLD _putinPaddle;
+
+		struct {
+			bool nothing;
+		} _keyframe[ MAX_ANIMATION_FRAMES ];
 };
 
 #endif

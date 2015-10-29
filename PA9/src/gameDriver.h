@@ -20,6 +20,7 @@ class GameDriver{
 		void addPowerups();
 
 		// setters
+		void stepPhysicsAnimation( float dt );
 
 		// getters
 		Player getPlayer1()const;

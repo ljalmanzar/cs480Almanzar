@@ -38,6 +38,7 @@ void Powerup::init(){
 						 ,"putin.jpg");
 
 	// init powerup starting location
+		// all below the table
 
 }
 
