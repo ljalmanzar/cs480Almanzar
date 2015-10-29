@@ -43,7 +43,36 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 }
 
 GLD::GLD( const GLD& srcGLD ){
-	//stub
+	// make a copy of all of the static data files
+		// data files
+		_geometryFile = srcGLD._geometryFile;
+		_textureFile = srcGLD._textureFile;
+
+		// geometry and attributes
+		_model = srcGLD._model;
+		_numOfVerticies = srcGLD._numOfVerticies;
+		_mass = srcGLD._mass;
+		_inertia = srcGLD._inertia;
+		_geometry = srcGLD._geometry;
+
+		// bullet
+		_objMesh = new btTriangleMesh();
+		_rigidBody = NULL;
+		_cShape = NULL;
+
+		// initialize buffer handlers ( if successful, should have no effect )
+		_vboGeometry = 0;
+		_picTexture = 0;
+	// generate new GL buffers
+		glGenBuffers(1, &_vboGeometry);
+		glBindBuffer(GL_ARRAY_BUFFER, _vboGeometry);
+		glBufferData(GL_ARRAY_BUFFER,
+			_numOfVerticies * sizeof(Vertex),
+			&_geometry.front(),
+			GL_STATIC_DRAW);
+	// reimport texture data
+		this->mapTextures();
+	// allocate memory
 }
 
 GLD& GLD::operator=( const GLD& srcGLD ){

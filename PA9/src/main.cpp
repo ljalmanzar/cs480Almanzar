@@ -141,8 +141,20 @@ bool initialize()
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 	GLD objectController("../bin/peeps_model.obj","../bin/metal.jpg");
+    GLD someotherObject("../bin/mario_mystery_box.obj", "../bin/Color_icon_yellow.png");
+    glm::mat4 transformMatrix = glm::translate( 
+        someotherObject.getModel(),
+        glm::vec3(-4.0f, 0.0, 0.0) 
+        );
+    transformMatrix = glm::scale(
+        transformMatrix,
+        glm::vec3(.4f, .4f, .4f)
+        );
+    someotherObject.setModel( transformMatrix );
+
 
 	allObjects.push_back(objectController);
+    allObjects.push_back(someotherObject);
 
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
@@ -254,46 +266,48 @@ void render()
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-    //premultiply the matrix for this example
-    model = allObjects[0].getModel();
-    mvp = projection * view * model;
+    for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
+        //premultiply the matrix for this example
+        model = allObjects[objIndex].getModel();
+        mvp = projection * view * model;
 
-    //enable the shader program
-    glUseProgram(program);
+        //enable the shader program
+        glUseProgram(program);
 
-    //upload the matrix to the shader
-    glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+        //upload the matrix to the shader
+        glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
 
-    //Bind each texture to the corresponding object
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, allObjects[0].getPicTexture() );
+        //Bind each texture to the corresponding object
+        glActiveTexture( GL_TEXTURE0 );
+        glBindTexture( GL_TEXTURE_2D, allObjects[objIndex].getPicTexture() );
 
-    //set up the Vertex Buffer Object so it can be drawn
-    glEnableVertexAttribArray(loc_position);
-    glEnableVertexAttribArray(loc_texture);
+        //set up the Vertex Buffer Object so it can be drawn
+        glEnableVertexAttribArray(loc_position);
+        glEnableVertexAttribArray(loc_texture);
 
-    glBindBuffer(GL_ARRAY_BUFFER, allObjects[0].getVBO());
+        glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex].getVBO());
 
-    //set pointers into the vbo for each of the attributes(position and color)
-    glVertexAttribPointer( loc_position,//location of attribute
-                           3,//number of elements
-                           GL_FLOAT,//type
-                           GL_FALSE,//normalized?
-                           sizeof(Vertex),//stride
-                           0);//offset
+        //set pointers into the vbo for each of the attributes(position and color)
+        glVertexAttribPointer( loc_position,//location of attribute
+                               3,//number of elements
+                               GL_FLOAT,//type
+                               GL_FALSE,//normalized?
+                               sizeof(Vertex),//stride
+                               0);//offset
 
-    glVertexAttribPointer( loc_texture,
-                            2,
-                            GL_FLOAT,
-                            GL_FALSE,
-                            sizeof(Vertex),
-                            (void*)offsetof(Vertex,uv));
+        glVertexAttribPointer( loc_texture,
+                                2,
+                                GL_FLOAT,
+                                GL_FALSE,
+                                sizeof(Vertex),
+                                (void*)offsetof(Vertex,uv));
 
-    glDrawArrays(GL_TRIANGLES, 0, (allObjects[0].getNumOfVerticies()));//mode, starting index, count
+        glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
-    //clean up
-    glDisableVertexAttribArray(loc_position);
-    glDisableVertexAttribArray(loc_texture);
+        //clean up
+        glDisableVertexAttribArray(loc_position);
+        glDisableVertexAttribArray(loc_texture);
+    }
                            
     //swap the buffers
     glutSwapBuffers();

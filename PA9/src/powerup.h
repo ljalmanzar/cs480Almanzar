@@ -41,7 +41,7 @@ class Powerup{
 
 		struct {
 			bool nothing;
-		} _keyframe[ MAX_ANIMATION_FRAMES ];
+		} _keyframes [ MAX_ANIMATION_FRAMES ];
 };
 
 #endif

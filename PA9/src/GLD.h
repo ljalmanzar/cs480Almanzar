@@ -55,6 +55,8 @@ class GLD{
 		bool setModel( const glm::mat4& incomingModel );
 		void setMass(int incomingMass);
 	private:
+		// maintenance functions
+		
 		// OpenGL attributes
 		glm::mat4 _model;
 		GLuint _vboGeometry;
