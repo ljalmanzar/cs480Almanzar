@@ -16,7 +16,7 @@ class Player{
 		void incrementScore(int amount);
 		void setScore(int score);
 		void resetScore();
-		void setPaddle(GLD paddle);
+		void setPlayerNumber(int);
 
 		//getters 
 		int getScore() const;
@@ -24,7 +24,8 @@ class Player{
 
 	private:
 		int _score;
-		GLD _paddle;
+		GLD _paddle; 
+		int _playerNumber;
 };
 
 #endif
