@@ -35,8 +35,8 @@ class Powerup{
 		GLD _multiPuck;
 		GLD _heavyPuck;
 		GLD _lightPuck;
-		GLD _iceRing;
-		GLD _health;
+		GLD _iceRink;
+		GLD _minusPoint;
 		GLD _putinPaddle;
 
 		struct {

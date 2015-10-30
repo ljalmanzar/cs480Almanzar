@@ -28,10 +28,10 @@ void Powerup::init(){
 	_lightPuck.initialize("feather.obj"
 						 ,"feather.jpg");
 
-	_iceRing.initialize("../bin/powerup/snowflake.obj"
+	_iceRink.initialize("../bin/powerup/snowflake.obj"
 						 ,"../bin/ice.jpg");
 
-	_health.initialize("../bin/powerup/health.obj"
+	_minusPoint.initialize("../bin/powerup/health.obj"
 						 ,"../bin/powerup/firstaid.jpg");
 
 	_putinPaddle.initialize("../bin/powerup/putin.obj"
@@ -39,20 +39,61 @@ void Powerup::init(){
 
 	// init powerup starting location
 		// all below the table
-	//_mysteryBox
 
-}
+	glm::mat4 tempModel = glm::translate( 
+        _mysteryBox.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_mysteryBox.setModel(tempModel);
+
+	tempModel = glm::translate( 
+        _multiPuck.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_multiPuck.setModel(tempModel);
+
+	tempModel = glm::translate( 
+        _lightPuck.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_lightPuck.setModel(tempModel);
+
+	tempModel = glm::translate( 
+        _iceRink.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_iceRink.setModel(tempModel);
+
+	tempModel = glm::translate( 
+        _minusPoint.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_minusPoint.setModel(tempModel);
+
+	tempModel = glm::translate( 
+        _putinPaddle.getModel(),
+        glm::vec3(0.0f, -1.0, 0.0) 
+        );
+	_putinPaddle.setModel(tempModel);
+}	
 
 void spawnRandPU(){
 	srand(time(NULL));
 
-	int randNum = rand()% 100 + 1;
+	int randNum = rand()% 120 + 1;
+
+	glm::mat4 tempModel;
 
 	// 1 <= randNum < 20
 	if ((randNum >= 1) && (randNum < 20)){
 		// *** GLD ***
 		// set pos over ? box
 		// show object
+		tempModel = glm::translate( 
+        _mysteryBox.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_mysteryBox.setModel(tempModel);
 
 		// set properties 
 	} 
@@ -62,6 +103,11 @@ void spawnRandPU(){
 		// *** GLD ***
 		// set pos over ? box
 		// show object
+		tempModel = glm::translate( 
+        _multiPuck.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_multiPuck.setModel(tempModel);
 
 		// set properties 
 	}
@@ -72,7 +118,13 @@ void spawnRandPU(){
 		// set pos over ? box
 		// show object
 
-		// set properties 
+		tempModel = glm::translate( 
+        _lightPuck.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_lightPuck.setModel(tempModel);
+
+		// set props
 	}
 	
 	// 40 <= randNum < 60
@@ -80,17 +132,34 @@ void spawnRandPU(){
 		// *** GLD ***
 		// set pos over ? box
 		// show object
+		tempModel = glm::translate( 
+        _iceRink.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_iceRink.setModel(tempModel);
 
 		// set properties 
 	}
 	
 	// 40 <= randNum <= 100
-	else {
+	else  if ((randNum >= 80) && (randNum < 100)){
 		// *** GLD ***
 		// set pos over ? box
 		// show object
+		tempModel = glm::translate( 
+        _minusPoint.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_minusPoint.setModel(tempModel);
 
 		// set properties 
+	}
+	else{
+		tempModel = glm::translate( 
+        _putinPaddle.getModel(),
+        glm::vec3(0.0f, 2.0, 0.0) 
+        );
+		_putinPaddle.setModel(tempModel);
 	}
 }
 
@@ -112,11 +181,11 @@ GLD* Powerup::getLightPuck(){
 }
 
 GLD* Powerup::getIceRing(){
-	return &_iceRing;
+	return &_iceRink;
 }
 
 GLD* Powerup::getHealth(){
-	return &_health;
+	return &_minusPoint;
 }
 
 GLD* Powerup::getPutinPaddle(){
