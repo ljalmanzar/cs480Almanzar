@@ -77,7 +77,7 @@ void Powerup::init(){
 	_putinPaddle.setModel(tempModel);
 }	
 
-void spawnRandPU(){
+void Powerup::spawnRandPU(){
 	srand(time(NULL));
 
 	int randNum = rand()% 120 + 1;
@@ -95,7 +95,7 @@ void spawnRandPU(){
         );
 		_mysteryBox.setModel(tempModel);
 
-		// set properties 
+		// set propertieus 
 	} 
 
 	// 20 <= randNum < 40

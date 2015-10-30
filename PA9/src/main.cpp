@@ -129,8 +129,8 @@ bool initialize()
 												solver, collisionConfiguration);
 	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-	GLD objectController("../bin/peeps_model.obj","../bin/metal.jpg");
-    GLD someotherObject("../bin/mario_mystery_box.obj", "../bin/Color_icon_yellow.png");
+	GLD objectController("../bin/peeps_model.obj","../bin/powerup/metal.jpg");
+    GLD someotherObject("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png");
     glm::mat4 transformMatrix = glm::translate( 
         someotherObject.getModel(),
         glm::vec3(-4.0f, 0.0, 0.0) 
@@ -141,7 +141,7 @@ bool initialize()
         );
     someotherObject.setModel( transformMatrix );
 
-    GLD aThirdObject("../bin/feather.obj", "../bin/26-soft-white-nice-feather-texture.jpg");
+    GLD aThirdObject("../bin/feather.obj", "../bin/powerup/feather.jpg");
     transformMatrix = glm::translate( 
         someotherObject.getModel(),
         glm::vec3(4.0f, 0.0, 0.0) 
