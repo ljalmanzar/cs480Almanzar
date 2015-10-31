@@ -117,6 +117,12 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 GLD::~GLD(){
 	//delete _objMesh;
 	//delete _rigidBody;
+	if( _objMesh != NULL ){
+		delete _objMesh;
+	}
+	if( _rigidBody != NULL ){
+		delete _rigidBody;
+	}
 }
 
 bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file ){

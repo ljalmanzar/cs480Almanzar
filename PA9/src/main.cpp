@@ -119,42 +119,52 @@ int main(int argc, char **argv)
 
 bool initialize()
 {
-	//bullet allocating stuff
-	broadphase = new btDbvtBroadphase();
-	collisionConfiguration = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collisionConfiguration); 
-	solver = new btSequentialImpulseConstraintSolver;
+    //bullet allocating stuff
+    broadphase = new btDbvtBroadphase();
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    dispatcher = new btCollisionDispatcher(collisionConfiguration); 
+    solver = new btSequentialImpulseConstraintSolver;
 
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
-												solver, collisionConfiguration);
-	dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
+                                                solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-	GLD objectController("../bin/peeps_model.obj","../bin/powerup/metal.jpg");
-    GLD someotherObject("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png");
-    glm::mat4 transformMatrix = glm::translate( 
-        someotherObject.getModel(),
+    allObjects.push_back( new GLD("../bin/peeps_model.obj","../bin/powerup/metal.jpg") );
+    allObjects.push_back( new GLD("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png") );
+    allObjects.push_back( new GLD("../bin/feather.obj", "../bin/powerup/feather.jpg") );
+
+    glm::mat4 transformMatrix;
+
+    
+    transformMatrix = glm::translate( 
+        allObjects[1]->getModel(),
         glm::vec3(-4.0f, 0.0, 0.0) 
         );
     transformMatrix = glm::scale(
         transformMatrix,
         glm::vec3(.4f, .4f, .4f)
         );
-    someotherObject.setModel( transformMatrix );
+    allObjects[1]->setModel( transformMatrix );
 
-    GLD aThirdObject("../bin/feather.obj", "../bin/powerup/feather.jpg");
     transformMatrix = glm::translate( 
-        someotherObject.getModel(),
+        allObjects[2]->getModel(),
         glm::vec3(4.0f, 0.0, 0.0) 
         );
     transformMatrix = glm::scale(
         transformMatrix,
         glm::vec3(.4f, .4f, .4f)
         );
-    someotherObject.setModel( transformMatrix );
+    allObjects[2]->setModel( transformMatrix );
 
+/*
+    GLD objectController("../bin/peeps_model.obj","../bin/powerup/metal.jpg");
+    GLD someotherObject("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png");
+    GLD aThirdObject("../bin/feather.obj", "../bin/powerup/feather.jpg");
     allObjects.push_back(&objectController);
     allObjects.push_back(&someotherObject);
     allObjects.push_back(&aThirdObject);
+*/
+
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     
@@ -315,7 +325,7 @@ void render()
 void update()
 {
 
-	glutPostRedisplay();
+    glutPostRedisplay();
 
 }
 
