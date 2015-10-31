@@ -156,15 +156,6 @@ bool initialize()
         );
     allObjects[2]->setModel( transformMatrix );
 
-/*
-    GLD objectController("../bin/peeps_model.obj","../bin/powerup/metal.jpg");
-    GLD someotherObject("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png");
-    GLD aThirdObject("../bin/feather.obj", "../bin/powerup/feather.jpg");
-    allObjects.push_back(&objectController);
-    allObjects.push_back(&someotherObject);
-    allObjects.push_back(&aThirdObject);
-*/
-
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     

@@ -5,15 +5,23 @@
 
 
 GameDriver::GameDriver(){
-	
+	//initialize the puck(s)
+	GLD firstPuck("../bin/powerup/puck_red_leaf.obj", "red_black_yellow_colorbars.jpg");
+	_pucks.push_back( firstPuck );
+	this->initGame();
 }
 
 GameDriver::~GameDriver(){
-
+	// clean up after all of the dynamically allocated GLD's
+	for( unsigned int i = 0; i < _allObjects.size(); i++ ){
+		delete _allObjects[i];
+	}
 }
 
 void GameDriver::initGame(){
 	// create players
+	_player1.setPlayerNumber(1);
+	_player2.setPlayerNumber(2);
 	_player1.init();
 	_player2.init();
 
@@ -31,6 +39,10 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getIceRing());
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
+
+	//get the table in here as well
+	all_Objects.push_back( new GLD() );
+
 
 }
 
