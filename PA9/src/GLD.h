@@ -27,7 +27,7 @@ class GLD{
 	public:
 		// constructors, deconstructors and such
 		GLD();
-		GLD( const std::string& geometry_file, const std::string& texture_file );
+		GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable = true );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
@@ -50,6 +50,7 @@ class GLD{
 		btScalar getMass() const;
 		btVector3 getInertia() const;
 		std::vector<Vertex> getOrderedVerticies() const;
+		bool isDrawable() const;
 
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
@@ -79,6 +80,8 @@ class GLD{
 		btRigidBody * _rigidBody;
 		btScalar _mass;
 		btVector3 _inertia;
+
+		bool _isDrawable; 
 };
 
 #endif

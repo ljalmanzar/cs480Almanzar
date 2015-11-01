@@ -19,9 +19,11 @@ GLD::GLD(){
 	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
 	_cShape = NULL;
+
+	_isDrawable = false; 
 }
 
-GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
+GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable ){
 	//assign variables, allocate memory
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
@@ -37,6 +39,8 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file ){
 	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
 	_cShape = NULL;
+
+	_isDrawable = incomingDrawable;
 	
 	//initialize the scene from Assimp and textures
 	this->initialize(  _geometryFile, _textureFile );
@@ -305,4 +309,7 @@ void GLD::setMass(int incomingMass){
 	_mass = incomingMass;
 }
 
+bool GLD::isDrawable() const{
+	return _isDrawable;
+}
 #endif

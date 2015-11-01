@@ -267,6 +267,11 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
+    	//draw only the objects we want to see and skip elseways
+    	if( !allObjects[objIndex]->isDrawable() ){
+    		continue;
+    	}
+
         //premultiply the matrix for this example
         model = allObjects[objIndex]->getModel();
         mvp = projection * view * model;

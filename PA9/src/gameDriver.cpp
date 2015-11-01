@@ -36,12 +36,12 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getMultiPuck());
 	_allObjects.push_back(_powerup.getHeavyPuck());
 	_allObjects.push_back(_powerup.getLightPuck());
-	_allObjects.push_back(_powerup.getIceRing());
+	_allObjects.push_back(_powerup.getIceRink());
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	all_Objects.push_back( new GLD() );
+	_allObjects.push_back( new GLD("hockey_table_1.obj","../penis/seth-rogan-james-franco-bound-2-bound-3-kim-kardashian-kanye-west-video-spoof.gif") );
 
 
 }

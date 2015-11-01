@@ -20,7 +20,7 @@ class Powerup{
 		GLD* getMultiPuck();
 		GLD* getHeavyPuck();
 		GLD* getLightPuck();
-		GLD* getIceRing();
+		GLD* getIceRink();
 		GLD* getHealth();
 		GLD* getPutinPaddle();
 

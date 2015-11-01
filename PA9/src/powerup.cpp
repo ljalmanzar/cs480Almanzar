@@ -180,7 +180,7 @@ GLD* Powerup::getLightPuck(){
 	return &_lightPuck;
 }
 
-GLD* Powerup::getIceRing(){
+GLD* Powerup::getIceRink(){
 	return &_iceRink;
 }
 
