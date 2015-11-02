@@ -6,8 +6,11 @@
 
 GameDriver::GameDriver(){
 	//initialize the puck(s)
-	GLD firstPuck("../bin/powerup/puck_red_leaf.obj", "red_black_yellow_colorbars.jpg");
+	std::cout << "Got to before the initiation" << endl;
+	GLD firstPuck("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	std::cout << "Got to before the push" << endl;
 	_pucks.push_back( firstPuck );
+	std::cout << "Got to after the push" << endl;
 	this->initGame();
 }
 

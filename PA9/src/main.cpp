@@ -54,6 +54,8 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 
+GameDriver mainGame;
+
 // BULLET STUFF
 //check for collisions
 btBroadphaseInterface *broadphase;
