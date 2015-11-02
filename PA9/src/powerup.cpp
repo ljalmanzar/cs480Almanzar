@@ -25,8 +25,8 @@ void Powerup::init(){
 	_heavyPuck.initialize("../bin/powerup/weight.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
 
-	_lightPuck.initialize("feather.obj"
-						 ,"feather.jpg");
+	_lightPuck.initialize("../bin/powerup/feather.obj"
+						 ,"../bin/powerup/feather.jpg");
 
 	_iceRink.initialize("../bin/powerup/snowflake.obj"
 						 ,"../bin/ice.jpg");
@@ -34,27 +34,27 @@ void Powerup::init(){
 	_minusPoint.initialize("../bin/powerup/health.obj"
 						 ,"../bin/powerup/firstaid.jpg");
 
-	_putinPaddle.initialize("../bin/powerup/putin.obj"
-						 ,"putin.jpg");
+	_putinPaddle.initialize("../bin/powerup/health.obj"
+						 ,"../bin/powerup/feather.jpg");
 
 	// init powerup starting location
 		// all below the table
 
 	glm::mat4 tempModel = glm::translate( 
         _mysteryBox.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, 3.0f, 0.0f) 
         );
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _multiPuck.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, 3.0f, 0.0f) 
         );
 	_multiPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _lightPuck.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, 3.0f, 0.0f) 
         );
 	_lightPuck.setModel(tempModel);
 

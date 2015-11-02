@@ -134,6 +134,8 @@ GLD::~GLD(){
 }
 
 bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file ){
+	_geometryFile = geometry_file;
+	_textureFile = texture_file;
 	// check for string existance consistancy
 	if( geometry_file == "" ){
 		//use the predefined geoometry file
@@ -154,13 +156,13 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 	ifstream fin;
 	fin.open( _geometryFile.c_str() );
 	if( !fin.good() ){
-		std::cerr << "File " + _geometryFile + " had problems opening." << endl;
+		std::cerr << "Geometry File " + _geometryFile + " had problems opening." << endl;
 		return false;
 	}
 	fin.close();
 	fin.open( _textureFile.c_str() );
 	if( !fin.good() ){
-		std::cerr << "File " + _textureFile + " had problems opening." << endl;
+		std::cerr << "Texture File " + _textureFile + " had problems opening." << endl;
 		return false;
 	}
 	fin.close();

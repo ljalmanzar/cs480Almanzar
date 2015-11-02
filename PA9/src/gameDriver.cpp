@@ -11,7 +11,7 @@ GameDriver::GameDriver(){
 GameDriver::~GameDriver(){
 	// clean up after all of the dynamically allocated GLD's
 	for( unsigned int i = 0; i < _allObjects.size(); i++ ){
-		delete _allObjects[i];
+		//delete _allObjects[i];
 	}
 }
 
@@ -38,7 +38,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	_allObjects.push_back( new GLD("../bin/hockey_table_1.obj","../penis/seth-rogan-james-franco-bound-2-bound-3-kim-kardashian-kanye-west-video-spoof.gif") );
+	_allObjects.push_back( new GLD("../bin/hockey_table_1.obj","../bin/powerup/metal.jpg") );
 
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 

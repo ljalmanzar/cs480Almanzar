@@ -131,39 +131,13 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-    allObjects.push_back( new GLD("../bin/peeps_model.obj","../bin/powerup/metal.jpg") );
-    allObjects.push_back( new GLD("../bin/powerup/mario_mystery_box.obj", "../bin/powerup/Color_icon_yellow.png") );
-    allObjects.push_back( new GLD("../bin/feather.obj", "../bin/powerup/feather.jpg") );
-
-    glm::mat4 transformMatrix;
-
-    
-    transformMatrix = glm::translate( 
-        allObjects[1]->getModel(),
-        glm::vec3(-4.0f, 0.0, 0.0) 
-        );
-    transformMatrix = glm::scale(
-        transformMatrix,
-        glm::vec3(.4f, .4f, .4f)
-        );
-    allObjects[1]->setModel( transformMatrix );
-
-    transformMatrix = glm::translate( 
-        allObjects[2]->getModel(),
-        glm::vec3(4.0f, 0.0, 0.0) 
-        );
-    transformMatrix = glm::scale(
-        transformMatrix,
-        glm::vec3(.4f, .4f, .4f)
-        );
-    allObjects[2]->setModel( transformMatrix );
-
     //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
     //objectController->addPhysics();
     
    // dynamicsWorld->addRigidBody( objectController->getRigidBody() );
 
     mainGame.initGame();
+    allObjects = mainGame.getAllObjects();
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 

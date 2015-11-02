@@ -20,7 +20,7 @@ void Player::init(){
 		_paddle.initialize("../bin/paddle_red.obj"
 						 ,"../bin/blue_while_red.png");
 	else
-		_paddle.initialize("../bin/paddle_blue"
+		_paddle.initialize("../bin/paddle_blue.obj"
 						  ,"../bin/blue_while_red.png");
 }
 
