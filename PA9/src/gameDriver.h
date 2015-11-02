@@ -17,7 +17,6 @@ class GameDriver{
 		~GameDriver();
 
 		void initGame();
-		void addPowerups();
 		void updateP1Score(GLD* puck);
 		void updateP2Score(GLD* puck);
 
@@ -29,6 +28,7 @@ class GameDriver{
 		Player getPlayer2()const; 
 		std::vector<GLD> getPucks()const;
 		std::vector<GLD*> getAllObjects();
+		GLD* getTable();
 
 	private:
 		Player _player1;

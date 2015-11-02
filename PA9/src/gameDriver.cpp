@@ -38,17 +38,14 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	_allObjects.push_back( new GLD("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png") );
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png");
+	_allObjects.push_back(_table);
 
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
-}
-
-void GameDriver::addPowerups(){
-
 }
 
 // setters
@@ -93,6 +90,10 @@ std::vector<GLD> GameDriver::getPucks() const{
 
 std::vector<GLD*> GameDriver::getAllObjects(){
 	return _allObjects;
+}
+
+GLD* GameDriver::getTable(){
+	return &_table;
 }
 
 #endif
