@@ -39,7 +39,7 @@ void GameDriver::initGame(){
 
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png");
-	_allObjects.push_back(_table);
+	_allObjects.push_back(&_table);
 
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 
