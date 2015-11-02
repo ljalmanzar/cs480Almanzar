@@ -324,6 +324,7 @@ void render()
 
 void update()
 {
+    allObjects = mainGame.getAllObjects();
 
     glutPostRedisplay();
 
