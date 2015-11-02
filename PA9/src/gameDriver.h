@@ -18,6 +18,8 @@ class GameDriver{
 
 		void initGame();
 		void addPowerups();
+		void updateP1Score(GLD* puck);
+		void updateP2Score(GLD* puck);
 
 		// setters
 		void stepPhysicsAnimation( float dt );

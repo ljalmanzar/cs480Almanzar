@@ -42,6 +42,9 @@ void GameDriver::initGame(){
 
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 
+	// reset player's score
+	_player1.resetScore();
+	_player2.resetScore();
 }
 
 void GameDriver::addPowerups(){
@@ -49,8 +52,30 @@ void GameDriver::addPowerups(){
 }
 
 // setters
-void stepPhysicsAnimation( float dt ){
+void GameDriver::stepPhysicsAnimation( float dt ){
 	
+}
+
+void GameDriver::updateP1Score(GLD* puck){
+	_player1.incrementScore(1);
+	if (_player1.getScore() >= 11){
+		// end game menu
+
+	} else{
+		// reset puck pos in front of p2
+
+	}
+}
+
+void GameDriver::updateP2Score(GLD* puck){
+	_player2.incrementScore(1);
+	if (_player2.getScore() >= 11){
+		// end game menu
+
+	} else{
+		// reset puck pos in front of p1
+		
+	}
 }
 
 // getters
