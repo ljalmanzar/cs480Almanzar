@@ -28,7 +28,6 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
 
-std::cout << "GLD constructor" << endl;
 	//assign the defaults to everything else
 	_model = glm::mat4(1.0f);
 	_vboGeometry = 0;
@@ -37,18 +36,17 @@ std::cout << "GLD constructor" << endl;
 	_mass = 1;
 	_inertia = btVector3(0,0,0);
 	_myScene = NULL;
-std::cout << "B4 OBJ MESH" << endl;
 	_objMesh = new btTriangleMesh();
-std::cout << "AFTER OBJ MESH" << endl;
 	_rigidBody = NULL;
 	_cShape = NULL;
 
 	_isDrawable = incomingDrawable;
 	
 	//initialize the scene from Assimp and textures
-std::cout << "B4 INITIALIZE" << endl;
-	this->initialize(  _geometryFile, _textureFile );
-std::cout << "AFTER INITIALIZE" << endl;
+	if( !this->initialize(  _geometryFile, _textureFile ) ){
+		std::cerr << "There were some problems when initializing this object. " <<
+		"Provide the correct files and try again" << endl;	 
+	}
 }
 
 GLD::GLD( const GLD& srcGLD ){
@@ -63,6 +61,7 @@ GLD::GLD( const GLD& srcGLD ){
 		_mass = srcGLD._mass;
 		_inertia = srcGLD._inertia;
 		_geometry = srcGLD._geometry;
+		_isDrawable = srcGLD._isDrawable;
 
 		// bullet
 		_objMesh = new btTriangleMesh();
@@ -151,7 +150,6 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 			return false;
 		}
 	}
-std::cout << "BEFORE ERRORS" << endl;
 	// check file existances
 	ifstream fin;
 	fin.open( _geometryFile.c_str() );
@@ -174,9 +172,7 @@ std::cout << "BEFORE ERRORS" << endl;
 		return false;
 	}
 	// pre-order vertices (just for faster initialization)
-std::cout << "B4 ORDERING" << endl;
 	this->orderVerticies();
-std::cout << "AFTER ORDERING" << endl;
 
 	glGenBuffers(1, &_vboGeometry);
 	glBindBuffer(GL_ARRAY_BUFFER, _vboGeometry);
@@ -185,7 +181,6 @@ std::cout << "AFTER ORDERING" << endl;
 		&_geometry.front(),
 		GL_STATIC_DRAW);
 
-std::cout << "THROUGH INITIALIZE" << endl;
 
 	// load the magick++ stuff
 	this->mapTextures();

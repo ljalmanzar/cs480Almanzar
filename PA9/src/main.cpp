@@ -163,6 +163,8 @@ bool initialize()
     
    // dynamicsWorld->addRigidBody( objectController->getRigidBody() );
 
+    mainGame.initGame();
+
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);

@@ -6,12 +6,6 @@
 
 GameDriver::GameDriver(){
 	//initialize the puck(s)
-	std::cout << "Got to before the initiation" << endl;
-	GLD firstPuck("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
-	std::cout << "Got to before the push" << endl;
-	_pucks.push_back( firstPuck );
-	std::cout << "Got to after the push" << endl;
-	this->initGame();
 }
 
 GameDriver::~GameDriver(){
@@ -44,8 +38,9 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	_allObjects.push_back( new GLD("hockey_table_1.obj","../penis/seth-rogan-james-franco-bound-2-bound-3-kim-kardashian-kanye-west-video-spoof.gif") );
+	_allObjects.push_back( new GLD("../bin/hockey_table_1.obj","../penis/seth-rogan-james-franco-bound-2-bound-3-kim-kardashian-kanye-west-video-spoof.gif") );
 
+	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 
 }
 
