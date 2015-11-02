@@ -38,7 +38,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	_allObjects.push_back( new GLD("../bin/hockey_table_1.obj","../bin/powerup/metal.jpg") );
+	_allObjects.push_back( new GLD("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png") );
 
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
 
