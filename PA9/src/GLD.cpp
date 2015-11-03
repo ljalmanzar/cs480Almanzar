@@ -133,9 +133,10 @@ GLD::~GLD(){
 	}
 }
 
-bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file ){
+bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable ){
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
+	_isDrawable = incomingDrawable;
 	// check for string existance consistancy
 	if( geometry_file == "" ){
 		//use the predefined geoometry file
