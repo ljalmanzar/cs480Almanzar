@@ -27,13 +27,15 @@ class GLD{
 	public:
 		// constructors, deconstructors and such
 		GLD();
-		GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable = true );
+		GLD( const std::string& geometry_file, const std::string& texture_file, 
+			bool incomingDrawable = true, bool incomingPhysics = true );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
 
 		// fill i/o
-		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "", bool incomingDrawable = true );
+		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "", 
+							bool incomingDrawable = true, bool incomingPhysics = true );
 	
 		// organize attributes within OpenGL Buffers 
 		void orderVerticies();
@@ -51,6 +53,7 @@ class GLD{
 		btVector3 getInertia() const;
 		std::vector<Vertex> getOrderedVerticies() const;
 		bool isDrawable() const;
+		bool needPhysics() const;
 
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
@@ -82,6 +85,7 @@ class GLD{
 		btVector3 _inertia;
 
 		bool _isDrawable; 
+		bool _needPhysics;
 };
 
 #endif

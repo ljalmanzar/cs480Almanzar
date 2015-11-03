@@ -38,10 +38,10 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
 	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true);
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png");
 	_allObjects.push_back(&this->_table);
 
-	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true) );
+	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg") );
 
 	// reset player's score
 	_player1.resetScore();

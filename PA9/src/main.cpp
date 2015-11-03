@@ -131,13 +131,17 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-    //objectController = new GLD("../bin/peeps_model.obj","../bin/metal.jpg");
-    //objectController->addPhysics();
-    
-   // dynamicsWorld->addRigidBody( objectController->getRigidBody() );
-
     mainGame.initGame();
     allObjects = mainGame.getAllObjects();
+
+    // add physics where needed & and add to world
+    for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
+        {
+            if (allObjects[objectNdx]->needPhysics()){
+                allObjects[objectNdx]->addPhysics();
+                dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
+            }
+        }
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -299,6 +303,21 @@ void render()
 void update()
 {
     allObjects = mainGame.getAllObjects();
+
+    btTransform trans;
+    btScalar m[16];
+    dynamicsWorld->stepSimulation(1/60, 10);
+    
+    btRigidBody * tempBody;
+
+    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+        if (allObjects[i]->needPhysics()){
+            tempBody = allObjects[i]->getRigidBody();
+            tempBody->getMotionState()->getWorldTransform(trans);
+            trans.getOpenGLMatrix(m);
+            allObjects[i]->setModel(glm::make_mat4(m));
+        }        
+    }
 
     glutPostRedisplay();
 

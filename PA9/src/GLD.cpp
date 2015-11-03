@@ -21,9 +21,10 @@ GLD::GLD(){
 	_cShape = NULL;
 
 	_isDrawable = false; 
+	_needPhysics = false;
 }
 
-GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable ){
+GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, bool incomingPhysics ){
 	//assign variables, allocate memory
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
@@ -41,6 +42,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
 	_cShape = NULL;
 
 	_isDrawable = incomingDrawable;
+	_needPhysics = incomingPhysics;
 	
 	//initialize the scene from Assimp and textures
 	if( !this->initialize(  _geometryFile, _textureFile ) ){
@@ -133,10 +135,12 @@ GLD::~GLD(){
 	}
 }
 
-bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable ){
+bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, bool incomingPhysics ){
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
 	_isDrawable = incomingDrawable;
+	_needPhysics = incomingPhysics;
+
 	// check for string existance consistancy
 	if( geometry_file == "" ){
 		//use the predefined geoometry file
@@ -319,5 +323,9 @@ void GLD::setMass(int incomingMass){
 
 bool GLD::isDrawable() const{
 	return _isDrawable;
+}
+
+bool GLD::needPhysics() const{
+	return _needPhysics;
 }
 #endif

@@ -17,62 +17,68 @@ void Powerup::init(){
 	// init powerups
 	// (geometry file, texture file) 
 	_mysteryBox.initialize("../bin/powerup/mario_mystery_box.obj"
-						 ,"../bin/powerup/Color_icon_yellow.png");
+						 ,"../bin/powerup/Color_icon_yellow.png",true, true);
 
 	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
-						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
+						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
+						 true, true);
 
 	_heavyPuck.initialize("../bin/powerup/weight.obj"
-						 ,"../bin/powerup/red_black_yellow_colorbars.jpg");
+						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
+						 true, true);
 
 	_lightPuck.initialize("../bin/powerup/feather.obj"
-						 ,"../bin/powerup/feather.jpg");
+						 ,"../bin/powerup/feather.jpg",
+						 true, true);
 
 	_iceRink.initialize("../bin/powerup/snowflake.obj"
-						 ,"../bin/ice.jpg");
+						 ,"../bin/ice.jpg",
+						 true, true);
 
 	_minusPoint.initialize("../bin/powerup/health.obj"
-						 ,"../bin/powerup/firstaid.jpg");
+						 ,"../bin/powerup/firstaid.jpg",
+						 true, true);
 
 	_putinPaddle.initialize("../bin/powerup/health.obj"
-						 ,"../bin/powerup/feather.jpg");
+						 ,"../bin/powerup/feather.jpg",
+						 true, true);
 
 	// init powerup starting location
 		// all below the table
 
 	glm::mat4 tempModel = glm::translate( 
         _mysteryBox.getModel(),
-        glm::vec3(0.0f, 3.0f, 0.0f) 
+        glm::vec3(0.0f, 5.0f, 0.0f) 
         );
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _multiPuck.getModel(),
-        glm::vec3(0.0f, 3.0f, 0.0f) 
+        glm::vec3(0.0f, -5.0f, 0.0f) 
         );
 	_multiPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _lightPuck.getModel(),
-        glm::vec3(0.0f, 3.0f, 0.0f) 
+        glm::vec3(0.0f, -5.0f, 0.0f) 
         );
 	_lightPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _iceRink.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, -5.0, 0.0) 
         );
 	_iceRink.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _minusPoint.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, -5.0, 0.0) 
         );
 	_minusPoint.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _putinPaddle.getModel(),
-        glm::vec3(0.0f, -1.0, 0.0) 
+        glm::vec3(0.0f, -5.0, 0.0) 
         );
 	_putinPaddle.setModel(tempModel);
 }	
