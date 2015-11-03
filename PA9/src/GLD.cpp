@@ -16,9 +16,8 @@ GLD::GLD(){
 	_mass = 1;
 	_inertia = btVector3(0,0,0);
 	_myScene = NULL;
-	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
-	_cShape = NULL;
+	_collisionShape = NULL;
 
 	_isDrawable = false; 
 	_needPhysics = false;
@@ -37,12 +36,36 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
 	_mass = 1;
 	_inertia = btVector3(0,0,0);
 	_myScene = NULL;
-	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
-	_cShape = NULL;
+	_collisionShape = NULL;
 
 	_isDrawable = incomingDrawable;
 	_typeOfShape = incomingType;
+
+	if (_typeOfShape == SPHERE){
+		_sphereShape = new btSphereShape(2);
+	}
+	else if(_typeOfShape == BOX){
+		_boxShape = new btBoxShape(btVector3(2,2,3));
+	}
+	else if(_typeOfShape == CYLINDER){
+		_cylinderShape = new btCylinderShape(btVector3(2,1,2));
+	}
+	else if(_typeOfShape == CAPSULE){
+
+	}
+	else if(_typeOfShape == CONE){
+
+	}
+	else if(_typeOfShape == TRIMESH){
+		_triMesh = new btTriangleMesh();
+	}
+	else if(_typeOfShape == PLANE){
+		_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
+	}
+	else{
+
+	}
 	
 	//initialize the scene from Assimp and textures
 	if( !this->initialize(  _geometryFile, _textureFile ) ){
@@ -66,9 +89,8 @@ GLD::GLD( const GLD& srcGLD ){
 		_isDrawable = srcGLD._isDrawable;
 
 		// bullet
-		_objMesh = new btTriangleMesh();
 		_rigidBody = NULL;
-		_cShape = NULL;
+		_collisionShape = NULL;
 
 		// initialize buffer handlers ( if successful, should have no effect )
 		_vboGeometry = 0;
@@ -92,7 +114,6 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 	}
 
 	// clear allocated memory( to not worry overwriting )
-	delete _objMesh;
 	delete _rigidBody;
 	glDeleteBuffers(1, &this->_vboGeometry);
 
@@ -107,7 +128,6 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 	_inertia = srcGLD._inertia;
 
 	// generate new OpenGL buffers for this new one
-	_objMesh = new btTriangleMesh();
 	_rigidBody = NULL;
 
 	// DO THE GEN BUFFERS STUFF
@@ -125,14 +145,6 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 }
 
 GLD::~GLD(){
-	//delete _objMesh;
-	//delete _rigidBody;
-	if( _objMesh != NULL ){
-		delete _objMesh;
-	}
-	if( _rigidBody != NULL ){
-		delete _rigidBody;
-	}
 }
 
 bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType ){
@@ -140,6 +152,39 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 	_textureFile = texture_file;
 	_isDrawable = incomingDrawable;
 	_typeOfShape = incomingType;
+
+	if (_typeOfShape == SPHERE){
+		std::cout << "SPHERE" << endl;
+		_sphereShape = new btSphereShape(2);
+	}
+	else if(_typeOfShape == BOX){
+		std::cout << "BOX" << endl;
+		_boxShape = new btBoxShape(btVector3(2,2,3));
+	}
+	else if(_typeOfShape == CYLINDER){
+		std::cout << "CYLINDEr" << endl;
+		_cylinderShape = new btCylinderShape(btVector3(2,1,2));
+	}
+	else if(_typeOfShape == CAPSULE){
+		std::cout << "CAPSULE" << endl;
+
+	}
+	else if(_typeOfShape == CONE){
+		std::cout << "CONE" << endl;
+
+	}
+	else if(_typeOfShape == TRIMESH){
+		std::cout << "TRIEMESH" << endl;
+		_triMesh = new btTriangleMesh();
+	}
+	else if(_typeOfShape == PLANE){
+		std::cout << "PLANE" << endl;
+		_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
+	}
+	else{
+		std::cout << "NONE" << endl;
+
+	}
 
 	// check for string existance consistancy
 	if( geometry_file == "" ){
@@ -235,8 +280,8 @@ void GLD::orderVerticies(){
 				_geometry.push_back( tempVert );
 			}
 
-			if( _objMesh != NULL ){
-				_objMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
+			if( _typeOfShape == TRIMESH ){
+				_triMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
 			}
 		}
 	}
@@ -273,21 +318,65 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
-	if (_typeOfShape == SPHERE){
 
-	}
-	else if(){
-
-	}
-	else if(){
-
-	}
+		if (_typeOfShape == SPHERE){
+			btTransform t;	//position and rotation
+			t.setIdentity();
+			t.setOrigin(btVector3(0,1,0));	//put it to x,y,z coordinates
+			_sphereShape =new btSphereShape(2);	//it's a sphere, so use sphereshape	//inertia is 0,0,0 for static object, else
+			_sphereShape->calculateLocalInertia(_mass,_inertia);	//it can be determined by this function (for all kind of shapes)
 	
-	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
+			_shapeMotionState=new btDefaultMotionState(t);	//set the position (and motion)
+			btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_sphereShape,_inertia);	//create the constructioninfo, you can create multiple bodies with the same info
+			_rigidBody=new btRigidBody(info);
+		}
+		else if(_typeOfShape == BOX){
+			btTransform t;
+	        t.setIdentity();
+	        t.setOrigin(btVector3(0,1,0));
+	        _boxShape = new btBoxShape(btVector3(2, 1,2));
+	        _boxShape->calculateLocalInertia(_mass,_inertia);
+	       
+	        _shapeMotionState=new btDefaultMotionState(t);
+	        btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_cylinderShape,_inertia);
+	        _rigidBody=new btRigidBody(info);
+
+		}
+		else if(_typeOfShape == CYLINDER){
+			btTransform t;
+	        t.setIdentity();
+	        t.setOrigin(btVector3(0,1,0));
+	        _cylinderShape = new btCylinderShape(btVector3(2, 1,2));
+	        _cylinderShape->calculateLocalInertia(_mass,_inertia);
+	       
+	        _shapeMotionState=new btDefaultMotionState(t);
+	        btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_cylinderShape,_inertia);
+	        _rigidBody=new btRigidBody(info);
+		}
+		else if(_typeOfShape == CAPSULE){
+
+		}
+		else if(_typeOfShape == CONE){
+
+		}
+		else if(_typeOfShape == TRIMESH){
+			_triMesh = new btTriangleMesh();
+		}
+		else if(_typeOfShape == PLANE){
+			_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0),0);
+			_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+			btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(0.0, _shapeMotionState, _staticPlaneShape);
+			_rigidBody = new btRigidBody(shapeRigidBodyCI);
+		}else{
+			
+		}	
+	/*
+	_collisionShape = new btBvhTriangleMeshShape(_objMesh, true);
 	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
-	_cShape->calculateLocalInertia(_mass,_inertia);
-	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _cShape, _inertia);
+	_collisionShape->calculateLocalInertia(_mass,_inertia);
+	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _collisionShape, _inertia);
 	_rigidBody = new btRigidBody(shapeRigidBodyCI);
+	*/
 }
 
 glm::mat4 GLD::getModel() const{
