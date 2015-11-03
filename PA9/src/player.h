@@ -17,7 +17,7 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
-		void setPaddlePos(int, int);
+		void setPaddlePos(int x_pos, int y_pos, int width, int height);
 
 		//getters 
 		int getScore() const;
@@ -27,6 +27,16 @@ class Player{
 		int _score;
 		GLD _paddle; 
 		int _playerNumber;
+
+		float _horizontalAngle;
+		float _verticalAngle;
+
+		float _oldX;
+		float _oldY;
+
+		float _myX;
+		float _myY;
+		glm::vec3 _position;
 };
 
 #endif

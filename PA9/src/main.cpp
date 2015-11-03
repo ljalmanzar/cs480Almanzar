@@ -350,7 +350,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void mouse(int x_pos, int y_pos){
-        
+        mainGame.setP1PaddlePos(x_pos, y_pos, w, h);
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)

@@ -18,10 +18,26 @@ void Player::init(){
 	// init paddle by color
 	if (_playerNumber == 1)
 		_paddle.initialize("../bin/paddle_red.obj"
-						 ,"../bin/blue_while_red.png");
+						 ,"../bin/blue_while_red.png", true);
 	else
 		_paddle.initialize("../bin/paddle_blue.obj"
-						  ,"../bin/blue_while_red.png");
+						  ,"../bin/blue_while_red.png", true);
+
+	// put paddle on board
+	glm::mat4 tempModel = glm::translate( 
+        _paddle.getModel(),
+        glm::vec3(0.0f, 3.0f, 0.0f) 
+        );
+
+	_paddle.setModel(tempModel);
+
+	_horizontalAngle = 0;
+	_verticalAngle = 0;
+	_oldX = 0;
+	_oldY = 0;
+	_myX = 0;
+	_myY = 0;
+	_position = glm::vec3(0,3,0);
 }
 
 //setters
@@ -41,8 +57,31 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePos(int x_pos, int y_pos){
+void Player::setPaddlePos(int x_pos, int y_pos, int width, int height){
+	//std::cout << x_pos << " "<< y_pos<< endl;
 
+	if (_oldY == 0 && _oldX == 0){
+		_oldX = x_pos;
+		_oldY = y_pos;
+	}
+
+
+	float deltaX = _oldX - x_pos; 
+	float deltaY = _oldY - y_pos;
+
+	glm::vec3 direction(
+		deltaX / 10 
+		,0.0
+    	, deltaY / 10
+		);
+
+	_oldX = x_pos;
+	_oldY = y_pos;
+	glm::mat4 tempModel = glm::translate(
+		_paddle.getModel()
+		, direction);
+
+	_paddle.setModel(tempModel);
 }
 
 // getters
