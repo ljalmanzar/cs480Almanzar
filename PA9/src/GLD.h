@@ -23,19 +23,30 @@
 
 #include "vertex.cpp"
 
+enum TypeOfShape{
+	SPHERE,
+	BOX,
+	CYLINDER,
+	CAPSULE,
+	CONE,
+	TRIMESH,
+	PLANE,
+	NONE
+};
+
 class GLD{
 	public:
 		// constructors, deconstructors and such
 		GLD();
 		GLD( const std::string& geometry_file, const std::string& texture_file, 
-			bool incomingDrawable = true, bool incomingPhysics = true );
+			bool incomingDrawable = true, TypeOfShape incomingType = NONE );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
 
 		// fill i/o
 		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "", 
-							bool incomingDrawable = true, bool incomingPhysics = true );
+							bool incomingDrawable = true, TypeOfShape incomingType = NONE );
 	
 		// organize attributes within OpenGL Buffers 
 		void orderVerticies();
@@ -53,7 +64,7 @@ class GLD{
 		btVector3 getInertia() const;
 		std::vector<Vertex> getOrderedVerticies() const;
 		bool isDrawable() const;
-		bool needPhysics() const;
+		TypeOfShape getShape() const;
 
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
@@ -83,6 +94,8 @@ class GLD{
 		btRigidBody * _rigidBody;
 		btScalar _mass;
 		btVector3 _inertia;
+
+		TypeOfShape _typeOfShape;
 
 		bool _isDrawable; 
 		bool _needPhysics;

@@ -17,7 +17,8 @@ void Player::init(){
 	// init paddle by color
 	if (_playerNumber == 1){
 		_paddle.initialize("../bin/paddle_red.obj"
-						 ,"../bin/blue_while_red.png");
+							 ,"../bin/blue_while_red.png", 
+							 	true, CYLINDER);
 		glm::mat4 tempModel = glm::translate( 
        		_paddle.getModel(),
        		glm::vec3(10.0f, 5.0f, 0.0f) 
@@ -26,7 +27,8 @@ void Player::init(){
 	}
 	else{
 		_paddle.initialize("../bin/paddle_blue.obj"
-						  ,"../bin/blue_while_red.png");
+						  	,"../bin/blue_while_red.png",
+						  		true, CYLINDER);
 		glm::mat4 tempModel = glm::translate( 
         	_paddle.getModel(),
         	glm::vec3(-10.0f, 5.0f, 0.0f) 

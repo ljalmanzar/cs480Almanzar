@@ -24,7 +24,7 @@ GLD::GLD(){
 	_needPhysics = false;
 }
 
-GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, bool incomingPhysics ){
+GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType ){
 	//assign variables, allocate memory
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
@@ -42,7 +42,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
 	_cShape = NULL;
 
 	_isDrawable = incomingDrawable;
-	_needPhysics = incomingPhysics;
+	_typeOfShape = incomingType;
 	
 	//initialize the scene from Assimp and textures
 	if( !this->initialize(  _geometryFile, _textureFile ) ){
@@ -135,11 +135,11 @@ GLD::~GLD(){
 	}
 }
 
-bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, bool incomingPhysics ){
+bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType ){
 	_geometryFile = geometry_file;
 	_textureFile = texture_file;
 	_isDrawable = incomingDrawable;
-	_needPhysics = incomingPhysics;
+	_typeOfShape = incomingType;
 
 	// check for string existance consistancy
 	if( geometry_file == "" ){
@@ -273,6 +273,16 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
+	if (_typeOfShape == SPHERE){
+
+	}
+	else if(){
+
+	}
+	else if(){
+
+	}
+	
 	_cShape = new btBvhTriangleMeshShape(_objMesh, true);
 	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 	_cShape->calculateLocalInertia(_mass,_inertia);
@@ -325,7 +335,7 @@ bool GLD::isDrawable() const{
 	return _isDrawable;
 }
 
-bool GLD::needPhysics() const{
-	return _needPhysics;
+TypeOfShape GLD::getShape() const{
+	return _typeOfShape;
 }
 #endif

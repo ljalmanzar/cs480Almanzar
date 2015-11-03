@@ -139,7 +139,8 @@ bool initialize()
     // add physics where needed & and add to world
     for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
         {
-            if (allObjects[objectNdx]->needPhysics()){
+            if (allObjects[objectNdx]->getShape() != NONE){
+                std::cout << "ADDING PHYSICS TO" << allObjects[objectNdx]->getShape()<<endl;
                 allObjects[objectNdx]->addPhysics();
                 dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
             }
@@ -314,7 +315,7 @@ void update()
     btRigidBody * tempBody;
 
     for( unsigned int i = 0; i < allObjects.size(); ++i ){
-        if (allObjects[i]->needPhysics()){
+        if (allObjects[i]->getShape() != NONE){
             tempBody = allObjects[i]->getRigidBody();
             tempBody->getMotionState()->getWorldTransform(trans);
             trans.getOpenGLMatrix(m);

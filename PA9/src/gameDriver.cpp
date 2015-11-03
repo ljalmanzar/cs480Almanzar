@@ -24,24 +24,24 @@ void GameDriver::initGame(){
 
 	// add player's paddle
 	_allObjects.push_back(_player1.getPaddle());
-	//_allObjects.push_back(_player2.getPaddle());
+	_allObjects.push_back(_player2.getPaddle());
 
 	// init/add powerups
 	_powerup.init();
 
-	/*_allObjects.push_back(_powerup.getMysteryBox());
+	_allObjects.push_back(_powerup.getMysteryBox());
 	_allObjects.push_back(_powerup.getMultiPuck());
 	_allObjects.push_back(_powerup.getHeavyPuck());
 	_allObjects.push_back(_powerup.getLightPuck());
 	_allObjects.push_back(_powerup.getIceRink());
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
-*/
+
 	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png");
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
 	_allObjects.push_back(&this->_table);
 
-	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg") );
+	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
 	// reset player's score
 	_player1.resetScore();

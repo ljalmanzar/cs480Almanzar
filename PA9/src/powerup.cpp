@@ -17,31 +17,31 @@ void Powerup::init(){
 	// init powerups
 	// (geometry file, texture file) 
 	_mysteryBox.initialize("../bin/powerup/mario_mystery_box.obj"
-						 ,"../bin/powerup/Color_icon_yellow.png",true, true);
+						 ,"../bin/powerup/Color_icon_yellow.png",true, BOX);
 
 	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
-						 true, true);
+						 true, NONE);
 
 	_heavyPuck.initialize("../bin/powerup/weight.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
-						 true, true);
+						 true, NONE);
 
 	_lightPuck.initialize("../bin/powerup/feather.obj"
 						 ,"../bin/powerup/feather.jpg",
-						 true, true);
+						 true, NONE);
 
 	_iceRink.initialize("../bin/powerup/snowflake.obj"
 						 ,"../bin/ice.jpg",
-						 true, true);
+						 true, NONE);
 
 	_minusPoint.initialize("../bin/powerup/health.obj"
 						 ,"../bin/powerup/firstaid.jpg",
-						 true, true);
+						 true, NONE);
 
 	_putinPaddle.initialize("../bin/powerup/health.obj"
 						 ,"../bin/powerup/feather.jpg",
-						 true, true);
+						 true, NONE);
 
 	// init powerup starting location
 		// all below the table
