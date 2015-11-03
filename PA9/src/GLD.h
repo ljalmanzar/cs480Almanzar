@@ -33,7 +33,7 @@ class GLD{
 		~GLD();
 
 		// fill i/o
-		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "" );
+		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "", bool incomingDrawable = true );
 	
 		// organize attributes within OpenGL Buffers 
 		void orderVerticies();
