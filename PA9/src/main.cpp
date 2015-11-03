@@ -53,6 +53,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 //--I/O callbacks
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
+void mouse(int x_pos, int y_pos);
 
 GameDriver mainGame;
 
@@ -105,6 +106,7 @@ int main(int argc, char **argv)
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
     glutSpecialFunc(special_keyboard);
+    glutMotionFunc(mouse);
 
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
@@ -306,6 +308,7 @@ void update()
 
     btTransform trans;
     btScalar m[16];
+
     dynamicsWorld->stepSimulation(1/60, 10);
     
     btRigidBody * tempBody;
@@ -318,6 +321,7 @@ void update()
             allObjects[i]->setModel(glm::make_mat4(m));
         }        
     }
+   
 
     glutPostRedisplay();
 
@@ -365,6 +369,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
     glutPostRedisplay();
+}
+
+void mouse(int x_pos, int y_pos){
+        mainGame.setP1PaddlePos(x_pos, y_pos, w, h);
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)

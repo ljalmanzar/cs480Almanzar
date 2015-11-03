@@ -24,19 +24,19 @@ void GameDriver::initGame(){
 
 	// add player's paddle
 	_allObjects.push_back(_player1.getPaddle());
-	_allObjects.push_back(_player2.getPaddle());
+	//_allObjects.push_back(_player2.getPaddle());
 
 	// init/add powerups
 	_powerup.init();
 
-	_allObjects.push_back(_powerup.getMysteryBox());
+	/*_allObjects.push_back(_powerup.getMysteryBox());
 	_allObjects.push_back(_powerup.getMultiPuck());
 	_allObjects.push_back(_powerup.getHeavyPuck());
 	_allObjects.push_back(_powerup.getLightPuck());
 	_allObjects.push_back(_powerup.getIceRink());
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
-
+*/
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png");
 	_allObjects.push_back(&this->_table);
@@ -51,6 +51,10 @@ void GameDriver::initGame(){
 // setters
 void GameDriver::stepPhysicsAnimation( float dt ){
 	
+}
+
+void GameDriver::setP1PaddlePos(int x_pos, int y_pos, int width, int height){
+	_player1.setPaddlePos(x_pos, y_pos, width, height);
 }
 
 void GameDriver::updateP1Score(GLD* puck){
