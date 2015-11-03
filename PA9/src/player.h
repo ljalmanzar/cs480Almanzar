@@ -17,6 +17,7 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
+		void setPaddlePos(int, int);
 
 		//getters 
 		int getScore() const;

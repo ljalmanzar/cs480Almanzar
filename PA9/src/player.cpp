@@ -41,6 +41,10 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
+void Player::setPaddlePos(int x_pos, int y_pos){
+
+}
+
 // getters
 int Player::getScore() const{
 	return _score;

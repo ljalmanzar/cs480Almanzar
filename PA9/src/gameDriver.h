@@ -22,6 +22,7 @@ class GameDriver{
 
 		// setters
 		void stepPhysicsAnimation( float dt );
+		void setP1PaddlePos(int, int);
 
 		// getters
 		Player getPlayer1()const;

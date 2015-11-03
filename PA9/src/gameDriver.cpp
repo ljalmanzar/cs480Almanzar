@@ -53,6 +53,10 @@ void GameDriver::stepPhysicsAnimation( float dt ){
 	
 }
 
+void GameDriver::setP1PaddlePos(int x_pos, int y_pos){
+	_player1.setPaddlePos(x_pos, y_pos);
+}
+
 void GameDriver::updateP1Score(GLD* puck){
 	_player1.incrementScore(1);
 	if (_player1.getScore() >= 11){
