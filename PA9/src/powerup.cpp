@@ -50,6 +50,8 @@ void Powerup::init(){
         _mysteryBox.getModel(),
         glm::vec3(0.0f, -15.0f, 0.0f) 
         );
+
+	tempModel = glm::scale(tempModel, glm::vec3(0.3));
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 

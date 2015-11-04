@@ -38,14 +38,6 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
-	_allObjects.push_back(&this->_table);
-
-
-	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
-	//addPuck(0, "../bin/powerup/red_black_yellow_colorbars.jpg");
-
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
 	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
@@ -54,8 +46,16 @@ void GameDriver::initGame(){
         _gamePuck.getModel(),
         glm::vec3(0.0f, 1.0f, 0.0f) 
         );
+	
 	_gamePuck.setModel(tempModel);
 	_allObjects.push_back(&this->_gamePuck);
+
+	//get the table in here as well
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
+	_allObjects.push_back(&this->_table);
+	
+	//tempModel = glm::scale(_table.getModel(), glm::vec3(2.5, 1.1, 1.5));
+	//_table.setModel(tempModel);
 
 	// reset player's score
 	_player1.resetScore();
