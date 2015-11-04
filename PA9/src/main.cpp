@@ -56,6 +56,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 void mouse(int x_pos, int y_pos);
+float getDT();
 
 GameDriver mainGame;
 
@@ -63,9 +64,9 @@ btCylinderShape * CYLINDERSHAPE;
 btRigidBody *rigidBody;
 
 // BULLET STUFF
-//check for collisions
+//check for collisions, (broad or narrow, broad eliminates the non-colliding objs)
 btBroadphaseInterface *broadphase;
-// collision algorithm
+// collision algorithm (heavy lifting)
 btDefaultCollisionConfiguration *collisionConfiguration;
 // param: collisionConfig pointer, used for collision algorithm, sends events to obj
 btCollisionDispatcher *dispatcher; 
@@ -136,7 +137,7 @@ bool initialize()
 
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
                                                 solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+    dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
     mainGame.initGame();
     allObjects = mainGame.getAllObjects();
@@ -332,54 +333,75 @@ void update()
     btTransform trans;
     btScalar m[16];
 
-    dynamicsWorld->stepSimulation(1/60, 10);
+    dynamicsWorld->stepSimulation(getDT(), 10);
     
     btRigidBody * tempBody;
     glm::mat4 tempMat;
 
-/*
-    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+/*    for( unsigned int i = 0; i < allObjects.size(); ++i ){
         if (allObjects[i]->getShape() != NONE){
-            if (i>=10){
-                    // get object
-                tempMat = allObjects[i]->getModel();
-                // get position of object
-                glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
-                // get rigid body
-                tempBody = allObjects[i]->getRigidBody();
-                // get transform
-                tempBody->getMotionState()->getWorldTransform(trans);
-                trans.getOpenGLMatrix(m);
-                allObjects[i]->setModel(glm::make_mat4(m));
-            } else {
-                // get object
-                tempMat = allObjects[i]->getModel();
-                // get position of object
-                glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
-                // get rigid body
-                tempBody = allObjects[i]->getRigidBody();
-                // get transform
-                tempBody->getMotionState()->getWorldTransform(trans);
-                //trans.getOpenGLMatrix(m);
-                //allObjects[i]->setModel(glm::make_mat4(m));
-
-                // move the transform
-                //trans.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
-                // set the new position
-                tempBody->getMotionState()->setWorldTransform(trans);
-                allObjects[i]->setRigidBody(tempBody);
-            }
-        }        
-    }    
-    
-    for( unsigned int i = 0; i < allObjects.size(); ++i ){
-        if (allObjects[i]->getShape() == CYLINDER){
-            rigidBody->getMotionState()->getWorldTransform(trans);
+            // get object
+            tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
+            tempBody = allObjects[i]->getRigidBody();
+            // get transform
+            tempBody->getMotionState()->getWorldTransform(trans);
             trans.getOpenGLMatrix(m);
             allObjects[i]->setModel(glm::make_mat4(m));
+        }
+    }
+*/
+
+/*    
+    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+        if (allObjects[i]->getShape() != NONE){
+            //if (allObjects[i]->getShape() != CYLINDER && (i>5)){
+                // get object
+            tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
+            tempBody = allObjects[i]->getRigidBody();
+            // get transform
+            tempBody->getMotionState()->getWorldTransform(trans);
+            trans.getOpenGLMatrix(m);
+            allObjects[i]->setModel(glm::make_mat4(m));
+            /*
+            }
+            else{
+            // get object
+            tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
+            tempBody = allObjects[i]->getRigidBody();
+            // get transform
+            tempBody->getMotionState()->getWorldTransform(trans);
+            //trans.getOpenGLMatrix(m);
+            //allObjects[i]->setModel(glm::make_mat4(m));
+
+            // move the transform
+            trans.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
+            // set the new position
+            tempBody->getMotionState()->setWorldTransform(trans);
+            allObjects[i]->setRigidBody(tempBody);
+            }
+        }        
+    } 
+*/
+    
+/*
+    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+        std::cout << "index update " << i << endl; 
+        if (allObjects[i]->getShape() == NONE){
+        (allObjects[i]->getRigidBody())->getMotionState()->getWorldTransform(trans);
+        trans.getOpenGLMatrix(m);
+        allObjects[i]->setModel(glm::make_mat4(m));
         }        
     }
-*/    
+*/
 
     glutPostRedisplay();
 
@@ -403,6 +425,21 @@ void cleanUp()
     // Clean up, Clean up
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo_geometry);
+
+    delete dynamicsWorld;
+    delete solver;
+    delete collisionConfiguration;
+    delete dispatcher;
+    delete broadphase;
+}
+
+float getDT()
+{
+    float ret;
+    t2 = std::chrono::high_resolution_clock::now();
+    ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
+    t1 = std::chrono::high_resolution_clock::now();
+    return ret;
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)

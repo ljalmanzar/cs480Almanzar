@@ -27,11 +27,14 @@ class GameDriver{
 		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
 
 		// getters
-		Player getPlayer1()const;
-		Player getPlayer2()const; 
-		std::vector<GLD> getPucks()const;
-		std::vector<GLD*> getAllObjects();
+		Player* getPlayer1();
+		Player* getPlayer2(); 
+		std::vector<GLD>* getPucks();
+		Powerup* getPowerup();
 		GLD* getTable();
+
+		std::vector<GLD*> getAllObjects();
+	
 
 	private:
 		Player _player1;

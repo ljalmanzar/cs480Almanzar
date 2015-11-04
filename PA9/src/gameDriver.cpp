@@ -137,24 +137,28 @@ void GameDriver::updateP2Score(GLD* puck){
 }
 
 // getters
-Player GameDriver::getPlayer1() const{
-	return _player1;
+Player* GameDriver::getPlayer1(){
+	return &_player1;
 }
 
-Player GameDriver::getPlayer2() const{
-	return _player2;
-}
-
-std::vector<GLD> GameDriver::getPucks() const{
-	return _pucks;
-}
-
-std::vector<GLD*> GameDriver::getAllObjects(){
-	return _allObjects;
+Player* GameDriver::getPlayer2(){
+	return &_player2;
 }
 
 GLD* GameDriver::getTable(){
 	return &_table;
+}
+
+Powerup* GameDriver::getPowerup(){
+	return &_powerup;
+}
+
+std::vector<GLD>* GameDriver::getPucks(){
+	return &_pucks;
+}
+
+std::vector<GLD*> GameDriver::getAllObjects(){
+	return _allObjects;
 }
 
 #endif
