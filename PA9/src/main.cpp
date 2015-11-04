@@ -311,7 +311,7 @@ void update()
     btScalar m[16];
 
     dynamicsWorld->stepSimulation(1/60, 10);
-/*    
+    
     btRigidBody * tempBody;
 
     for( unsigned int i = 0; i < allObjects.size(); ++i ){
@@ -321,8 +321,7 @@ void update()
             trans.getOpenGLMatrix(m);
             allObjects[i]->setModel(glm::make_mat4(m));
         }        
-    }
- */  
+    } 
 
     glutPostRedisplay();
 
