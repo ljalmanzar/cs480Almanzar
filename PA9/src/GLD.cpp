@@ -324,7 +324,7 @@ void GLD::addPhysics(){
 			btTransform t;	//position and rotation
 			t.setIdentity();
 			t.setOrigin(btVector3(0,1,0));	//put it to x,y,z coordinates
-			_sphereShape =new btSphereShape(2);	//it's a sphere, so use sphereshape	//inertia is 0,0,0 for static object, else
+			//_sphereShape =new btSphereShape(2);	//it's a sphere, so use sphereshape	//inertia is 0,0,0 for static object, else
 			_sphereShape->calculateLocalInertia(_mass,_inertia);	//it can be determined by this function (for all kind of shapes)
 	
 			_shapeMotionState=new btDefaultMotionState(t);	//set the position (and motion)
@@ -335,7 +335,7 @@ void GLD::addPhysics(){
 			btTransform t;
 	        t.setIdentity();
 	        t.setOrigin(btVector3(0,-10,0));
-	        _boxShape = new btBoxShape(btVector3(2, 1,2));
+	        //_boxShape = new btBoxShape(btVector3(2, 1,2));
 	        _boxShape->calculateLocalInertia(_mass,_inertia);
 	       
 	        _shapeMotionState=new btDefaultMotionState(t);
@@ -345,13 +345,12 @@ void GLD::addPhysics(){
 		}
 		else if(_typeOfShape == CYLINDER){
 			std::cout<<"creating CYLINDER" << endl;
-			btTransform t;
-	        t.setIdentity();
-	        t.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
-	        _cylinderShape = new btCylinderShape(btVector3(2, 1,2));
+	        //t.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
+	        //_cylinderShape = new btCylinderShape(btVector3(2, 1,2));
 	        _cylinderShape->calculateLocalInertia(_mass,_inertia);
 	       
-	        _shapeMotionState=new btDefaultMotionState(t);
+	        _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 1, 1, 1), 
+	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
 	        btRigidBody::btRigidBodyConstructionInfo info(5,_shapeMotionState,_cylinderShape,_inertia);
 	        _rigidBody=new btRigidBody(info);
 		}
@@ -365,7 +364,7 @@ void GLD::addPhysics(){
 			_triMesh = new btTriangleMesh();
 		}
 		else if(_typeOfShape == PLANE){
-			_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0),0);
+			//_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0),0);
 			_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 			btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(0.0, _shapeMotionState, _staticPlaneShape);
 			_rigidBody = new btRigidBody(shapeRigidBodyCI);
