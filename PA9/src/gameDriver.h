@@ -40,6 +40,8 @@ class GameDriver{
 		Powerup _powerup;
 
 		GLD _table;
+		GLD _gamePuck;
+		
 		std::vector<GLD> _pucks;
 		std::vector<GLD*> _allObjects;
 };

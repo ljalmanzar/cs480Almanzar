@@ -48,37 +48,37 @@ void Powerup::init(){
 
 	glm::mat4 tempModel = glm::translate( 
         _mysteryBox.getModel(),
-        glm::vec3(0.0f, 5.0f, 0.0f) 
+        glm::vec3(0.0f, -15.0f, 0.0f) 
         );
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _multiPuck.getModel(),
-        glm::vec3(0.0f, -5.0f, 0.0f) 
+        glm::vec3(0.0f, -15.0f, 0.0f) 
         );
 	_multiPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _lightPuck.getModel(),
-        glm::vec3(0.0f, -5.0f, 0.0f) 
+        glm::vec3(0.0f, -15.0f, 0.0f) 
         );
 	_lightPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _iceRink.getModel(),
-        glm::vec3(0.0f, -5.0, 0.0) 
+        glm::vec3(0.0f, -15.0, 0.0) 
         );
 	_iceRink.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _minusPoint.getModel(),
-        glm::vec3(0.0f, -5.0, 0.0) 
+        glm::vec3(0.0f, -15.0, 0.0) 
         );
 	_minusPoint.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _putinPaddle.getModel(),
-        glm::vec3(0.0f, -5.0, 0.0) 
+        glm::vec3(0.0f, -15.0, 0.0) 
         );
 	_putinPaddle.setModel(tempModel);
 }	
