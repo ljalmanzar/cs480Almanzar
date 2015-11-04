@@ -43,9 +43,8 @@ void GameDriver::initGame(){
 
 
 	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
-	addPuck(0, "../bin/powerup/red_black_yellow_colorbars.jpg");
+	//addPuck(0, "../bin/powerup/red_black_yellow_colorbars.jpg");
 
-/*
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
 	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
@@ -55,7 +54,6 @@ void GameDriver::initGame(){
         );
 	_gamePuck.setModel(tempModel);
 	_allObjects.push_back(&this->_gamePuck);
-*/
 
 	// reset player's score
 	_player1.resetScore();

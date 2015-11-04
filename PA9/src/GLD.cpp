@@ -433,4 +433,8 @@ TypeOfShape GLD::getShape() const{
 void GLD::setRigidBody(btRigidBody * incomingBody){
 	_rigidBody = incomingBody;
 }
+
+string GLD::getFile(){
+	return _geometryFile;
+}
 #endif
