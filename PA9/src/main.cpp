@@ -435,6 +435,23 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
         key == 'q' || key == 'e')
     	mainGame.setP2PaddlePos(key);
+
+    else {
+        switch( key ){
+            case '8':
+                camera.pivot( P_UP );
+                break;
+            case '2':
+                camera.pivot( P_DOWN );
+                break;
+            case '4':
+                camera.pivot( P_LEFT );
+                break;
+            case '6':
+                camera.pivot( P_RIGHT );
+                break;
+        }        
+    }
     glutPostRedisplay();
 }
 
@@ -444,20 +461,6 @@ void mouse(int x_pos, int y_pos){
 
 void special_keyboard(int key, int x_pos, int y_pos)
 {
-    switch( key ){
-        case GLUT_KEY_UP:
-            camera.pivot( P_UP );
-            break;
-        case GLUT_KEY_DOWN:
-            camera.pivot( P_DOWN );
-            break;
-        case GLUT_KEY_LEFT:
-            camera.pivot( P_LEFT );
-            break;
-        case GLUT_KEY_RIGHT:
-            camera.pivot( P_RIGHT );
-            break;
-    }
 
     glutPostRedisplay();
 }
