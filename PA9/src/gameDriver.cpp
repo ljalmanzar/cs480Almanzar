@@ -41,8 +41,8 @@ void GameDriver::initGame(){
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
 	_allObjects.push_back(&this->_table);
 
-	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
-
+	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
+	addPuck(0, "../bin/powerup/red_black_yellow_colorbars.jpg");
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
@@ -55,6 +55,40 @@ void GameDriver::stepPhysicsAnimation( float dt ){
 
 void GameDriver::setP1PaddlePos(int x_pos, int y_pos, int width, int height){
 	_player1.setPaddlePos(x_pos, y_pos, width, height);
+}
+
+void GameDriver::addPuck(int side, const std::string &textureFile){
+	// create puck in puck vector
+	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", textureFile, true, CYLINDER) );
+
+	glm::mat4 tempModel;
+	// place it on side
+	switch(side){
+		case 0: // center
+			 tempModel = glm::translate( 
+	        	_pucks[_pucks.size() - 1].getModel(),
+	        	glm::vec3(0.0f, 10.0f, 0.0f) 
+       		); 		
+		break;
+
+		case 1: // player 1
+			 tempModel = glm::translate( 
+	        	_pucks[_pucks.size() - 1].getModel(),
+	        	glm::vec3(-10.0f, 10.0f, 0.0f) 
+       		);
+		break;
+
+		case 2: // player 2
+			 tempModel = glm::translate( 
+	        	_pucks[_pucks.size() - 1].getModel(),
+	        	glm::vec3(10.0f, 10.0f, 0.0f) 
+       		);
+		break;
+	}
+
+	_pucks[_pucks.size() - 1].setModel(tempModel);
+	// add reference to puck to all objects
+	_allObjects.push_back(&_pucks[_pucks.size() - 1]);
 }
 
 void GameDriver::updateP1Score(GLD* puck){
