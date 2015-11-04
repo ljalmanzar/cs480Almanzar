@@ -318,6 +318,7 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
+	glm::vec3 positionOfObject = glm::vec3(_model[3]);
 
 		if (_typeOfShape == SPHERE){
 			btTransform t;	//position and rotation
@@ -333,7 +334,7 @@ void GLD::addPhysics(){
 		else if(_typeOfShape == BOX){
 			btTransform t;
 	        t.setIdentity();
-	        t.setOrigin(btVector3(0,1,0));
+	        t.setOrigin(btVector3(0,-10,0));
 	        _boxShape = new btBoxShape(btVector3(2, 1,2));
 	        _boxShape->calculateLocalInertia(_mass,_inertia);
 	       
@@ -343,14 +344,15 @@ void GLD::addPhysics(){
 
 		}
 		else if(_typeOfShape == CYLINDER){
+			std::cout<<"creating CYLINDER" << endl;
 			btTransform t;
 	        t.setIdentity();
-	        t.setOrigin(btVector3(0,1,0));
+	        t.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
 	        _cylinderShape = new btCylinderShape(btVector3(2, 1,2));
 	        _cylinderShape->calculateLocalInertia(_mass,_inertia);
 	       
 	        _shapeMotionState=new btDefaultMotionState(t);
-	        btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_cylinderShape,_inertia);
+	        btRigidBody::btRigidBodyConstructionInfo info(5,_shapeMotionState,_cylinderShape,_inertia);
 	        _rigidBody=new btRigidBody(info);
 		}
 		else if(_typeOfShape == CAPSULE){
@@ -426,5 +428,13 @@ bool GLD::isDrawable() const{
 
 TypeOfShape GLD::getShape() const{
 	return _typeOfShape;
+}
+
+void GLD::setRigidBody(btRigidBody * incomingBody){
+	_rigidBody = incomingBody;
+}
+
+string GLD::getFile(){
+	return _geometryFile;
 }
 #endif
