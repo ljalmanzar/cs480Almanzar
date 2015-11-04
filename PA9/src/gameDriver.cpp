@@ -38,24 +38,20 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
+	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
-	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
+	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
 	
-	glm::mat4 tempModel = glm::translate( 
-        _gamePuck.getModel(),
-        glm::vec3(0.0f, 1.0f, 0.0f) 
-        );
-	
-	_gamePuck.setModel(tempModel);
-	_allObjects.push_back(&this->_gamePuck);
+	glm::mat4 tempModel;
 
+	//_gamePuck.setModel(tempModel);
+	//_allObjects.push_back(&this->_gamePuck);
+
+	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
 	_allObjects.push_back(&this->_table);
-	
-	//tempModel = glm::scale(_table.getModel(), glm::vec3(2.5, 1.1, 1.5));
-	//_table.setModel(tempModel);
 
 	// reset player's score
 	_player1.resetScore();
@@ -81,9 +77,9 @@ void GameDriver::setP2PaddlePos(unsigned char key){
 	_player2.setPaddlePosKey(key);
 }
 
-void GameDriver::addPuck(int side, const std::string &textureFile){
+void GameDriver::addPuck(int side, const std::string &objFile, const std::string &textureFile){
 	// create puck in puck vector
-	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", textureFile, true, CYLINDER) );
+	_pucks.push_back( GLD(objFile, textureFile, true, CYLINDER) );
 
 	glm::mat4 tempModel;
 	// place it on side
@@ -91,24 +87,27 @@ void GameDriver::addPuck(int side, const std::string &textureFile){
 		case 0: // spawn center
 			 tempModel = glm::translate( 
 	        	_pucks[_pucks.size() - 1].getModel(),
-	        	glm::vec3(0.0f, 2.0f, 0.0f) 
+	        	glm::vec3(0.0f, 5.0f, 0.0f) 
        		); 		
 		break;
 
 		case 1: // spawn at player 1
 			 tempModel = glm::translate( 
 	        	_pucks[_pucks.size() - 1].getModel(),
-	        	glm::vec3(-10.0f, 2.0f, 0.0f) 
+	        	glm::vec3(-10.0f, 5.0f, 0.0f) 
        		);
 		break;
 
 		case 2: // spawn at player 2
 			 tempModel = glm::translate( 
 	        	_pucks[_pucks.size() - 1].getModel(),
-	        	glm::vec3(10.0f, 2.0f, 0.0f) 
+	        	glm::vec3(10.0f, 5.0f, 0.0f) 
        		);
 		break;
 	}
+
+	// scale puck
+	tempModel = glm::scale(tempModel, glm::vec3(0.34));
 
 	_pucks[_pucks.size() - 1].setModel(tempModel);
 	// add reference to puck to all objects
@@ -122,7 +121,7 @@ void GameDriver::updateP1Score(GLD* puck){
 
 	} else{
 		// reset puck pos in front of p2
-
+		this -> addPuck(2, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	}
 }
 
@@ -133,7 +132,7 @@ void GameDriver::updateP2Score(GLD* puck){
 
 	} else{
 		// reset puck pos in front of p1
-		
+		this -> addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	}
 }
 

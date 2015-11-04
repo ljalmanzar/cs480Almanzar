@@ -24,7 +24,7 @@ class GameDriver{
 		void stepPhysicsAnimation( float dt );
 		void setP1PaddlePos(int x_pos, int y_pos, int width, int height);
 		void setP2PaddlePos(unsigned char key);
-		void addPuck(int side, const std::string &textureFile);
+		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
 
 		// getters
 		Player getPlayer1()const;
