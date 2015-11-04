@@ -15,6 +15,7 @@
 #include "player.cpp"
 #include "powerup.cpp"
 #include "GLD.cpp"
+#include "camera.h"
 
 //--Evil Global variables
 //Just for this example!
@@ -22,6 +23,7 @@ int w = 640, h = 480;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
 int NUM_OF_VERTICIES = 0;
+Camera camera;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -135,7 +137,7 @@ bool initialize()
 
     mainGame.initGame();
     allObjects = mainGame.getAllObjects();
-
+/*
     // add physics where needed & and add to world
     for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
         {
@@ -148,6 +150,7 @@ bool initialize()
                 dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
             }
         }
+*/
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -253,6 +256,8 @@ void render()
     //clear the screen
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+    //get the most recent camera data
+    view = camera.getViewMatrix();
 
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
     	//draw only the objects we want to see and skip elseways
@@ -365,24 +370,16 @@ void cleanUp()
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
-    static float CameraZoom = 8.0;
-
     // Handle keyboard input
     if(key == 27)//ESC
        {
            exit(0);
        }
     if(key == '+'){
-        CameraZoom -= .5f;
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
-                            glm::vec3(0.0, 0.0, 0.0), //Focus point
-                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+        camera.zoom( .1 );       
     }
     if(key == '-'){
-        CameraZoom += .5f;
-        view = glm::lookAt( glm::vec3(0.0, CameraZoom, -CameraZoom), //Eye Position
-                            glm::vec3(0.0, 0.0, 0.0), //Focus point
-                            glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
+        camera.zoom( -.1 );     
     }
 
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
@@ -397,24 +394,20 @@ void mouse(int x_pos, int y_pos){
 
 void special_keyboard(int key, int x_pos, int y_pos)
 {
-   switch(key)
-      {
-         case GLUT_KEY_LEFT:
-         model = glm::rotate(model, (.2f), glm::vec3(0.0,1.0,0.0));
-         break;
-
-         case GLUT_KEY_RIGHT:
-         model = glm::rotate(model, -(.2f), glm::vec3(0.0,1.0,0.0));
-         break;
-
-       case GLUT_KEY_UP:
-         model = glm::rotate(model, (.2f), glm::vec3(1.0,0.0,0.0));
-         break;
-
-         case GLUT_KEY_DOWN:
-         model = glm::rotate(model, -(.2f), glm::vec3(1.0,0.0,0.0));
-         break;         
-      }
+    switch( key ){
+        case GLUT_KEY_UP:
+            camera.pivot( P_UP );
+            break;
+        case GLUT_KEY_DOWN:
+            camera.pivot( P_DOWN );
+            break;
+        case GLUT_KEY_LEFT:
+            camera.pivot( P_LEFT );
+            break;
+        case GLUT_KEY_RIGHT:
+            camera.pivot( P_RIGHT );
+            break;
+    }
 
     glutPostRedisplay();
 }
