@@ -313,13 +313,26 @@ void update()
     dynamicsWorld->stepSimulation(1/60, 10);
     
     btRigidBody * tempBody;
-
+    glm::mat4 tempMat;
+    
     for( unsigned int i = 0; i < allObjects.size(); ++i ){
         if (allObjects[i]->getShape() != NONE){
+            // get object
+            tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
             tempBody = allObjects[i]->getRigidBody();
+            // get transform
             tempBody->getMotionState()->getWorldTransform(trans);
-            trans.getOpenGLMatrix(m);
-            allObjects[i]->setModel(glm::make_mat4(m));
+            //trans.getOpenGLMatrix(m);
+            //allObjects[i]->setModel(glm::make_mat4(m));
+
+            // move the transform
+            trans.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
+            // set the new position
+            tempBody->getMotionState()->setWorldTransform(trans);
+            allObjects[i]->setRigidBody(tempBody);
         }        
     } 
 

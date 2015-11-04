@@ -67,6 +67,7 @@ class GLD{
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
 		void setMass(int incomingMass);
+		void setRigidBody(btRigidBody * incomingBody);
 	private:
 		// maintenance functions
 		
