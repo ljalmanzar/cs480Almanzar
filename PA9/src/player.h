@@ -17,8 +17,8 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
-		void setPaddlePos(int x_pos, int y_pos, int width, int height);
-
+		void setPaddlePosMouse(int x_pos, int y_pos, int width, int height);
+		void setPaddlePosKey(unsigned char key);
 		//getters 
 		int getScore() const;
 		GLD* getPaddle();
