@@ -183,7 +183,6 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 	}
 	else{
 		std::cout << "NONE" << endl;
-
 	}
 
 	// check for string existance consistancy
@@ -273,7 +272,7 @@ void GLD::orderVerticies(){
 
 				if( _myScene->mMeshes[meshIndex]->mNormals != NULL && _myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
 					tempVert.uv[0] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
-					tempVert.uv[1] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
+					tempVert.uv[1] = 1-_myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
 				}
 				
 				//add to the final vec
