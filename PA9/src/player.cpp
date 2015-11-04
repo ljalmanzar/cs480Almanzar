@@ -61,7 +61,7 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePos(int x_pos, int y_pos, int width, int height){
+void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height){
 	//std::cout << x_pos << " "<< y_pos<< endl;
 
 	if (_oldY == 0 && _oldX == 0){
@@ -86,6 +86,39 @@ void Player::setPaddlePos(int x_pos, int y_pos, int width, int height){
 		, direction);
 
 	_paddle.setModel(tempModel);
+}
+
+void Player::setPaddlePosKey(unsigned char key){
+	glm::vec3 direction;
+
+	if (key == 'w') // -x
+		direction = glm::vec3(1, 0, 0);
+
+	else if (key == 'a') // + z
+		direction = glm::vec3(0, 0, -1);
+
+	else if (key == 's') // +x
+		direction = glm::vec3(-1, 0, 0);
+
+	else if (key == 'd')// +x
+		direction = glm::vec3(0, 0, 1);
+
+	else if (key == 'q')
+		direction = glm::vec3(1, 0, -1);
+
+	else if (key == 'e')
+		direction = glm::vec3(1, 0, 1);
+
+	glm::mat4 tempModel = glm::translate(
+		_paddle.getModel()
+		, direction
+	);
+
+	_paddle.setModel(tempModel);
+
+
+
+
 }
 
 // getters

@@ -384,6 +384,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                             glm::vec3(0.0, 0.0, 0.0), //Focus point
                             glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up        
     }
+
+    if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
+        key == 'q' || key == 'e')
+    	mainGame.setP2PaddlePos(key);
     glutPostRedisplay();
 }
 
