@@ -40,17 +40,17 @@ void GameDriver::initGame(){
 
 	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
-	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
+	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
 	
 	glm::mat4 tempModel;
 
 	//_gamePuck.setModel(tempModel);
-	//_allObjects.push_back(&this->_gamePuck);
+	_allObjects.push_back(&this->_gamePuck);
 
-	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	//this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	
 	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", false, PLANE);
 	_allObjects.push_back(&this->_table);
 
 	// reset player's score

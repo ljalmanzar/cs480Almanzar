@@ -41,30 +41,28 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
 
 	_isDrawable = incomingDrawable;
 	_typeOfShape = incomingType;
+	int switchInt = incomingType;
 
-	if (_typeOfShape == SPHERE){
-		_sphereShape = new btSphereShape(2);
-	}
-	else if(_typeOfShape == BOX){
-		_boxShape = new btBoxShape(btVector3(2,2,3));
-	}
-	else if(_typeOfShape == CYLINDER){
-		_cylinderShape = new btCylinderShape(btVector3(2,1,2));
-	}
-	else if(_typeOfShape == CAPSULE){
-
-	}
-	else if(_typeOfShape == CONE){
-
-	}
-	else if(_typeOfShape == TRIMESH){
-		_triMesh = new btTriangleMesh();
-	}
-	else if(_typeOfShape == PLANE){
-		_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
-	}
-	else{
-
+	switch( switchInt ){
+		case SPHERE:
+			_sphereShape = new btSphereShape(2);
+			break;
+		case BOX:
+			_boxShape = new btBoxShape(btVector3(2,2,3));
+			break;
+		case CYLINDER:
+			_cylinderShape = new btCylinderShape(btVector3(2,1,2));
+			break;
+		case TRIMESH:
+			_triMesh = new btTriangleMesh();
+			break;
+		case PLANE:
+			_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
+			break;
+		case CAPSULE:
+		case CONE:
+		default:
+			break;
 	}
 	
 	//initialize the scene from Assimp and textures
@@ -153,37 +151,6 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 	_isDrawable = incomingDrawable;
 	_typeOfShape = incomingType;
 
-	if (_typeOfShape == SPHERE){
-		std::cout << "SPHERE" << endl;
-		_sphereShape = new btSphereShape(2);
-	}
-	else if(_typeOfShape == BOX){
-		std::cout << "BOX" << endl;
-		_boxShape = new btBoxShape(btVector3(2,2,3));
-	}
-	else if(_typeOfShape == CYLINDER){
-		std::cout << "CYLINDEr" << endl;
-		_cylinderShape = new btCylinderShape(btVector3(2,1,2));
-	}
-	else if(_typeOfShape == CAPSULE){
-		std::cout << "CAPSULE" << endl;
-
-	}
-	else if(_typeOfShape == CONE){
-		std::cout << "CONE" << endl;
-
-	}
-	else if(_typeOfShape == TRIMESH){
-		std::cout << "TRIEMESH" << endl;
-		_triMesh = new btTriangleMesh();
-	}
-	else if(_typeOfShape == PLANE){
-		std::cout << "PLANE" << endl;
-		_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
-	}
-	else{
-		std::cout << "NONE" << endl;
-	}
 
 	// check for string existance consistancy
 	if( geometry_file == "" ){
@@ -201,6 +168,8 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 			return false;
 		}
 	}
+
+	
 	// check file existances
 	ifstream fin;
 	fin.open( _geometryFile.c_str() );
@@ -215,6 +184,29 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
 		return false;
 	}
 	fin.close();
+
+	int switchInt = incomingType;
+	switch( switchInt ){
+		case SPHERE:
+			_sphereShape = new btSphereShape(2);
+			break;
+		case BOX:
+			_boxShape = new btBoxShape(btVector3(2,2,3));
+			break;
+		case CYLINDER:
+			_cylinderShape = new btCylinderShape(btVector3(2,1,2));
+			break;
+		case TRIMESH:
+			_triMesh = new btTriangleMesh();
+			break;
+		case PLANE:
+			_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
+			break;
+		case CAPSULE:
+		case CONE:
+		default:
+			break;
+	}
 
 	// load the assimp stuff
 	_myScene = _importer.ReadFile( _geometryFile, aiProcess_Triangulate );
@@ -319,64 +311,51 @@ void GLD::mapTextures(){
 void GLD::addPhysics(){
 	glm::vec3 positionOfObject = glm::vec3(_model[3]);
 
-		if (_typeOfShape == SPHERE){
-			btTransform t;	//position and rotation
-			t.setIdentity();
-			t.setOrigin(btVector3(0,1,0));	//put it to x,y,z coordinates
-			//_sphereShape =new btSphereShape(2);	//it's a sphere, so use sphereshape	//inertia is 0,0,0 for static object, else
+		if ( _typeOfShape == SPHERE ){
 			_sphereShape->calculateLocalInertia(_mass,_inertia);	//it can be determined by this function (for all kind of shapes)
-	
-			_shapeMotionState=new btDefaultMotionState(t);	//set the position (and motion)
+			_shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 1, 1, 1), 
+	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));	//set the position (and motion)
 			btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_sphereShape,_inertia);	//create the constructioninfo, you can create multiple bodies with the same info
 			_rigidBody=new btRigidBody(info);
-		}
-		else if(_typeOfShape == BOX){
-			btTransform t;
-	        t.setIdentity();
-	        t.setOrigin(btVector3(0,-10,0));
-	        //_boxShape = new btBoxShape(btVector3(2, 1,2));
+			_rigidBody = new btRigidBody(info);
+		} 
+		else if( _typeOfShape == BOX ){
 	        _boxShape->calculateLocalInertia(_mass,_inertia);
 	       
-	        _shapeMotionState=new btDefaultMotionState(t);
+	        _shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 1, 1, 1), 
+	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));
 	        btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_cylinderShape,_inertia);
-	        _rigidBody=new btRigidBody(info);
-
+	        _rigidBody = new btRigidBody(info);
 		}
-		else if(_typeOfShape == CYLINDER){
-			std::cout<<"creating CYLINDER" << endl;
-	        //t.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
-	        //_cylinderShape = new btCylinderShape(btVector3(2, 1,2));
+		else if( _typeOfShape == CYLINDER ){
 	        _cylinderShape->calculateLocalInertia(_mass,_inertia);
-	       
 	        _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 1, 1, 1), 
-	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
+	        												btVector3(positionOfObject[0], positionOfObject[1]+10, positionOfObject[2])));
 	        btRigidBody::btRigidBodyConstructionInfo info(5,_shapeMotionState,_cylinderShape,_inertia);
-	        _rigidBody=new btRigidBody(info);
+	        _rigidBody = new btRigidBody(info);
+	        _rigidBody -> setRestitution(1.0);
+			_rigidBody -> setFriction(1.0);
 		}
-		else if(_typeOfShape == CAPSULE){
-
-		}
-		else if(_typeOfShape == CONE){
-
-		}
-		else if(_typeOfShape == TRIMESH){
-			_triMesh = new btTriangleMesh();
-		}
-		else if(_typeOfShape == PLANE){
-			//_staticPlaneShape = new btStaticPlaneShape(btVector3(0,1,0),0);
-			_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
-			btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(0.0, _shapeMotionState, _staticPlaneShape);
-			_rigidBody = new btRigidBody(shapeRigidBodyCI);
-		}else{
+		else if ( _typeOfShape == TRIMESH ){
 			
-		}	
-	/*
-	_collisionShape = new btBvhTriangleMeshShape(_objMesh, true);
-	_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
-	_collisionShape->calculateLocalInertia(_mass,_inertia);
-	btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(_mass, _shapeMotionState, _collisionShape, _inertia);
-	_rigidBody = new btRigidBody(shapeRigidBodyCI);
-	*/
+		}
+		else if ( _typeOfShape == PLANE ){
+			_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
+	        												btVector3(positionOfObject[0], positionOfObject[1]-10, positionOfObject[2])));
+			btRigidBody::btRigidBodyConstructionInfo info(0.0, _shapeMotionState, _staticPlaneShape);
+			_rigidBody = new btRigidBody(info);
+			_rigidBody -> setRestitution(1.0);
+			_rigidBody -> setFriction(1.0);
+		}
+		else if ( _typeOfShape == CAPSULE ){
+			// Stub for completeness
+		}
+		else if ( _typeOfShape == CONE ){
+			// Stub for completeness
+		}
+		else{
+
+		}
 }
 
 glm::mat4 GLD::getModel() const{

@@ -24,7 +24,7 @@
 #include "vertex.cpp"
 
 enum TypeOfShape{
-	SPHERE,
+	SPHERE = 1,
 	BOX,
 	CYLINDER,
 	CAPSULE,
