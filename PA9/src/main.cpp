@@ -59,6 +59,9 @@ void mouse(int x_pos, int y_pos);
 
 GameDriver mainGame;
 
+btCylinderShape * CYLINDERSHAPE;
+btRigidBody *rigidBody;
+
 // BULLET STUFF
 //check for collisions
 btBroadphaseInterface *broadphase;
@@ -137,6 +140,18 @@ bool initialize()
 
     mainGame.initGame();
     allObjects = mainGame.getAllObjects();
+
+    btCollisionShape *fallShape = new btSphereShape(1);
+
+    btScalar mass(100);
+    btVector3 inertia(1, 2, 1);
+
+    btDefaultMotionState *shapeMotionState = NULL;
+    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), btVector3(2.6, 15, 0)));
+    fallShape->calculateLocalInertia(mass, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, fallShape, inertia);
+    rigidBody = new btRigidBody(shapeRigidBodyCI);
+
 /*
     // add physics where needed & and add to world
     for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
@@ -151,6 +166,8 @@ bool initialize()
             }
         }
 */
+
+    dynamicsWorld->addRigidBody(rigidBody);
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -322,9 +339,22 @@ void update()
     
     btRigidBody * tempBody;
     glm::mat4 tempMat;
-    
+    /*
     for( unsigned int i = 0; i < allObjects.size(); ++i ){
         if (allObjects[i]->getShape() != NONE){
+            if (i==10){
+                // get object
+            tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
+            tempBody = allObjects[i]->getRigidBody();
+            // get transform
+            tempBody->getMotionState()->getWorldTransform(trans);
+            trans.getOpenGLMatrix(m);
+            allObjects[i]->setModel(glm::make_mat4(m));
+            }
+            else{
             // get object
             tempMat = allObjects[i]->getModel();
             // get position of object
@@ -341,8 +371,28 @@ void update()
             // set the new position
             tempBody->getMotionState()->setWorldTransform(trans);
             allObjects[i]->setRigidBody(tempBody);
+            }
         }        
     } 
+    */
+    /*
+    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+        std::cout << "index update " << i << endl; 
+        if (allObjects[i]->getShape() == NONE){
+        (allObjects[i]->getRigidBody())->getMotionState()->getWorldTransform(trans);
+        trans.getOpenGLMatrix(m);
+        allObjects[i]->setModel(glm::make_mat4(m));
+        }        
+    }
+    */
+    for( unsigned int i = 0; i < allObjects.size(); ++i ){
+        std::cout << "index update " << i << endl; 
+        if (allObjects[i]->getShape() == CYLINDER){
+        rigidBody->getMotionState()->getWorldTransform(trans);
+        trans.getOpenGLMatrix(m);
+        allObjects[i]->setModel(glm::make_mat4(m));
+        }        
+    }
 
     glutPostRedisplay();
 

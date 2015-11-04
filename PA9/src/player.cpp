@@ -21,7 +21,7 @@ void Player::init(){
 							 	true, CYLINDER);
 		glm::mat4 tempModel = glm::translate( 
        		_paddle.getModel(),
-       		glm::vec3(10.0f, 5.0f, 0.0f) 
+       		glm::vec3(10.0f, 10.0f, 0.0f) 
         );
 		_paddle.setModel(tempModel);
 	}
