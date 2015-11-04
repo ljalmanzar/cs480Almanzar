@@ -41,6 +41,7 @@ class GameDriver{
 
 		GLD _table;
 		GLD _gamePuck;
+		GLD _backGround;
 		
 		std::vector<GLD> _pucks;
 		std::vector<GLD*> _allObjects;

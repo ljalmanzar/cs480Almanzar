@@ -6,6 +6,7 @@
 
 GameDriver::GameDriver(){
 	//initialize the puck(s)
+
 }
 
 GameDriver::~GameDriver(){
@@ -48,6 +49,7 @@ void GameDriver::initGame(){
 	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
 	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER);
+	
 	glm::mat4 tempModel = glm::translate( 
         _gamePuck.getModel(),
         glm::vec3(0.0f, 1.0f, 0.0f) 
@@ -58,6 +60,12 @@ void GameDriver::initGame(){
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
+
+	// create background
+	_backGround.initialize("../bin/planet.obj", "../bin/background.jpeg");
+	_allObjects.push_back(&_backGround);
+	tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
+	_backGround.setModel(tempModel);
 }
 
 // setters
