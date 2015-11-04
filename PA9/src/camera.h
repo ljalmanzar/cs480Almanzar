@@ -36,7 +36,6 @@ class Camera{
 		void zoom( float zoomValue );
 		void pivot( Pivot twistDirection );
 
-
 		//Accessible Data
 		glm::vec3 cam_pos;
 		glm::vec3 cam_focus;
