@@ -52,6 +52,7 @@ class Camera{
 		glm::vec3 _cam_right;
 		glm::vec3 _dir_UP;
 		int _frameTicker;
+		float _cam_speed;
 
 		//animation
 		struct{
@@ -65,6 +66,7 @@ Camera::Camera(){
 	cam_focus = glm::vec3(0.0, 0.0, 0.0);
 	cam_yaw = glm::vec3(0.0, 1.0, 0.0);
 	_dir_UP = cam_yaw;
+	_cam_speed = 1.0f;
 
 	_frameTicker = MAX_FRAME;
 
@@ -109,23 +111,23 @@ bool Camera::setAnimation( glm::vec3 endingPos, glm::vec3 endingFocus ){
 }
 
 void Camera::zoom( float zoomValue ){
-	cam_pos -= zoomValue * _cam_direction;
+	cam_pos -= zoomValue * _cam_speed * _cam_direction;
 	_updateAttributes();
 }
 
 void Camera::pivot( Pivot twistDirection ){
 	switch( twistDirection ){
 		case P_UP:
-			cam_pos += _cam_up;
+			cam_pos += _cam_speed*_cam_up;
 			break;
 		case P_DOWN:
-			cam_pos -= _cam_up;
+			cam_pos -= _cam_speed*_cam_up;
 			break;
 		case P_LEFT:
-			cam_pos -= _cam_right;
+			cam_pos -= _cam_speed*_cam_right;
 			break;
 		case P_RIGHT:
-			cam_pos += _cam_right;
+			cam_pos += _cam_speed*_cam_right;
 			break;
 	}
 	_updateAttributes();

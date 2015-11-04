@@ -426,10 +426,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
            exit(0);
        }
     if(key == '+'){
-        camera.zoom( .1 );       
+        camera.zoom( 1 );       
     }
     if(key == '-'){
-        camera.zoom( -.1 );     
+        camera.zoom( -1 );     
     }
 
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
