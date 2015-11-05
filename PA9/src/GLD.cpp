@@ -325,7 +325,8 @@ void GLD::addPhysics(){
                                                             btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));    //set the position (and motion)
             btRigidBody::btRigidBodyConstructionInfo info(0,_shapeMotionState,_sphereShape,_inertia);   //create the constructioninfo, you can create multiple bodies with the same info
             _rigidBody=new btRigidBody(info);
-            _rigidBody = new btRigidBody(info);
+            _rigidBody->setCollisionFlags( _rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
+            _rigidBody->setActivationState(DISABLE_DEACTIVATION);
         } 
         else if( _typeOfShape == BOX ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
@@ -442,16 +443,17 @@ bool GLD::updateObjectAndPhysics(){
     btScalar m[16];
     glm::mat4 tempMat;
 
-    if( this -> getShape() != NONE and this-> getShape() != TRIMESH and _needPhysics ){
+    if( this -> getShape() != NONE and this-> getShape() != SPHERE and _needPhysics ){
         //get the transformation
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
     }
-    else if( this->getShape() == TRIMESH ){
+    else if( this->getShape() == SPHERE ){
         trans.setIdentity();
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.setOrigin( btVector3( _model[3][0], _model[3][1], _model[3][2] ) );
+        getRigidBody()->setCenterOfMassTransform( trans );
         getRigidBody()->setWorldTransform(trans);
     }
 /*
