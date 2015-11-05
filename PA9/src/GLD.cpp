@@ -339,24 +339,26 @@ void GLD::addPhysics(){
         else if( _typeOfShape == CYLINDER ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
-            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 1, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+20, positionOfObject[2])));
+            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 0, 1, 1), 
+                                                            btVector3(positionOfObject[0]-10, positionOfObject[1]+20, positionOfObject[2])));
             btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
-            _rigidBody -> setRestitution(1.0);
-            _rigidBody -> setFriction(2.0);
+            _rigidBody -> setRestitution(.5);
+            _rigidBody -> setFriction(3.0);
             //_rigidBody -> setAngularFactor(btVector3(0,0,0));
             //_rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
         else if ( _typeOfShape == TRIMESH ){
-            _shapeMotionState = new btDefaultMotionState( btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)));
-            _collisionShape->calculateLocalInertia( 0, _inertia );
-            btRigidBody::btRigidBodyConstructionInfo info(0,_shapeMotionState,_collisionShape,_inertia);
+            glm::vec3 positionOfObject = glm::vec3(_model[3]);
+            _shapeMotionState = new btDefaultMotionState( btTransform(btQuaternion(0,0,0,1), 
+                                            btVector3( positionOfObject[0], positionOfObject[1], positionOfObject[2])));
+                _collisionShape->calculateLocalInertia( _mass, _inertia );
+            btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_collisionShape,_inertia);
             _rigidBody = new btRigidBody(info);
             //  _rigidBody->setRestitution(1.0);
+            //_rigidBody->setFriction(2.0);
             _rigidBody->setCollisionFlags( _rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
             _rigidBody->setActivationState(DISABLE_DEACTIVATION);
-            //_rigidBody->setFriction(2.0);            
         }
         else if ( _typeOfShape == PLANE ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
@@ -440,16 +442,16 @@ bool GLD::updateObjectAndPhysics(){
     btScalar m[16];
     glm::mat4 tempMat;
 
-    if( this -> getShape() != NONE and _needPhysics ){
+    if( this -> getShape() != NONE and this-> getShape() != TRIMESH and _needPhysics ){
         //get the transformation
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
     }
-    if( this->getShape() == TRIMESH ){
-        cout << "resetting the world" << endl;
+    else if( this->getShape() == TRIMESH ){
+        trans.setIdentity();
         getRigidBody()->getMotionState()->getWorldTransform(trans);
-        trans.setOrigin( trans.getOrigin() + btVector3( _model[3][0], _model[3][1], _model[3][2] ) );
+        trans.setOrigin( btVector3( _model[3][0], _model[3][1], _model[3][2] ) );
         getRigidBody()->setWorldTransform(trans);
     }
 /*
@@ -479,5 +481,6 @@ bool GLD::updateObjectAndPhysics(){
 -                // set the new position
 -                _rigidBody->getMotionState()->setWorldTransform(trans);    
 */
+    return true;
 }
 #endif
