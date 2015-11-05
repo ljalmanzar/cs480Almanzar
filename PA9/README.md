@@ -5,6 +5,7 @@ This program will use the Assimp model loader to load files that will be found i
 How to run
 ==========
 *Must install Magick++ first
+Just testing..
 
 Navigate to build
 --> make 
