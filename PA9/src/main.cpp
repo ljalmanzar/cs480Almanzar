@@ -147,6 +147,7 @@ bool initialize()
                 std::cout << "File name " << allObjects[objectNdx]->getFile()<<endl;
                 allObjects[objectNdx]->addPhysics();
                 dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
+                cout << "adding rigid body" << endl;
             }
         }
 

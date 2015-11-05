@@ -18,20 +18,20 @@ void Player::init(){
 	if (_playerNumber == 1){
 		_paddle.initialize("../bin/paddle_red.obj"
 							 ,"../bin/powerup/metal.jpg", 
-							 	true, CYLINDER);
+							 	true, TRIMESH);
 		tempModel = glm::translate( 
        		_paddle.getModel(),
-       		glm::vec3(10.0f, 0.0f, 0.0f) 
+       		glm::vec3(10.0f, 7.0f, 0.0f) 
         );
 	}
 
 	else{
 		_paddle.initialize("../bin/paddle_blue.obj"
 						  	,"../bin/blue_while_red.png",
-						  		true, CYLINDER);
+						  		true, TRIMESH);
 		tempModel = glm::translate( 
         	_paddle.getModel(),
-        	glm::vec3(-10.0f, 0.0f, 0.0f) 
+        	glm::vec3(-10.0f, 7.5, 0.0f) 
         );
 	}
 
@@ -106,10 +106,10 @@ void Player::setPaddlePosKey(unsigned char key){
 		direction = glm::vec3(0, 0, 1);
 
 	else if (key == 'q')
-		direction = glm::vec3(1, 0, -1);
+		direction = glm::vec3(0, 1, 0);
 
 	else if (key == 'e')
-		direction = glm::vec3(1, 0, 1);
+		direction = glm::vec3(0, -1, 0);
 
 	glm::mat4 tempModel = glm::translate(
 		_paddle.getModel()
@@ -117,9 +117,6 @@ void Player::setPaddlePosKey(unsigned char key){
 	);
 
 	_paddle.setModel(tempModel);
-
-
-
 
 }
 
