@@ -69,6 +69,8 @@ class GLD{
 		void setMass(int incomingMass);
 		void setRigidBody(btRigidBody * incomingBody);
 		string getFile();
+
+		bool updateObjectAndPhysics();
 	private:
 		// maintenance functions
 		

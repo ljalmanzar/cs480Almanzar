@@ -50,7 +50,7 @@ void GameDriver::initGame(){
 	//this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	
 	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", false, PLANE);
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
 	_allObjects.push_back(&this->_table);
 
 	// reset player's score

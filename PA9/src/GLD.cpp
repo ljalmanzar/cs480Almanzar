@@ -309,9 +309,12 @@ void GLD::mapTextures(){
 }
 
 void GLD::addPhysics(){
-	glm::vec3 positionOfObject = glm::vec3(_model[3]);
+
+	//-> setAngularFactor(); // stop roation
+	//-> setLinearFactor(); // restrict movement of planes
 
 		if ( _typeOfShape == SPHERE ){
+			glm::vec3 positionOfObject = glm::vec3(_model[3]);
 			_sphereShape->calculateLocalInertia(_mass,_inertia);	//it can be determined by this function (for all kind of shapes)
 			_shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 1, 1, 1), 
 	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));	//set the position (and motion)
@@ -320,6 +323,7 @@ void GLD::addPhysics(){
 			_rigidBody = new btRigidBody(info);
 		} 
 		else if( _typeOfShape == BOX ){
+			glm::vec3 positionOfObject = glm::vec3(_model[3]);
 	        _boxShape->calculateLocalInertia(_mass,_inertia);
 	       
 	        _shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 1, 1, 1), 
@@ -328,20 +332,24 @@ void GLD::addPhysics(){
 	        _rigidBody = new btRigidBody(info);
 		}
 		else if( _typeOfShape == CYLINDER ){
+			glm::vec3 positionOfObject = glm::vec3(_model[3]);
 	        _cylinderShape->calculateLocalInertia(_mass,_inertia);
 	        _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 1, 1, 1), 
-	        												btVector3(positionOfObject[0], positionOfObject[1]+10, positionOfObject[2])));
+	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
 	        btRigidBody::btRigidBodyConstructionInfo info(5,_shapeMotionState,_cylinderShape,_inertia);
 	        _rigidBody = new btRigidBody(info);
 	        _rigidBody -> setRestitution(1.0);
 			_rigidBody -> setFriction(1.0);
+			//_rigidBody -> setAngularFactor(btVector3(0,0,0));
+			//_rigidBody -> setLinearFactor(btVector3(1,0,1));
 		}
 		else if ( _typeOfShape == TRIMESH ){
 			
 		}
 		else if ( _typeOfShape == PLANE ){
+			glm::vec3 positionOfObject = glm::vec3(_model[3]);
 			_shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-	        												btVector3(positionOfObject[0], positionOfObject[1]-10, positionOfObject[2])));
+	        												btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
 			btRigidBody::btRigidBodyConstructionInfo info(0.0, _shapeMotionState, _staticPlaneShape);
 			_rigidBody = new btRigidBody(info);
 			_rigidBody -> setRestitution(1.0);
@@ -413,5 +421,39 @@ void GLD::setRigidBody(btRigidBody * incomingBody){
 
 string GLD::getFile(){
 	return _geometryFile;
+}
+
+bool GLD::updateObjectAndPhysics(){
+	btTransform trans;
+    btScalar m[16];
+
+	btRigidBody * tempBody;
+    glm::mat4 tempMat;
+
+	if (allObjects[i]->getShape() != NONE){
+		// get object
+        tempMat = allObjects[i]->getModel();
+            // get position of object
+            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
+            // get rigid body
+            tempBody = allObjects[i]->getRigidBody();
+            // get transform
+            tempBody->getMotionState()->getWorldTransform(trans);
+            trans.getOpenGLMatrix(m);
+            allObjects[i]->setModel(glm::make_mat4(m));    
+    }       
+
+/*    // get object
+-                // get position of object
+-                glm::vec3 positionOfObject = glm::vec3(_model[3]);
+-                // get transform
+              	 _rigidBody->getMotionState()->getWorldTransform(trans);
+-                trans.getOpenGLMatrix(m);
+-
+-                // move the transform
+-                trans.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
+-                // set the new position
+-                _rigidBody->getMotionState()->setWorldTransform(trans);    
+*/
 }
 #endif

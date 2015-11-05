@@ -313,28 +313,12 @@ void update()
 {
     allObjects = mainGame.getAllObjects();
 
-    btTransform trans;
-    btScalar m[16];
-
     dynamicsWorld->stepSimulation(getDT(), 10);
     
-    btRigidBody * tempBody;
-    glm::mat4 tempMat;
-
-    for( unsigned int i = 0; i < allObjects.size(); ++i ){
-        if (allObjects[i]->getShape() != NONE){
-            // get object
-            tempMat = allObjects[i]->getModel();
-            // get position of object
-            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
-            // get rigid body
-            tempBody = allObjects[i]->getRigidBody();
-            // get transform
-            tempBody->getMotionState()->getWorldTransform(trans);
-            trans.getOpenGLMatrix(m);
-            allObjects[i]->setModel(glm::make_mat4(m));
+    for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj)
+        {
+            allObjects[currentObj]->updateObjectAndPhysics();
         }
-    }
 
     glutPostRedisplay();
 
