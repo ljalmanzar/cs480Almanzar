@@ -461,11 +461,11 @@ bool GLD::updateObjectAndPhysics(){
         newTrans.setOrigin(btVector3(_model[3][0], _model[3][1], _model[3][2]) ); 
         //newTrans.setFromOpenGLMatrix(glm::value_ptr(_model));
         getRigidBody()->setWorldTransform(newTrans);
-        //NEW LINE OF CODE
         _shapeMotionState->setWorldTransform(newTrans); 
+    }
+        //NEW LINE OF CODE
 //        getRigidBody()-setKinematicPos(trans);
 //        getRigidBody()->setCenterOfMassTransform( trans );
-    }
 /*
     if (_allObjects[i]->getShape() != NONE){
         // get object
