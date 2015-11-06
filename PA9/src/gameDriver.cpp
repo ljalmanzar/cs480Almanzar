@@ -136,6 +136,39 @@ void GameDriver::updateP2Score(GLD* puck){
 	}
 }
 
+void GameDriver::printScores() const {
+	//temp variables
+	char * tempStr;
+	int cursor = 0;
+	std::string information[10];
+	//declare varibles for positioning
+	//generate strings for each corner and print them out
+		//top left hand corner
+		information[0] = "Player 1 Score: " + std::to_string(_player1.getScore());
+		information[1] = "Player 2 Score: " + std::to_string(_player2.getScore());
+		//top right hand corner
+	//no program needed to print text
+	glUseProgram(0);
+
+	//display the text
+	glColor3f(1.0,1.0,1.0);
+
+	glRasterPos2f(-.95,.95);
+	tempStr = &information[0][0];
+	while( tempStr[cursor] ){
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, tempStr[cursor++] );
+	}
+	cursor = 0;
+
+	glRasterPos2f(-.95,.85);
+	tempStr = &information[1][0];
+	while( tempStr[cursor] ){
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, tempStr[cursor++] );
+	}
+	cursor = 0;
+
+}
+
 // getters
 Player* GameDriver::getPlayer1(){
 	return &_player1;
