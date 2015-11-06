@@ -327,6 +327,8 @@ void GLD::addPhysics(){
             _rigidBody=new btRigidBody(info);
             _rigidBody->setCollisionFlags( _rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
             _rigidBody->setActivationState(DISABLE_DEACTIVATION);
+            _rigidBody -> setAngularFactor(btVector3(0,0,0));
+            _rigidBody -> setLinearFactor(btVector3(0.0,0,0));
         } 
         else if( _typeOfShape == BOX ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
@@ -341,7 +343,7 @@ void GLD::addPhysics(){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 0, 1, 1), 
-                                                            btVector3(positionOfObject[0]-10, positionOfObject[1]+20, positionOfObject[2])));
+                                                            btVector3(positionOfObject[0]-9.5, positionOfObject[1]+20, positionOfObject[2])));
             btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(.5);
@@ -431,6 +433,9 @@ TypeOfShape GLD::getShape() const{
 }
 
 void GLD::setRigidBody(btRigidBody * incomingBody){
+    if( _rigidBody == NULL ){
+        delete _rigidBody;
+    }
     _rigidBody = incomingBody;
 }
 
@@ -450,11 +455,16 @@ bool GLD::updateObjectAndPhysics(){
         this->setModel( glm::make_mat4(m) );
     }
     else if( this->getShape() == SPHERE ){
-        trans.setIdentity();
+        //trans.setIdentity();
         getRigidBody()->getMotionState()->getWorldTransform(trans);
-        trans.setOrigin( btVector3( _model[3][0], _model[3][1], _model[3][2] ) );
-        getRigidBody()->setCenterOfMassTransform( trans );
-        getRigidBody()->setWorldTransform(trans);
+        btTransform newTrans;
+        newTrans.setOrigin(btVector3(_model[3][0], _model[3][1], _model[3][2]) ); 
+        //newTrans.setFromOpenGLMatrix(glm::value_ptr(_model));
+        getRigidBody()->setWorldTransform(newTrans);
+        //NEW LINE OF CODE
+        _shapeMotionState->setWorldTransform(newTrans); 
+//        getRigidBody()-setKinematicPos(trans);
+//        getRigidBody()->setCenterOfMassTransform( trans );
     }
 /*
     if (_allObjects[i]->getShape() != NONE){
