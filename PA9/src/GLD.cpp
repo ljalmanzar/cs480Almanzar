@@ -342,11 +342,11 @@ void GLD::addPhysics(){
         else if( _typeOfShape == CYLINDER ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
-            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 0, 1, 1), 
-                                                            btVector3(positionOfObject[0]-9.5, positionOfObject[1]+20, positionOfObject[2])));
+            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 0, 1), 
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+9, positionOfObject[2])));
             btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
-            _rigidBody -> setRestitution(.5);
+            _rigidBody -> setRestitution(.25);
             _rigidBody -> setFriction(3.0);
             //_rigidBody -> setAngularFactor(btVector3(0,0,0));
             //_rigidBody -> setLinearFactor(btVector3(1,0,1));

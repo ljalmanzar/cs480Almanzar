@@ -347,7 +347,7 @@ void cleanUp()
     // Clean up, Clean up
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo_geometry);
-
+    
     delete dynamicsWorld;
     delete solver;
     delete collisionConfiguration;

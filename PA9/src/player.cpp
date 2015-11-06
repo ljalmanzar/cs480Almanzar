@@ -92,24 +92,26 @@ void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height){
 
 void Player::setPaddlePosKey(unsigned char key){
 	glm::vec3 direction;
-
-	if (key == 'w') // -x
-		direction = glm::vec3(1, 0, 0);
-
-	else if (key == 'a') // + z
-		direction = glm::vec3(0, 0, -1);
-
-	else if (key == 's') // +x
-		direction = glm::vec3(-1, 0, 0);
-
-	else if (key == 'd')// +x
-		direction = glm::vec3(0, 0, 1);
-
-	else if (key == 'q')
-		direction = glm::vec3(0, 1, 0);
-
-	else if (key == 'e')
-		direction = glm::vec3(0, -1, 0);
+	switch( key ){
+		case 'w':
+			direction = glm::vec3(1, 0, 0);
+			break;
+		case 'a':
+			direction = glm::vec3(0, 0, -1);
+			break;
+		case 's':
+			direction = glm::vec3(-1, 0, 0);
+			break;
+		case 'd':
+			direction = glm::vec3(0, 0, 1);
+			break;
+		case 'q':
+			direction = glm::vec3(0, 1, 0);
+			break;
+		case 'e':
+			direction = glm::vec3(0, -1, 0);
+			break;
+	}
 
 	glm::mat4 tempModel = glm::translate(
 		_paddle.getModel()
