@@ -255,21 +255,25 @@ void render()
     //clear the screen
     glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+
+    //write the player scores to the screen before anything else happens
+    mainGame.printScores();
+    
+    //enable the shader program
+    glUseProgram(program);
+
     //get the most recent camera data
     view = camera.getViewMatrix();
 
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
-    	//draw only the objects we want to see and skip elseways
-    	if( !allObjects[objIndex]->isDrawable() ){
-    		continue;
-    	}
+        //draw only the objects we want to see and skip elseways
+        if( !allObjects[objIndex]->isDrawable() ){
+            continue;
+        }
 
         //premultiply the matrix for this example
         model = allObjects[objIndex]->getModel();
         mvp = projection * view * model;
-
-        //enable the shader program
-        glUseProgram(program);
 
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
