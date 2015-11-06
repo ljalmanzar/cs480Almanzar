@@ -44,13 +44,14 @@ void GameDriver::initGame(){
 	
 	glm::mat4 tempModel;
 
-	//_gamePuck.setModel(tempModel);
+	_gamePuck.setModel(tempModel);
+
 	_allObjects.push_back(&this->_gamePuck);
 
 	//this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	
 	//get the table in here as well
-	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, PLANE);
+	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH);
 	_allObjects.push_back(&this->_table);
 
 	// reset player's score
@@ -79,7 +80,7 @@ void GameDriver::setP2PaddlePos(unsigned char key){
 
 void GameDriver::addPuck(int side, const std::string &objFile, const std::string &textureFile){
 	// create puck in puck vector
-	_pucks.push_back( GLD(objFile, textureFile, true, CYLINDER) );
+	_pucks.push_back( GLD(objFile, textureFile, true, CYLINDER, true) );
 
 	glm::mat4 tempModel;
 	// place it on side
@@ -107,7 +108,7 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 	}
 
 	// scale puck
-	tempModel = glm::scale(tempModel, glm::vec3(0.34));
+	tempModel = glm::scale(tempModel, glm::vec3(0.14));
 
 	_pucks[_pucks.size() - 1].setModel(tempModel);
 	// add reference to puck to all objects

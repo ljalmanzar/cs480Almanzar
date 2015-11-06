@@ -342,11 +342,11 @@ void GLD::addPhysics(){
         else if( _typeOfShape == CYLINDER ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
-            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(1, 1, 0, 1), 
+            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
                                                             btVector3(positionOfObject[0], positionOfObject[1]+9, positionOfObject[2])));
             btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
-            _rigidBody -> setRestitution(.25);
+            _rigidBody -> setRestitution(.5);
             _rigidBody -> setFriction(3.0);
             //_rigidBody -> setAngularFactor(btVector3(0,0,0));
             //_rigidBody -> setLinearFactor(btVector3(1,0,1));
@@ -463,36 +463,6 @@ bool GLD::updateObjectAndPhysics(){
         getRigidBody()->setWorldTransform(newTrans);
         _shapeMotionState->setWorldTransform(newTrans); 
     }
-        //NEW LINE OF CODE
-//        getRigidBody()-setKinematicPos(trans);
-//        getRigidBody()->setCenterOfMassTransform( trans );
-/*
-    if (_allObjects[i]->getShape() != NONE){
-        // get object
-        tempMat = _allObjects[i]->getModel();
-            // get position of object
-            glm::vec3 positionOfObject = glm::vec3(tempMat[3]);
-            // get rigid body
-            tempBody = _allObjects[i]->getRigidBody();
-            // get transform
-            tempBody->getMotionState()->getWorldTransform(trans);
-            trans.getOpenGLMatrix(m);
-            _allObjects[i]->setModel(glm::make_mat4(m));    
-    }       
-*/
-
-/*    // get object
--                // get position of object
--                glm::vec3 positionOfObject = glm::vec3(_model[3]);
--                // get transform
-                 _rigidBody->getMotionState()->getWorldTransform(trans);
--                trans.getOpenGLMatrix(m);
--
--                // move the transform
--                trans.setOrigin(btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]));
--                // set the new position
--                _rigidBody->getMotionState()->setWorldTransform(trans);    
-*/
     return true;
 }
 #endif
