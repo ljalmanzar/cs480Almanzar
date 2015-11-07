@@ -20,10 +20,10 @@ GLD::GLD(){
     _collisionShape = NULL;
 
     _isDrawable = false; 
-    _needPhysics = false;
+    _typeOfMovement = STATIC;
 }
 
-GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType, bool incomingNeedPhysics ){
+GLD::GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType, TypeOfMovement incomingMovement ){
     //assign variables, allocate memory
     _geometryFile = geometry_file;
     _textureFile = texture_file;
@@ -39,9 +39,10 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
     _rigidBody = NULL;
     _collisionShape = NULL;
 
-    _needPhysics = incomingNeedPhysics;
     _isDrawable = incomingDrawable;
     _typeOfShape = incomingType;
+    _typeOfMovement = incomingMovement;
+
     int switchInt = incomingType;
 
     switch( switchInt ){
@@ -52,7 +53,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -146,12 +147,12 @@ GLD& GLD::operator=( const GLD& srcGLD ){
 GLD::~GLD(){
 }
 
-bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType, bool incomingNeedPhysics ){
+bool GLD::initialize( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable, TypeOfShape incomingType, TypeOfMovement incomingMovement ){
     _geometryFile = geometry_file;
     _textureFile = texture_file;
     _isDrawable = incomingDrawable;
     _typeOfShape = incomingType;
-    _needPhysics = incomingNeedPhysics;
+    _typeOfMovement = incomingMovement;
 
     // check for string existance consistancy
     if( geometry_file == "" ){
@@ -195,7 +196,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -348,13 +349,16 @@ void GLD::addPhysics(){
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
-            //_rigidBody -> setAngularFactor(btVector3(0,0,0));
-            //_rigidBody -> setLinearFactor(btVector3(1,0,1));
+            _rigidBody -> setAngularFactor(btVector3(0,0,0));
+            _rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
         else if ( _typeOfShape == TRIMESH ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _shapeMotionState = new btDefaultMotionState( btTransform(btQuaternion(0,0,0,1), 
                                             btVector3( positionOfObject[0], positionOfObject[1], positionOfObject[2])));
+            if (_typeOfMovement == KINEMATIC){
+                _mass = 5;
+            }
                 _collisionShape->calculateLocalInertia( _mass, _inertia );
             btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_collisionShape,_inertia);
             _rigidBody = new btRigidBody(info);
