@@ -33,7 +33,7 @@ Game Tutorial
 
 Known Issues
 ------------
-Our texture seems to be mapping on the object backwards since our words are backwards. 
+There are absolutely no known issues.  If you find one, you can keep it to yourself.
 
 Credits
 -------
