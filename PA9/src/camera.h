@@ -36,6 +36,11 @@ class Camera{
 		void zoom( float zoomValue );
 		void pivot( Pivot twistDirection );
 
+		//getters
+		glm::vec3 getCamUp() const;
+		glm::vec3 getCamRight() const;
+		glm::vec3 getCamDir() const;
+
 		//Accessible Data
 		glm::vec3 cam_pos;
 		glm::vec3 cam_focus;
@@ -130,6 +135,18 @@ void Camera::pivot( Pivot twistDirection ){
 			break;
 	}
 	_updateAttributes();
+}
+
+glm::vec3 Camera::getCamUp() const{
+	return _cam_up;
+}
+
+glm::vec3 Camera::getCamRight() const{
+	return _cam_right;
+}
+
+glm::vec3 Camera::getCamDir() const {
+	return _cam_direction;
 }
 
 void Camera::_updateAttributes(){
