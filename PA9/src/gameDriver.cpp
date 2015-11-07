@@ -109,7 +109,7 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 	}
 
 	// scale puck
-	tempModel = glm::scale(tempModel, glm::vec3(0.14));
+	//tempModel = glm::scale(tempModel, glm::vec3(0.14));
 
 	_pucks[_pucks.size() - 1]->setModel(tempModel);
 	// add reference to puck to all objects
