@@ -40,11 +40,8 @@ void GameDriver::initGame(){
 
 	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
 
-<<<<<<< HEAD
 	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC);
-=======
 	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, true);
->>>>>>> d6fb8c91156be7db082404b2de6fea357f7ab29e
 	
 	glm::mat4 tempModel;
 
