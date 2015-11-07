@@ -28,7 +28,7 @@ void Player::init(){
 	else{
 		_paddle.initialize("../bin/paddle_blue.obj"
 						  	,"../bin/blue_while_red.png",
-						  		true, SPHERE);
+						  		true, CYLINDER);
 		tempModel = glm::translate( 
         	_paddle.getModel(),
         	glm::vec3(-10.0f, 6.0f, 0.0f) 
