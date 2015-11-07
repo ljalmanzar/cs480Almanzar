@@ -48,7 +48,7 @@ class GLD{
 			const std::string& texture_file, 
 			bool incomingDrawable = true, 
 			TypeOfShape incomingType = NONE, 
-			bool incomingNeedPhysics = false );
+			TypeOfMovement incomingMovement = STATIC );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
@@ -58,7 +58,7 @@ class GLD{
 			const std::string& texture_file = "", 
 			bool incomingDrawable = true, 
 			TypeOfShape incomingType = NONE, 
-			bool incomingNeedPhysics = false );
+			TypeOfMovement incomingMovement = STATIC );
 	
 		// organize attributes within OpenGL Buffers 
 		void orderVerticies();
@@ -121,6 +121,7 @@ class GLD{
 		btVector3 _inertia;
 
 		TypeOfShape _typeOfShape;
+		TypeOfMovement _typeOfMovement; 
 
 		bool _isDrawable; 
 		bool _needPhysics;
