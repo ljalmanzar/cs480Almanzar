@@ -34,17 +34,31 @@ enum TypeOfShape{
 	NONE
 };
 
+enum TypeOfMovement{
+	STATIC = 1,
+	KINEMATIC,
+	DYNAMIC
+};
+
 class GLD{
 	public:
 		// constructors, deconstructors and such
 		GLD();
-		GLD( const std::string& geometry_file, const std::string& texture_file, bool incomingDrawable = true, TypeOfShape incomingType = NONE, bool incomingNeedPhysics = false );
+		GLD( const std::string& geometry_file, 
+			const std::string& texture_file, 
+			bool incomingDrawable = true, 
+			TypeOfShape incomingType = NONE, 
+			bool incomingNeedPhysics = false );
 		GLD( const GLD& srcGLD );
 		GLD& operator=( const GLD& srcGLD );
 		~GLD();
 
 		// fill i/o
-		bool initialize( const std::string& geometry_file = "", const std::string& texture_file = "", bool incomingDrawable = true, TypeOfShape incomingType = NONE, bool incomingNeedPhysics = false );
+		bool initialize( const std::string& geometry_file = "", 
+			const std::string& texture_file = "", 
+			bool incomingDrawable = true, 
+			TypeOfShape incomingType = NONE, 
+			bool incomingNeedPhysics = false );
 	
 		// organize attributes within OpenGL Buffers 
 		void orderVerticies();

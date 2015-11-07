@@ -143,7 +143,7 @@ void Player::setPaddlePosKey(unsigned char key){
 */
 
 	btRigidBody * tempBody = _paddle.getRigidBody();
-	tempBody->setLinearVelocity(btVector3(10,0,0));
+	tempBody->setLinearVelocity(physicsDirection);
 }
 
 // getters
