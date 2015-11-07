@@ -469,6 +469,7 @@ bool GLD::updateObjectAndPhysics(){
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
+        getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
 
     }
     return true;
