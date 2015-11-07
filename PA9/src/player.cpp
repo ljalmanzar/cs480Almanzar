@@ -21,7 +21,7 @@ void Player::init(){
 							 	true, CYLINDER, KINEMATIC);
 		tempModel = glm::translate( 
        		_paddle.getModel(),
-       		glm::vec3(10.0f, 6.0f, 0.0f) 
+       		glm::vec3(10.0f, 5.0f, 0.0f) 
         );
 	}
 
@@ -31,7 +31,7 @@ void Player::init(){
 						  		true, CYLINDER, KINEMATIC);
 		tempModel = glm::translate( 
         	_paddle.getModel(),
-        	glm::vec3(-10.0f, 6.0f, 0.0f) 
+        	glm::vec3(-10.0f, 10.0f, 0.0f) 
 
         );
 	}

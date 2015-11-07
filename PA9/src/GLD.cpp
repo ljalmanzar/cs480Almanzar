@@ -53,7 +53,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,2,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -196,7 +196,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -345,12 +345,12 @@ void GLD::addPhysics(){
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
                                                             btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
-            btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
+            btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
             _rigidBody -> setAngularFactor(btVector3(0,0,0));
-            _rigidBody -> setLinearFactor(btVector3(1,0,1));
+            //_rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
         else if ( _typeOfShape == TRIMESH ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);

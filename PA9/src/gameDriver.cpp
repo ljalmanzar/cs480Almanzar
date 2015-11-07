@@ -89,7 +89,7 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 		case 0: // spawn center
 			 tempModel = glm::translate( 
 	        	_pucks[_pucks.size() - 1]->getModel(),
-	        	glm::vec3(0.0f, 5.0f, 0.0f) 
+	        	glm::vec3(0.0f, 5.4f, 0.0f) 
        		); 		
 		break;
 
