@@ -92,6 +92,9 @@ void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height){
 
 void Player::setPaddlePosKey(unsigned char key){
 	glm::vec3 direction;
+
+	btVector3 physicsDirection;
+
 	switch( key ){
 		case 'w':
 			direction = glm::vec3(1, 0, 0);
@@ -105,6 +108,24 @@ void Player::setPaddlePosKey(unsigned char key){
 		case 'd':
 			direction = glm::vec3(0, 0, 1);
 			break;
+
+		case 'u':
+			std::cout << "read U" << endl;
+			physicsDirection = btVector3(1, 0, 0);
+			break;
+		case 'h':
+		std::cout << "read h" << endl;
+			physicsDirection = btVector3(0, 0, -1);
+			break;
+		case 'j':
+		std::cout << "read j" << endl;
+			physicsDirection = btVector3(-1, 0, 0);
+			break;
+		case 'k':
+		std::cout << "read k" << endl;
+			physicsDirection = btVector3(0, 0, 1);
+			break;
+
 		case 'q':
 			direction = glm::vec3(0, 1, 0);
 			break;
@@ -112,14 +133,17 @@ void Player::setPaddlePosKey(unsigned char key){
 			direction = glm::vec3(0, -1, 0);
 			break;
 	}
-
+/*
 	glm::mat4 tempModel = glm::translate(
 		_paddle.getModel()
 		, direction
 	);
 
 	_paddle.setModel(tempModel);
+*/
 
+	btRigidBody * tempBody = _paddle.getRigidBody();
+	tempBody->setLinearVelocity(btVector3(10,0,0));
 }
 
 // getters

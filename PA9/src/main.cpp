@@ -379,7 +379,8 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
 
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
-        key == 'q' || key == 'e')
+        key == 'q' || key == 'e' || key == 'u' || key == 'h'
+        || key == 'j' || key == 'k')
     	mainGame.setP2PaddlePos(key);
 
     else {
