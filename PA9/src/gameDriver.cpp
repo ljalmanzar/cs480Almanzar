@@ -3,7 +3,6 @@
 
 #include "gameDriver.h"
 
-
 GameDriver::GameDriver(){
 	//initialize the puck(s)
 
@@ -70,12 +69,12 @@ void GameDriver::stepPhysicsAnimation( float dt ){
 	
 }
 
-void GameDriver::setP1PaddlePos(int x_pos, int y_pos, int width, int height){
-	_player1.setPaddlePosMouse(x_pos, y_pos, width, height);
+void GameDriver::setP1PaddlePos(int x_pos, int y_pos, int width, int height, Camera* camera){
+	_player1.setPaddlePosMouse(x_pos, y_pos, width, height, camera);
 }
 
-void GameDriver::setP2PaddlePos(unsigned char key){
-	_player2.setPaddlePosKey(key);
+void GameDriver::setP2PaddlePos(unsigned char key, Camera* camera){
+	_player2.setPaddlePosKey(key, camera);
 }
 
 void GameDriver::addPuck(int side, const std::string &objFile, const std::string &textureFile){

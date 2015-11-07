@@ -5,6 +5,7 @@
 #include "player.cpp"
 #include "GLD.cpp"
 #include "powerup.cpp"
+#include "camera.h"
 
 
 #ifndef __PLAYER_H_
@@ -23,8 +24,8 @@ class GameDriver{
 
 		// setters
 		void stepPhysicsAnimation( float dt );
-		void setP1PaddlePos(int x_pos, int y_pos, int width, int height);
-		void setP2PaddlePos(unsigned char key);
+		void setP1PaddlePos(int x_pos, int y_pos, int width, int height, Camera*);
+		void setP2PaddlePos(unsigned char key, Camera*);
 		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
 
 		// getters

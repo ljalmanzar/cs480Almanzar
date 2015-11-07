@@ -3,6 +3,7 @@
 
 #include "GLD.cpp"
 #include <iostream>
+#include "camera.h"
 
 class Player{
 	public:
@@ -17,8 +18,8 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
-		void setPaddlePosMouse(int x_pos, int y_pos, int width, int height);
-		void setPaddlePosKey(unsigned char key);
+		void setPaddlePosMouse(int x_pos, int y_pos, int width, int height, Camera*);
+		void setPaddlePosKey(unsigned char key, Camera*);
 		//getters 
 		int getScore() const;
 		GLD* getPaddle();

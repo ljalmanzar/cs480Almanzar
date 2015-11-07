@@ -381,7 +381,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
         key == 'q' || key == 'e' || key == 'u' || key == 'h'
         || key == 'j' || key == 'k')
-    	mainGame.setP2PaddlePos(key);
+    	mainGame.setP2PaddlePos(key, &camera);
 
     else {
         switch( key ){
@@ -403,7 +403,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void mouse(int x_pos, int y_pos){
-        mainGame.setP1PaddlePos(x_pos, y_pos, w, h);
+        mainGame.setP1PaddlePos(x_pos, y_pos, w, h, &camera);
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)

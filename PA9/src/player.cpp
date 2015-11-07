@@ -3,6 +3,7 @@
 
 #include "player.h"
 
+
 Player::Player(){
 	_score = 0;	
 }
@@ -14,6 +15,7 @@ Player::~Player(){
 void Player::init(){
 	resetScore();
 	glm::mat4 tempModel;
+
 	// init paddle by color
 	if (_playerNumber == 1){
 		_paddle.initialize("../bin/paddle_red.obj"
@@ -63,34 +65,29 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height){
-	//std::cout << x_pos << " "<< y_pos<< endl;
+void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height, Camera* camera){
 
-	if (_oldY == 0 && _oldX == 0){
-		_oldX = x_pos;
-		_oldY = y_pos;
-	}
+	btVector3 physicsDirection;
+
+	glm::vec3 mask = glm::vec3(1,0,1);
+
+	mask = mask*(camera->getCamDir());
 
 
 	float deltaX = _oldX - x_pos; 
 	float deltaY = _oldY - y_pos;
 
-	glm::vec3 direction(
-		deltaX / 10 
-		,0.0
-    	, deltaY / 10
-		);
+	glm::vec3 deltaVec = glm::vec3(deltaX, 0, deltaY);
 
-	_oldX = x_pos;
-	_oldY = y_pos;
-	glm::mat4 tempModel = glm::translate(
-		_paddle.getModel()
-		, direction);
+	mask += deltaVec; // change in forward
 
-	_paddle.setModel(tempModel);
+	physicsDirection = btVector3(mask.x, 0, mask.z);
+
+	btRigidBody * tempBody = _paddle.getRigidBody();
+	tempBody->setLinearVelocity(physicsDirection);
 }
 
-void Player::setPaddlePosKey(unsigned char key){
+void Player::setPaddlePosKey(unsigned char key, Camera* camera){
 	glm::vec3 direction;
 
 	btVector3 physicsDirection;
