@@ -53,7 +53,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -196,7 +196,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
+            _cylinderShape = new btCylinderShape(btVector3(2,0.5,2));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -349,7 +349,7 @@ void GLD::addPhysics(){
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
-            //_rigidBody -> setAngularFactor(btVector3(0,0,0));
+            _rigidBody -> setAngularFactor(btVector3(0,0,0));
             _rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
         else if ( _typeOfShape == TRIMESH ){
