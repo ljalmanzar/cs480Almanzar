@@ -16,6 +16,7 @@
 #include "powerup.cpp"
 #include "GLD.cpp"
 #include "camera.h"
+#include "mousePicker.h"
 
 //--Evil Global variables
 int w = 800, h = 800;// Window size
@@ -23,6 +24,7 @@ GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
 int NUM_OF_VERTICIES = 0;
 Camera camera;
+MousePicker mousePicker;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -135,6 +137,7 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
+    mousePicker.initialize(camera, projection, view);
     mainGame.initGame();
     allObjects = mainGame.getAllObjects();
 
@@ -264,6 +267,7 @@ void render()
 
     //get the most recent camera data
     view = camera.getViewMatrix();
+    mousePicker.update(camera, view);
 
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
         //draw only the objects we want to see and skip elseways
@@ -372,7 +376,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
            exit(0);
        }
     if(key == '+'){
-        camera.zoom( 1 );       
+        camera.zoom( 1 );     
     }
     if(key == '-'){
         camera.zoom( -1 );     
@@ -381,7 +385,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
         key == 'q' || key == 'e' || key == 'u' || key == 'h'
         || key == 'j' || key == 'k')
-    	mainGame.setP2PaddlePos(key);
+    	mainGame.setP2PaddlePos(key, &camera);
 
     else {
         switch( key ){
@@ -403,7 +407,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void mouse(int x_pos, int y_pos){
-        mainGame.setP1PaddlePos(x_pos, y_pos, w, h);
+     glm::vec3 mouseRay = mousePicker.calculateMouseRay(x_pos, y_pos, w, h);
+     mainGame.setP1PaddlePos(mouseRay);
+
+  //   std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
