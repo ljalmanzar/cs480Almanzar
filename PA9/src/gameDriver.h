@@ -30,7 +30,7 @@ class GameDriver{
 		// getters
 		Player* getPlayer1();
 		Player* getPlayer2(); 
-		std::vector<GLD>* getPucks();
+		std::vector<GLD*>* getPucks();
 		Powerup* getPowerup();
 		GLD* getTable();
 
@@ -47,7 +47,7 @@ class GameDriver{
 		GLD _gamePuck;
 		GLD _backGround;
 		
-		std::vector<GLD> _pucks;
+		std::vector<GLD*> _pucks;
 		std::vector<GLD*> _allObjects;
 };
 
