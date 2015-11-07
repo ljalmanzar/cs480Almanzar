@@ -70,8 +70,8 @@ void GameDriver::stepPhysicsAnimation( float dt ){
 	
 }
 
-void GameDriver::setP1PaddlePos(int x_pos, int y_pos, int width, int height, Camera* camera){
-	_player1.setPaddlePosMouse(x_pos, y_pos, width, height, camera);
+void GameDriver::setP1PaddlePos(glm::vec3 mouseRay){
+	_player1.setPaddlePosMouse(mouseRay);
 }
 
 void GameDriver::setP2PaddlePos(unsigned char key, Camera* camera){

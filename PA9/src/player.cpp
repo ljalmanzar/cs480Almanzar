@@ -66,23 +66,15 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePosMouse(int x_pos, int y_pos, int width, int height, Camera* camera){
+void Player::setPaddlePosMouse(glm::vec3 mouseRay){
+	float sensitivity = 4;
 
 	btVector3 physicsDirection;
-
-	glm::vec3 mask = glm::vec3(1,0,1);
-
-	mask = mask*(camera->getCamDir());
-
-
-	float deltaX = _oldX - x_pos; 
-	float deltaY = _oldY - y_pos;
-
-	glm::vec3 deltaVec = glm::vec3(deltaX, 0, deltaY);
-
-	mask += deltaVec; // change in forward
-
-	physicsDirection = btVector3(mask.x, 0, mask.z);
+	physicsDirection = btVector3(
+		mouseRay.x * sensitivity
+		,mouseRay.y *sensitivity
+		,mouseRay.z *sensitivity
+	);
 
 	btRigidBody * tempBody = _paddle.getRigidBody();
 	tempBody->setLinearVelocity(physicsDirection);
