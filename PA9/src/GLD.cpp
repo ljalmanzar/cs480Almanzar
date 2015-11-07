@@ -343,7 +343,7 @@ void GLD::addPhysics(){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+9, positionOfObject[2])));
+                                                            btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
             btRigidBody::btRigidBodyConstructionInfo info(6,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);

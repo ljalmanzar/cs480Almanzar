@@ -18,7 +18,7 @@ void Player::init(){
 	if (_playerNumber == 1){
 		_paddle.initialize("../bin/paddle_red.obj"
 							 ,"../bin/powerup/metal.jpg", 
-							 	true, SPHERE);
+							 	true, CYLINDER);
 		tempModel = glm::translate( 
        		_paddle.getModel(),
        		glm::vec3(10.0f, 6.0f, 0.0f) 
@@ -111,19 +111,19 @@ void Player::setPaddlePosKey(unsigned char key){
 
 		case 'u':
 			std::cout << "read U" << endl;
-			physicsDirection = btVector3(1, 0, 0);
+			physicsDirection = btVector3(10, 0, 0);
 			break;
 		case 'h':
 		std::cout << "read h" << endl;
-			physicsDirection = btVector3(0, 0, -1);
+			physicsDirection = btVector3(0, 0, -10);
 			break;
 		case 'j':
 		std::cout << "read j" << endl;
-			physicsDirection = btVector3(-1, 0, 0);
+			physicsDirection = btVector3(-10, 0, 0);
 			break;
 		case 'k':
 		std::cout << "read k" << endl;
-			physicsDirection = btVector3(0, 0, 1);
+			physicsDirection = btVector3(0, 0, 10);
 			break;
 
 		case 'q':
