@@ -19,7 +19,7 @@ void Player::init(){
 	// init paddle by color
 	if (_playerNumber == 1){
 		_paddle.initialize("../bin/paddle_red.obj"
-							 ,"../bin/powerup/metal.jpg", 
+							 ,"../bin/blue_while_red.png", 
 							 	true, CYLINDER, KINEMATIC);
 		tempModel = glm::translate( 
        		_paddle.getModel(),
