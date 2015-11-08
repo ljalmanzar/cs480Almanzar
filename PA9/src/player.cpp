@@ -34,19 +34,11 @@ void Player::init(){
 		tempModel = glm::translate( 
         	_paddle.getModel(),
         	glm::vec3(-10.0f, 6.0f, 0.0f) 
-
         );
 	}
 
 	tempModel = glm::scale(tempModel, glm::vec3(0.34));
 	_paddle.setModel(tempModel);
-
-	_horizontalAngle = 0;
-	_verticalAngle = 0;
-	_oldX = 0;
-	_oldY = 0;
-	_myX = 0;
-	_myY = 0;
 }
 
 //setters
@@ -67,19 +59,24 @@ void Player::setPlayerNumber(int playerNumber){
 }
 
 void Player::setPaddlePosMouse(glm::vec3 mouseRay, Camera* camera){
-	float sensitivity = 20;
-
-	glm::vec4 tempPaddle = glm::vec4(1.0,1.0,1.0,1.0) * _paddle.getModel();
-	glm::vec4 tempRay = glm::vec4(mouseRay,1.0);
-	glm::vec4 distance = tempRay - tempPaddle;
+	float sensitivity = 1;
 	btVector3 physicsDirection;
 
-	physicsDirection = btVector3(
-		distance.x * sensitivity
-		,0
-		,distance.z *sensitivity
-	);
+	// find delta
+	glm::vec3 tempPaddle = glm::normalize(glm::vec3(_paddle.getModel()[3]));
+	glm::vec3 delta =  tempPaddle - mouseRay;
+	delta = glm::normalize(delta);
+//std::cout << delta.x << ", " << delta.y <<", " << delta.z << endl; 
+	// calculate forward and right
+	glm::vec3 puckForward = glm::vec3(_paddle.getModel()[3]) - camera->cam_pos;
+	puckForward.y = 0.0; // bind to y axis
+	puckForward = glm::normalize(puckForward);
+	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
 
+	glm::vec3 movement = (delta * puckRight) + (delta * puckForward);
+	movement = movement * sensitivity;
+	// add force
+	physicsDirection = btVector3(movement.x, movement.y, movement.z);
 	btRigidBody * tempBody = _paddle.getRigidBody();
 	tempBody->setLinearVelocity(physicsDirection);
 }
@@ -93,7 +90,7 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	puckForward.y = 0.0; // bind to y axis
 	puckForward = glm::normalize(puckForward);
 	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
-	glm::vec3 force = glm::vec3 (0.0,0.0,0.0);
+	glm::vec3 force = glm::vec3 (1.0,0.0,1.0);
 	float sensitivity = 20;
 
 	switch( key ){
