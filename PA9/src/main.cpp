@@ -26,6 +26,9 @@ int NUM_OF_VERTICIES = 0;
 Camera camera;
 MousePicker mousePicker;
 
+bool LEFTGOAL = false;
+bool RIGHTGOAL = false;
+
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
@@ -59,6 +62,7 @@ void special_keyboard(int key, int x_pos, int y_pos);
 void mouse(int x_pos, int y_pos);
 void menu_options( int id );
 float getDT();
+bool checkForGoal();
 
 GameDriver mainGame;
 
@@ -332,6 +336,23 @@ void update()
             allObjects[currentObj]->updateObjectAndPhysics();
         }
 
+    // check if time for power up and then move box
+   // if (mainGame.getPU()){
+        if( rand() % 250 == 0 ){
+            mainGame.activateMysteryBox();
+            cout << "MysteryBox" << endl;
+        }
+   // }
+
+    // check if powerup has been hit
+
+        // if hit, get type of powerup
+
+    checkForGoal(); 
+    if (LEFTGOAL || RIGHTGOAL){
+
+    }
+
     glutPostRedisplay();
 
 }
@@ -452,4 +473,35 @@ void menu_options( int id ){
             exit(0);
             break;
     }
+}
+
+bool checkForGoal(){
+    // find object
+    unsigned int i = 0;
+    for (i = 0; i < allObjects.size(); ++i)
+        {
+            if (allObjects[i]->getMovement() == DYNAMIC){
+                break;
+            }
+        }
+
+    // get coordinates
+    glm::mat4 tempModel = allObjects[i]->getModel();
+
+    glm::vec3 positionOfObject = glm::vec3(tempModel[3]);
+    //std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
+
+    if (positionOfObject.x >= 13){
+        std::cout << "PLAYER 2 GOOOOAL" << endl;
+        return true;
+    } 
+    else if(positionOfObject.x >= 14.85){
+        std::cout << "PLAYER 1 GOOOOAL" << endl;
+        return true;
+    }
+    else{
+        return false;
+    }
+
+    return false;
 }

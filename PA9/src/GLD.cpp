@@ -346,11 +346,11 @@ void GLD::addPhysics(){
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             if ( _typeOfMovement == KINEMATIC){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]-.2, positionOfObject[2])));
+                                                            btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
             }
             else if ( _typeOfMovement == DYNAMIC ){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+5.5, positionOfObject[2])));                
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+5.35, positionOfObject[2])));                
             }
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
@@ -489,9 +489,11 @@ bool GLD::updateObjectAndPhysics(){
             //getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
         }
 
-    } else if ( _frame_ticker < MAX_FRAME ){
+    }
+    if ( _frame_ticker < MAX_FRAME ){
         glm::vec4 newPosition = glm::vec4( _keyframes[_frame_ticker++], _model[3][3] );
         _model[3] = newPosition;
+        cout << "running animaiton with ticker of " << _frame_ticker << endl;
     }
     return true;
 }
@@ -558,6 +560,10 @@ void GLD::anim_MoveDown( float distance ){
         _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
     }
     _frame_ticker = 0;
+}
+
+TypeOfMovement GLD::getMovement() const{
+    return _typeOfMovement;
 }
 
 #endif

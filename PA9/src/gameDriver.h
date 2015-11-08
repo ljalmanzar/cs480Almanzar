@@ -37,6 +37,9 @@ class GameDriver{
 		GLD* getTable();
 
 		std::vector<GLD*> getAllObjects();
+
+		bool getPU();
+		void activateMysteryBox();
 	
 
 	private:

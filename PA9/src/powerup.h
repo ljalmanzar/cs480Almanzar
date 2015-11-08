@@ -13,7 +13,7 @@ class Powerup{
 		
 		void init();
 
-		void spawnRandPU();
+		bool spawnRandPU();
 
 		// getters
 		GLD* getMysteryBox();
@@ -23,6 +23,8 @@ class Powerup{
 		GLD* getIceRink();
 		GLD* getHealth();
 		GLD* getPutinPaddle();
+
+		void moveMysteryBoxUp();
 
 		// setters
 
