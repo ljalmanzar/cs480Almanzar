@@ -560,4 +560,8 @@ void GLD::anim_MoveDown( float distance ){
     _frame_ticker = 0;
 }
 
+TypeOfMovement GLD::getMovement() const{
+    return _typeOfMovement;
+}
+
 #endif

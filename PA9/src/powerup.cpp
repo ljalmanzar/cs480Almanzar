@@ -85,7 +85,7 @@ void Powerup::init(){
 	_putinPaddle.setModel(tempModel);
 }	
 
-void Powerup::spawnRandPU(){
+bool Powerup::spawnRandPU(){
 	srand(time(NULL));
 
 	int randNum = rand()% 120 + 1;
@@ -200,4 +200,7 @@ GLD* Powerup::getPutinPaddle(){
 	return &_putinPaddle;
 }
 
+void Powerup::moveMysteryBoxUp(){
+	
+}
 #endif

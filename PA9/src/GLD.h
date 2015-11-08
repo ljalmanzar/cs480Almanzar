@@ -81,6 +81,7 @@ class GLD{
 		std::vector<Vertex> getOrderedVerticies() const;
 		bool isDrawable() const;
 		TypeOfShape getShape() const;
+		TypeOfMovement getMovement() const;
 
 		// setters
 		bool setModel( const glm::mat4& incomingModel );
