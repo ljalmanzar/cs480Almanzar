@@ -24,7 +24,7 @@
 #include "vertex.cpp"
 
 #ifndef MAX_FRAME
-#define MAX_FRAME 30
+#define MAX_FRAME 40
 #endif
 
 enum TypeOfShape{
@@ -136,7 +136,7 @@ class GLD{
 		bool _needPhysics;
 
 		//Animation Specific
-		glm::vec3 _keyframes [MAX_FRAME];
+		glm::mat4 _keyframes [MAX_FRAME];
 		int _frame_ticker;
 };
 
