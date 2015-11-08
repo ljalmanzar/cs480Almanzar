@@ -63,6 +63,7 @@ void mouse(int x_pos, int y_pos);
 void menu_options( int id );
 float getDT();
 bool checkForGoal();
+bool checkForMysteryBox();
 
 GameDriver mainGame;
 
@@ -337,13 +338,15 @@ void update()
         }
 
     // check if time for power up and then move box
-   // if (mainGame.getPU()){
+    if (mainGame.getPU()){
         mainGame.activateMysteryBox();
-   // }
+    }
 
     // check if powerup has been hit
-
+    if(checkForMysteryBox()){
         // if hit, get type of powerup
+        mainGame.activatePowerUp();
+    }
 
     checkForGoal(); 
     if (LEFTGOAL || RIGHTGOAL){
@@ -473,6 +476,37 @@ void menu_options( int id ){
 }
 
 bool checkForGoal(){
+    // find object
+    unsigned int i = 0;
+    for (i = 0; i < allObjects.size(); ++i)
+        {
+            if (allObjects[i]->getMovement() == DYNAMIC){
+                break;
+            }
+        }
+
+    // get coordinates
+    glm::mat4 tempModel = allObjects[i]->getModel();
+
+    glm::vec3 positionOfObject = glm::vec3(tempModel[3]);
+    std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
+
+    if (positionOfObject.x >= 13){
+        std::cout << "PLAYER 2 GOOOOAL" << endl;
+        return true;
+    } 
+    else if(positionOfObject.x >= 14.85){
+        std::cout << "PLAYER 1 GOOOOAL" << endl;
+        return true;
+    }
+    else{
+        return false;
+    }
+
+    return false;
+}
+
+bool checkForMysteryBox(){
     // find object
     unsigned int i = 0;
     for (i = 0; i < allObjects.size(); ++i)

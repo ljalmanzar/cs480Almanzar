@@ -5,7 +5,7 @@
 
 GameDriver::GameDriver(){
 	//initialize the puck(s)
-
+	_activePowerUp = false;
 }
 
 GameDriver::~GameDriver(){
@@ -262,6 +262,9 @@ std::vector<GLD*>GameDriver::getAllObjects(){
 }
 
 bool GameDriver::getPU(){
+	if (_activePowerUp)
+		return false;
+
 	srand(time(NULL));
 
 	int randNum = rand() % 200;
@@ -274,6 +277,10 @@ bool GameDriver::getPU(){
 
 void GameDriver::activateMysteryBox(){
 	_powerup.moveMysteryBoxUp();
+}
+
+void GameDriver::activatePowerUp(){
+	_powerup.spawnRandPU();
 }
 
 #endif

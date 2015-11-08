@@ -94,80 +94,38 @@ bool Powerup::spawnRandPU(){
 
 	// 1 <= randNum < 20
 	if ((randNum >= 1) && (randNum < 20)){
-		// *** GLD ***
-		// set pos over ? box
-		// show object
-		tempModel = glm::translate( 
-        _mysteryBox.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_mysteryBox.setModel(tempModel);
-
-		// set propertieus 
 	} 
 
 	// 20 <= randNum < 40
 	else if ((randNum >= 20) && (randNum < 40)){
-		// *** GLD ***
-		// set pos over ? box
-		// show object
-		tempModel = glm::translate( 
-        _multiPuck.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_multiPuck.setModel(tempModel);
+		// show powerup
+		_multiPuck.anim_MoveUp(5.0);
 
-		// set properties 
+		// add new puck... how? idfk 
 	}
 
 	// 40 <= randNum < 60
 	else if ((randNum >= 40) && (randNum < 60)){
-		// *** GLD ***
-		// set pos over ? box
-		// show object
+		_lightPuck.anim_MoveUp(5.0);
 
-		tempModel = glm::translate( 
-        _lightPuck.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_lightPuck.setModel(tempModel);
-
-		// set props
+		// set mass lower..
 	}
 	
 	// 40 <= randNum < 60
 	else if ((randNum >= 60) && (randNum < 80)){
-		// *** GLD ***
-		// set pos over ? box
-		// show object
-		tempModel = glm::translate( 
-        _iceRink.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_iceRink.setModel(tempModel);
+		_iceRink.anim_MoveUp(5.0);
 
-		// set properties 
+		// make friction 0 and more restituion
 	}
 	
 	// 40 <= randNum <= 100
 	else  if ((randNum >= 80) && (randNum < 100)){
-		// *** GLD ***
-		// set pos over ? box
-		// show object
-		tempModel = glm::translate( 
-        _minusPoint.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_minusPoint.setModel(tempModel);
+		_minusPoint.anim_MoveUp(5.0);
 
-		// set properties 
+		// update score
 	}
 	else{
-		tempModel = glm::translate( 
-        _putinPaddle.getModel(),
-        glm::vec3(0.0f, 2.0, 0.0) 
-        );
-		_putinPaddle.setModel(tempModel);
+		_putinPaddle.anim_MoveUp(5.0);
 	}
 }
 

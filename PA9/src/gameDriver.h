@@ -40,6 +40,7 @@ class GameDriver{
 
 		bool getPU();
 		void activateMysteryBox();
+		void activatePowerUp();
 	
 
 	private:
@@ -54,6 +55,8 @@ class GameDriver{
 		
 		std::vector<GLD*> _pucks;
 		std::vector<GLD*> _allObjects;
+
+		bool _activePowerUp;
 };
 
 #endif
