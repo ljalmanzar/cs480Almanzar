@@ -24,11 +24,13 @@ class MousePicker{
 		glm::vec3 calculateMouseRay(float x_pos, float y_pos, float width, float height);
 		void initialize(Camera camera, glm::mat4 projection, glm::mat4 view);
 		void update(Camera camera, glm::mat4 view);
+		glm::vec2 getMousePos2D()const;
 	private:
 
 		glm::vec3 _currentRay;
 		glm::mat4 _projection;
 		glm::mat4 _view;
+		glm::vec2 _mousePos2D;
 		Camera _camera;
 
 };
@@ -67,6 +69,9 @@ glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, 
 	float z = 1.0;
 	glm::vec3 normal = glm::vec3(x,-y,z);
 
+	_mousePos2D.x = x_pos;
+	_mousePos2D.y=y_pos;
+
 	glm::vec4 clip = glm::vec4(normal.x, normal.y, -1.0, 1.0);
 
 	// to eye
@@ -84,6 +89,8 @@ glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, 
 	return _currentRay;
 }
 
-
+glm::vec2 MousePicker::getMousePos2D()const{
+	return _mousePos2D;
+}
 
 #endif

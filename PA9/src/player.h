@@ -4,6 +4,7 @@
 #include "GLD.cpp"
 #include <iostream>
 #include "camera.h"
+#include "mousePicker.h"
 
 enum PaddleDirection {
 	D_UP,
@@ -25,7 +26,7 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
-		void setPaddlePosMouse(glm::vec3, Camera*);
+		void setPaddlePosMouse(MousePicker, Camera*);
 		void setPaddlePosKey(PaddleDirection key, Camera*);
 		//getters 
 		int getScore() const;

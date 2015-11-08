@@ -73,7 +73,7 @@ void GameDriver::setP1PaddlePos(PaddleDirection key, Camera* camera){
 	_player1.setPaddlePosKey(key, camera);
 }
 
-void GameDriver::setP1PaddleMouse(glm::vec3 mouseRay, Camera* camera){
+void GameDriver::setP1PaddleMouse(MousePicker mouseRay, Camera* camera){
 	_player1.setPaddlePosMouse(mouseRay, camera);
 }
 

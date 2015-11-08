@@ -58,25 +58,19 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePosMouse(glm::vec3 mouseRay, Camera* camera){
+void Player::setPaddlePosMouse(MousePicker mouseRay, Camera* camera){
 	float sensitivity = 1;
 	btVector3 physicsDirection;
 
-	// find delta
-	glm::vec3 tempPaddle = glm::normalize(glm::vec3(_paddle.getModel()[3]));
-	glm::vec3 delta =  tempPaddle - mouseRay;
-	delta = glm::normalize(delta);
-//std::cout << delta.x << ", " << delta.y <<", " << delta.z << endl; 
-	// calculate forward and right
+	glm::vec2 mousePos2D = mouseRay.getMousePos2D();
+
+	cout << mousePos2D.x << ", " << mousePos2D.y << endl;
 	glm::vec3 puckForward = glm::vec3(_paddle.getModel()[3]) - camera->cam_pos;
 	puckForward.y = 0.0; // bind to y axis
 	puckForward = glm::normalize(puckForward);
 	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
 
-	glm::vec3 movement = (delta * puckRight) + (delta * puckForward);
-	movement = movement * sensitivity;
-	// add force
-	physicsDirection = btVector3(movement.x, movement.y, movement.z);
+	
 	btRigidBody * tempBody = _paddle.getRigidBody();
 	tempBody->setLinearVelocity(physicsDirection);
 }

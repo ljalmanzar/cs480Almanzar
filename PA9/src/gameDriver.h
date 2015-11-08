@@ -6,6 +6,7 @@
 #include "GLD.cpp"
 #include "powerup.cpp"
 #include "camera.h"
+#include "mousePicker.h"
 
 
 #ifndef __PLAYER_H_
@@ -25,7 +26,7 @@ class GameDriver{
 		// setters
 		void stepPhysicsAnimation( float dt );
 		void setP1PaddlePos(PaddleDirection, Camera*);
-		void setP1PaddleMouse(glm::vec3, Camera* camera);
+		void setP1PaddleMouse(MousePicker, Camera* camera);
 		void setP2PaddlePos(PaddleDirection, Camera* );
 		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
 
