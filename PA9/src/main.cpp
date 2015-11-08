@@ -57,6 +57,7 @@ std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
 void keyboard(unsigned char key, int x_pos, int y_pos);
 void special_keyboard(int key, int x_pos, int y_pos);
 void mouse(int x_pos, int y_pos);
+void menu_options( int id );
 float getDT();
 
 GameDriver mainGame;
@@ -93,6 +94,12 @@ int main(int argc, char **argv)
 
     // Name and create the Window
     glutCreateWindow("Air Hockey");
+
+    GLuint system_selection_menu = glutCreateMenu(menu_options);
+    glutCreateMenu(menu_options);
+    glutAddMenuEntry("Start Game", 1);
+    glutAddMenuEntry("Exit Game", 3);
+    glutAttachMenu( GLUT_RIGHT_BUTTON );
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -436,4 +443,17 @@ void special_keyboard(int key, int x_pos, int y_pos)
             mainGame.setP2PaddlePos(D_RIGHT, &camera);
     }
     glutPostRedisplay();
+}
+
+void menu_options( int id ){
+    //commands for each selection
+    switch( id ){
+        case 1:
+             break;
+        case 2:
+            break;
+        case 3:
+            exit(0);
+            break;
+    }
 }

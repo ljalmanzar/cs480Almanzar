@@ -115,7 +115,7 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	physicsDirection = btVector3(force.x, force.y, force.z);
 	 
 	btRigidBody * tempBody = _paddle.getRigidBody();
-	tempBody->applyCentralImpulse(physicsDirection);
+	tempBody->setLinearVelocity(physicsDirection);
 }
 
 // getters
