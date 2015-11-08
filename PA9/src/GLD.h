@@ -23,6 +23,10 @@
 
 #include "vertex.cpp"
 
+#ifndef MAX_FRAME
+#define MAX_FRAME 30
+#endif
+
 enum TypeOfShape{
 	SPHERE = 1,
 	BOX,
@@ -85,6 +89,10 @@ class GLD{
 		string getFile();
 
 		bool updateObjectAndPhysics();
+
+		//set animations
+		void anim_MoveUp( float distance );
+		void anim_MoveDown( float distance );
 	private:
 		// maintenance functions
 		
@@ -125,6 +133,10 @@ class GLD{
 
 		bool _isDrawable; 
 		bool _needPhysics;
+
+		//Animation Specific
+		glm::vec3 _keyframes [MAX_FRAME];
+		int _frame_ticker;
 };
 
 #endif

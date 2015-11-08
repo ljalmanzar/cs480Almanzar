@@ -153,6 +153,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
     _isDrawable = incomingDrawable;
     _typeOfShape = incomingType;
     _typeOfMovement = incomingMovement;
+    _frame_ticker = MAX_FRAME;
 
     // check for string existance consistancy
     if( geometry_file == "" ){
@@ -483,7 +484,75 @@ bool GLD::updateObjectAndPhysics(){
             //getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
         }
 
+    } else if ( _frame_ticker < MAX_FRAME ){
+        glm::vec4 newPosition = glm::vec4( _keyframes[_frame_ticker++], _model[3][3] );
+        _model[3] = newPosition;
     }
     return true;
 }
+
+void GLD::anim_MoveUp( float distance ){
+    //declare auxiliary variables
+    glm::vec3 start_pos = glm::vec3(_model[3]);
+    glm::vec3 dest_pos = glm::vec3(_model[3]);
+    float ratio;
+
+    //go down to 4 (20%)
+    dest_pos.y -= .2f * distance; 
+    for( int i = 0; i < 4; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    start_pos = dest_pos;
+
+    //go up to 22 (over shoot by 11.5-%12% )
+    dest_pos.y += .2f * distance;
+    dest_pos.y += .12 * distance;
+    for( int i = 4; i < 22; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    start_pos = dest_pos;
+
+    //go down to the end of the frames (30)
+    dest_pos.y -= .12 * distance;
+    for( int i = 22; i < MAX_FRAME; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    _frame_ticker = 0;
+}
+
+void GLD::anim_MoveDown( float distance ){
+    //declare auxiliary variables
+    glm::vec3 start_pos = glm::vec3(_model[3]);
+    glm::vec3 dest_pos = glm::vec3(_model[3]);
+    float ratio;
+
+    //go down to 4 (20%)
+    dest_pos.y += .2f * distance; 
+    for( int i = 0; i < 4; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    start_pos = dest_pos;
+
+    //go up to 22 (over shoot by 11.5-%12% )
+    dest_pos.y -= .2f * distance;
+    dest_pos.y -= .12 * distance;
+    for( int i = 4; i < 22; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    start_pos = dest_pos;
+
+    //go down to the end of the frames (30)
+    dest_pos.y += .12 * distance;
+    for( int i = 22; i < MAX_FRAME; i++ ){
+        ratio = float(i)/float(MAX_FRAME);
+        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+    }
+    _frame_ticker = 0;
+}
+
 #endif
