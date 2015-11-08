@@ -53,7 +53,7 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,2,2));
+            _cylinderShape = new btCylinderShape(btVector3(1,1,1));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -197,7 +197,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
         case CYLINDER:
-            _cylinderShape = new btCylinderShape(btVector3(2,1,2));
+            _cylinderShape = new btCylinderShape(btVector3(1,1,1));
             break;
         case TRIMESH:
             _triMesh = new btTriangleMesh();
@@ -346,11 +346,11 @@ void GLD::addPhysics(){
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             if ( _typeOfMovement == KINEMATIC){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
+                                                            btVector3(positionOfObject[0], positionOfObject[1]-.5, positionOfObject[2])));
             }
             else if ( _typeOfMovement == DYNAMIC ){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+5, positionOfObject[2])));                
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+5.15, positionOfObject[2])));                
             }
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
@@ -358,6 +358,11 @@ void GLD::addPhysics(){
             _rigidBody -> setFriction(1);
             _rigidBody -> setAngularFactor(btVector3(0,1,0));
             _rigidBody -> setLinearFactor(btVector3(1,0,1));
+
+            if (_typeOfMovement == KINEMATIC){
+            	_rigidBody -> setFriction(0);
+            	_rigidBody -> setRestitution(2);
+            }
         }
         else if ( _typeOfShape == TRIMESH ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);

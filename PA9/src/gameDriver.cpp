@@ -145,31 +145,69 @@ void GameDriver::printScores() const {
 	char * tempStr;
 	int cursor = 0;
 	std::string information[10];
+	std::string controls[10];
 	//declare varibles for positioning
 	//generate strings for each corner and print them out
 		//top left hand corner
 		information[0] = "Player 1 Score: " + std::to_string(_player1.getScore());
 		information[1] = "Player 2 Score: " + std::to_string(_player2.getScore());
+
+		controls[0] = "Player 1 Controls:";
+		controls[1] = "W - Move Forwards";
+		controls[2] = "S - Move Backwards";
+		controls[3] = "A - Move Left";
+		controls[4] = "D - Move Right";
+
+		controls[5] = "Player 2 Controls:";
+		controls[6] = "Up Arrow    - Move Forwards";
+		controls[7] = "Down Arrow  - Move Backwards";
+		controls[8] = "Left Arrow  - Move Left";
+		controls[9] = "Right Arrow - Move Right";
 		//top right hand corner
 	//no program needed to print text
 	glUseProgram(0);
 
-	//display the text
-	glColor3f(1.0,1.0,1.0);
+	//player 1 info
+	glColor3f(1,0,0);
 
 	glRasterPos2f(-.95,.95);
 	tempStr = &information[0][0];
 	while( tempStr[cursor] ){
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, tempStr[cursor++] );
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+
 	}
 	cursor = 0;
 
-	glRasterPos2f(-.95,.85);
+	float dec = .85;
+	for (int i = 0; i < 5; i++){
+		glRasterPos2f(-.95,dec);
+		tempStr = &controls[i][0];
+		while( tempStr[cursor] ){
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+		}
+		dec -= .05;
+		cursor = 0;
+	}
+
+
+	glColor3f(0,0,1);
+	glRasterPos2f(.60,.95);
 	tempStr = &information[1][0];
 	while( tempStr[cursor] ){
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, tempStr[cursor++] );
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
 	}
 	cursor = 0;
+
+	dec = .85;
+	for (int i = 5; i < 10; i++){
+		glRasterPos2f(.60,dec);
+		tempStr = &controls[i][0];
+		while( tempStr[cursor] ){
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+		}
+		dec -= .05;
+		cursor = 0;
+	}
 
 }
 
