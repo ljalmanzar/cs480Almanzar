@@ -17,7 +17,7 @@ void Powerup::init(){
 	// init powerups
 	// (geometry file, texture file) 
 	_mysteryBox.initialize("../bin/powerup/mario_mystery_box.obj"
-						 ,"../bin/powerup/Color_icon_yellow.png",true, BOX, DYNAMIC);
+						 ,"../bin/powerup/Color_icon_yellow.png",true, BOX, KINEMATIC);
 
 	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
@@ -36,7 +36,7 @@ void Powerup::init(){
 						 true, NONE);
 
 	_minusPoint.initialize("../bin/powerup/health.obj"
-						 ,"../bin/powerup/firstaid.jpg",
+						 ,"../bin/blue_while_red.png",
 						 true, NONE);
 
 	_putinPaddle.initialize("../bin/powerup/health.obj"
@@ -51,7 +51,7 @@ void Powerup::init(){
         glm::vec3(0.0f, -18.0f, 0.0f) 
         );
 
-	tempModel = glm::scale(tempModel, glm::vec3(0.2));
+	tempModel = glm::scale(tempModel, glm::vec3(0.1));
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 
