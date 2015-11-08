@@ -23,7 +23,7 @@ void Player::init(){
 							 	true, CYLINDER, KINEMATIC);
 		tempModel = glm::translate( 
        		_paddle.getModel(),
-       		glm::vec3(10.0f, 5.0f, 0.0f) 
+       		glm::vec3(10.0f, 6.0f, 0.0f) 
         );
 	}
 
@@ -33,7 +33,7 @@ void Player::init(){
 						  		true, CYLINDER, KINEMATIC);
 		tempModel = glm::translate( 
         	_paddle.getModel(),
-        	glm::vec3(-10.0f, 10.0f, 0.0f) 
+        	glm::vec3(-10.0f, 6.0f, 0.0f) 
 
         );
 	}
@@ -106,7 +106,6 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 		case D_LEFT:
 			force -= sensitivity * puckRight;
 			break;
-		
 		case D_RIGHT:
 			force += sensitivity * puckRight;
 			break;
@@ -115,7 +114,7 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	physicsDirection = btVector3(force.x, force.y, force.z);
 	 
 	btRigidBody * tempBody = _paddle.getRigidBody();
-	tempBody->applyCentralImpulse(physicsDirection);
+	tempBody->setLinearVelocity(physicsDirection);
 }
 
 // getters

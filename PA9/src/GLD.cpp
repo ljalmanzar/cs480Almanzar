@@ -349,14 +349,14 @@ void GLD::addPhysics(){
             }
             else if ( _typeOfMovement == DYNAMIC ){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+10, positionOfObject[2])));                
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+5, positionOfObject[2])));                
             }
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
-            _rigidBody -> setAngularFactor(btVector3(0,0,0));
-            //_rigidBody -> setLinearFactor(btVector3(1,0,1));
+            _rigidBody -> setAngularFactor(btVector3(0,1,0));
+            _rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
         else if ( _typeOfShape == TRIMESH ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
