@@ -5,6 +5,13 @@
 #include <iostream>
 #include "camera.h"
 
+enum PaddleDirection {
+	D_UP,
+	D_DOWN,
+	D_LEFT,
+	D_RIGHT
+};
+
 class Player{
 	public:
 		// constructor
@@ -19,7 +26,7 @@ class Player{
 		void resetScore();
 		void setPlayerNumber(int);
 		void setPaddlePosMouse(glm::vec3, Camera*);
-		void setPaddlePosKey(unsigned char key, Camera*);
+		void setPaddlePosKey(PaddleDirection key, Camera*);
 		//getters 
 		int getScore() const;
 		GLD* getPaddle();

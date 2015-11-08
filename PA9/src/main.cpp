@@ -382,11 +382,6 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
         camera.zoom( -1 );     
     }
 
-    if (key == 'w' || key == 'a' || key == 's' || key =='d' ||
-        key == 'q' || key == 'e' || key == 'u' || key == 'h'
-        || key == 'j' || key == 'k')
-    	mainGame.setP2PaddlePos(key, &camera);
-
     else {
         switch( key ){
             case '8':
@@ -401,6 +396,18 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case '6':
                 camera.pivot( P_RIGHT );
                 break;
+            case 'w':
+                mainGame.setP1PaddlePos(D_UP, &camera);
+                break;
+            case 'a':
+                  mainGame.setP1PaddlePos(D_LEFT, &camera);
+                break;
+            case 's':
+                 mainGame.setP1PaddlePos(D_DOWN, &camera);
+                break;
+            case 'd':
+                    mainGame.setP1PaddlePos(D_RIGHT, &camera);
+                break;
         }        
     }
     glutPostRedisplay();
@@ -408,13 +415,25 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 
 void mouse(int x_pos, int y_pos){
      glm::vec3 mouseRay = mousePicker.calculateMouseRay(x_pos, y_pos, w, h);
-     mainGame.setP1PaddlePos(mouseRay,&camera);
+     mainGame.setP1PaddleMouse(mouseRay,&camera);
 
-     std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
+    // std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
 {
-
+    switch(key){
+        case GLUT_KEY_UP:
+            mainGame.setP2PaddlePos(D_UP, &camera);
+            break;
+        case GLUT_KEY_LEFT:
+            mainGame.setP2PaddlePos(D_LEFT, &camera);
+            break;
+        case GLUT_KEY_DOWN:
+            mainGame.setP2PaddlePos(D_DOWN, &camera);
+            break;
+        case GLUT_KEY_RIGHT:
+            mainGame.setP2PaddlePos(D_RIGHT, &camera);
+    }
     glutPostRedisplay();
 }

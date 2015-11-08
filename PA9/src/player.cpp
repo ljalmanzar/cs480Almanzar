@@ -84,58 +84,36 @@ void Player::setPaddlePosMouse(glm::vec3 mouseRay, Camera* camera){
 	tempBody->setLinearVelocity(physicsDirection);
 }
 
-void Player::setPaddlePosKey(unsigned char key, Camera* camera){
+void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	glm::vec3 direction;
 
 	btVector3 physicsDirection;
 
+	glm::vec3 puckForward = glm::vec3(_paddle.getModel()[3]) - camera->cam_pos;
+	puckForward.y = 0.0; // bind to y axis
+	puckForward = glm::normalize(puckForward);
+	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
+	glm::vec3 force = glm::vec3 (0.0,0.0,0.0);
+	float sensitivity = 50;
+
 	switch( key ){
-		case 'w':
-			direction = glm::vec3(1, 0, 0);
+		case D_UP:
+			force += sensitivity * puckForward;
 			break;
-		case 'a':
-			direction = glm::vec3(0, 0, -1);
+		case D_DOWN:
+			force -= sensitivity * puckForward;
 			break;
-		case 's':
-			direction = glm::vec3(-1, 0, 0);
+		case D_LEFT:
+			force -= sensitivity * puckRight;
 			break;
-		case 'd':
-			direction = glm::vec3(0, 0, 1);
-			break;
-
-		case 'u':
-			std::cout << "read U" << endl;
-			physicsDirection = btVector3(10, 0, 0);
-			break;
-		case 'h':
-		std::cout << "read h" << endl;
-			physicsDirection = btVector3(0, 0, -10);
-			break;
-		case 'j':
-		std::cout << "read j" << endl;
-			physicsDirection = btVector3(-10, 0, 0);
-			break;
-		case 'k':
-		std::cout << "read k" << endl;
-			physicsDirection = btVector3(0, 0, 10);
-			break;
-
-		case 'q':
-			direction = glm::vec3(0, 1, 0);
-			break;
-		case 'e':
-			direction = glm::vec3(0, -1, 0);
+		
+		case D_RIGHT:
+			force += sensitivity * puckRight;
 			break;
 	}
-/*
-	glm::mat4 tempModel = glm::translate(
-		_paddle.getModel()
-		, direction
-	);
 
-	_paddle.setModel(tempModel);
-*/
-
+	physicsDirection = btVector3(force.x, force.y, force.z);
+	 
 	btRigidBody * tempBody = _paddle.getRigidBody();
 	tempBody->setLinearVelocity(physicsDirection);
 }

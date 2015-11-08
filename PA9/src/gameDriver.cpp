@@ -69,11 +69,15 @@ void GameDriver::stepPhysicsAnimation( float dt ){
 	
 }
 
-void GameDriver::setP1PaddlePos(glm::vec3 mouseRay, Camera* camera){
+void GameDriver::setP1PaddlePos(PaddleDirection key, Camera* camera){
+	_player1.setPaddlePosKey(key, camera);
+}
+
+void GameDriver::setP1PaddleMouse(glm::vec3 mouseRay, Camera* camera){
 	_player1.setPaddlePosMouse(mouseRay, camera);
 }
 
-void GameDriver::setP2PaddlePos(unsigned char key, Camera* camera){
+void GameDriver::setP2PaddlePos(PaddleDirection key, Camera* camera){
 	_player2.setPaddlePosKey(key, camera);
 }
 
