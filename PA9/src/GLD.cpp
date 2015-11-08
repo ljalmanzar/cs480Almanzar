@@ -346,11 +346,11 @@ void GLD::addPhysics(){
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
             if ( _typeOfMovement == KINEMATIC){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]-.5, positionOfObject[2])));
+                                                            btVector3(positionOfObject[0], positionOfObject[1]-.2, positionOfObject[2])));
             }
             else if ( _typeOfMovement == DYNAMIC ){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
-                                                            btVector3(positionOfObject[0], positionOfObject[1]+5.15, positionOfObject[2])));                
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+5.5, positionOfObject[2])));                
             }
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
