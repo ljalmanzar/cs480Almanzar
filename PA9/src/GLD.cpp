@@ -354,7 +354,7 @@ void GLD::addPhysics(){
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
-            _rigidBody -> setFriction(1);
+            _rigidBody -> setFriction(.15);
             _rigidBody -> setAngularFactor(btVector3(0,0,0));
             //_rigidBody -> setLinearFactor(btVector3(1,0,1));
         }
@@ -479,8 +479,9 @@ bool GLD::updateObjectAndPhysics(){
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
-        if (_typeOfMovement == KINEMATIC)
-            getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
+        if (_typeOfMovement == KINEMATIC){
+            //getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
+        }
 
     }
     return true;

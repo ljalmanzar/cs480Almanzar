@@ -94,7 +94,7 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	puckForward = glm::normalize(puckForward);
 	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
 	glm::vec3 force = glm::vec3 (0.0,0.0,0.0);
-	float sensitivity = 50;
+	float sensitivity = 40;
 
 	switch( key ){
 		case D_UP:
@@ -115,7 +115,7 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 	physicsDirection = btVector3(force.x, force.y, force.z);
 	 
 	btRigidBody * tempBody = _paddle.getRigidBody();
-	tempBody->setLinearVelocity(physicsDirection);
+	tempBody->applyCentralForce(physicsDirection);
 }
 
 // getters
