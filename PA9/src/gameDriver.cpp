@@ -262,7 +262,14 @@ std::vector<GLD*>GameDriver::getAllObjects(){
 }
 
 bool GameDriver::getPU(){
-	return _powerup.spawnRandPU();
+	srand(time(NULL));
+
+	int randNum = rand() % 200;
+
+	if (randNum < 5)
+		return true;
+
+	return false;
 }
 
 void GameDriver::activateMysteryBox(){
