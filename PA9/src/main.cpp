@@ -408,9 +408,9 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 
 void mouse(int x_pos, int y_pos){
      glm::vec3 mouseRay = mousePicker.calculateMouseRay(x_pos, y_pos, w, h);
-     mainGame.setP1PaddlePos(mouseRay);
+     mainGame.setP1PaddlePos(mouseRay,&camera);
 
-  //   std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
+     std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)

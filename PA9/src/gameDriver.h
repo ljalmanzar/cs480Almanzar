@@ -24,8 +24,8 @@ class GameDriver{
 
 		// setters
 		void stepPhysicsAnimation( float dt );
-		void setP1PaddlePos(glm::vec3);
-		void setP2PaddlePos(unsigned char key, Camera*);
+		void setP1PaddlePos(glm::vec3, Camera*);
+		void setP2PaddlePos(unsigned char key, Camera* );
 		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
 
 		// getters

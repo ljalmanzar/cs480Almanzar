@@ -63,8 +63,8 @@ void MousePicker::update(Camera camera, glm::mat4 view){
 
 glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, float height){
 	float x = (2.0*x_pos) / width - 1.0;
-	float y = (2.0*y_pos) / height -1.0;
-	glm::vec2 normal = glm::vec2(x,-y);
+	float y = 1.0 - (2.0*y_pos) / height;
+	glm::vec2 normal = glm::vec2(x,y);
 
 	glm::vec4 clip = glm::vec4(normal.x, normal.y, -1.0, 1.0);
 
@@ -73,12 +73,12 @@ glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, 
 
 	glm::vec4 eyeCoords = invertProj*clip;
 
-	glm::vec4 rayEye = glm::vec4(eyeCoords.x, eyeCoords.y, -1, 0);
+	glm::vec4 rayEye = glm::vec4(eyeCoords.x, eyeCoords.y, -1.0, 0.0);
 
 	// to world
 	glm::mat4 invertedView = glm::inverse(_view);
 	glm::vec4 rayWorld = invertedView * rayEye;
-	glm::vec3 mouseRay = glm::normalize(glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z));
+	glm::vec3 mouseRay = glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z);
 		
 	return mouseRay;
 }

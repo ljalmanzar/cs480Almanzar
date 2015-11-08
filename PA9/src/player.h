@@ -18,7 +18,7 @@ class Player{
 		void setScore(int score);
 		void resetScore();
 		void setPlayerNumber(int);
-		void setPaddlePosMouse(glm::vec3);
+		void setPaddlePosMouse(glm::vec3, Camera*);
 		void setPaddlePosKey(unsigned char key, Camera*);
 		//getters 
 		int getScore() const;

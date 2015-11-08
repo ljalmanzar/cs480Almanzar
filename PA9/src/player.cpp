@@ -66,14 +66,18 @@ void Player::setPlayerNumber(int playerNumber){
 	_playerNumber = playerNumber;
 }
 
-void Player::setPaddlePosMouse(glm::vec3 mouseRay){
-	float sensitivity = 4;
+void Player::setPaddlePosMouse(glm::vec3 mouseRay, Camera* camera){
+	float sensitivity = 20;
 
+	glm::vec4 tempPaddle = glm::vec4(1.0,1.0,1.0,1.0) * _paddle.getModel();
+	glm::vec4 tempRay = glm::vec4(mouseRay,1.0);
+	glm::vec4 distance = tempRay - tempPaddle;
 	btVector3 physicsDirection;
+
 	physicsDirection = btVector3(
-		mouseRay.x * sensitivity
-		,mouseRay.y *sensitivity
-		,mouseRay.z *sensitivity
+		distance.x * sensitivity
+		,0
+		,distance.z *sensitivity
 	);
 
 	btRigidBody * tempBody = _paddle.getRigidBody();
