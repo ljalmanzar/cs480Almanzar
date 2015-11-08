@@ -152,12 +152,8 @@ bool initialize()
     for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
         {
             if (allObjects[objectNdx]->getShape() != NONE){
-                std::cout << "ADDING PHYSICS TO" << allObjects[objectNdx]->getShape()<<endl;
-                std::cout << "NDX #" << objectNdx <<endl;
-                std::cout << "File name " << allObjects[objectNdx]->getFile()<<endl;
                 allObjects[objectNdx]->addPhysics();
                 dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
-                cout << "adding rigid body" << endl;
             }
         }
 
