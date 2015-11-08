@@ -236,4 +236,12 @@ std::vector<GLD*>GameDriver::getAllObjects(){
 	return _allObjects;
 }
 
+bool GameDriver::getPU(){
+	return _powerup.spawnRandPU();
+}
+
+void GameDriver::activateMysteryBox(){
+	_powerup.moveMysteryBoxUp();
+}
+
 #endif
