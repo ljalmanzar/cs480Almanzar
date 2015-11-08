@@ -343,8 +343,14 @@ void GLD::addPhysics(){
         else if( _typeOfShape == CYLINDER ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
             _cylinderShape->calculateLocalInertia(_mass,_inertia);
+            if ( _typeOfMovement == KINEMATIC){
             _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
                                                             btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2])));
+            }
+            else if ( _typeOfMovement == DYNAMIC ){
+            _shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), 
+                                                            btVector3(positionOfObject[0], positionOfObject[1]+10, positionOfObject[2])));                
+            }
             btRigidBody::btRigidBodyConstructionInfo info(1 ,_shapeMotionState,_cylinderShape,_inertia);
             _rigidBody = new btRigidBody(info);
             _rigidBody -> setRestitution(1);
@@ -473,7 +479,8 @@ bool GLD::updateObjectAndPhysics(){
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
-        getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
+        if (_typeOfMovement == KINEMATIC)
+            getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
 
     }
     return true;
