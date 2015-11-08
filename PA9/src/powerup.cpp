@@ -48,10 +48,10 @@ void Powerup::init(){
 
 	glm::mat4 tempModel = glm::translate( 
         _mysteryBox.getModel(),
-        glm::vec3(0.0f, -18.0f, 0.0f) 
+        glm::vec3(0.0f, -1.0f, 0.0f) 
         );
 
-	tempModel = glm::scale(tempModel, glm::vec3(0.1));
+	tempModel = glm::scale(tempModel, glm::vec3(0.25));
 	_mysteryBox.setModel(tempModel);
 
 	tempModel = glm::translate( 
@@ -159,6 +159,6 @@ GLD* Powerup::getPutinPaddle(){
 }
 
 void Powerup::moveMysteryBoxUp(){
-	_mysteryBox.anim_MoveDown(50.0);
+	_mysteryBox.anim_MoveUp(30.0);
 }
 #endif

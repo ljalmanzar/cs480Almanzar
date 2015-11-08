@@ -13,7 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
-#define MAX_FRAME 30
+#define MAX_FRAME 40
 
 enum Pivot {
 	P_UP,

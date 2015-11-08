@@ -481,85 +481,59 @@ bool GLD::updateObjectAndPhysics(){
         //_shapeMotionState->setWorldTransform(newTrans); 
     }
 */
-    if (_typeOfShape != NONE){
+    if (_typeOfShape != NONE and _typeOfShape != BOX){
         //get the transformation
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
-        if (_typeOfMovement == KINEMATIC){
-            //getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
-        }
 
     }
-    if ( _frame_ticker < MAX_FRAME ){
-        glm::vec4 newPosition = glm::vec4( _keyframes[_frame_ticker++], _model[3][3] );
-        _model[3] = newPosition;
-        cout << "running animaiton with ticker of " << _frame_ticker << endl;
+    if (_typeOfMovement == KINEMATIC and _frame_ticker < MAX_FRAME){
+        _model = _keyframes[_frame_ticker++];
+        if( _frame_ticker == MAX_FRAME ){
+            //place the rigid body in the world
+        } else {
+            //make sure it's not in the world
+        }
     }
     return true;
 }
 
 void GLD::anim_MoveUp( float distance ){
     //declare auxiliary variables
-    glm::vec3 start_pos = glm::vec3(_model[3]);
-    glm::vec3 dest_pos = glm::vec3(_model[3]);
-    float ratio;
+    glm::vec3 dest_pos = glm::vec3(0);
+    float t_ratio;
+    float p_ratio;
 
-    //go down to 4 (20%)
-    dest_pos.y -= .2f * distance; 
-    for( int i = 0; i < 4; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
-    }
-    start_pos = dest_pos;
+    //go up to (20%) overshot
+    dest_pos.y = distance; 
+    for( int i = 0; i < MAX_FRAME; i++ ){
+        t_ratio = float(i)/float(MAX_FRAME);
+        p_ratio = 1.1 * sin( 2 * t_ratio );
 
-    //go up to 22 (over shoot by 11.5-%12% )
-    dest_pos.y += .2f * distance;
-    dest_pos.y += .12 * distance;
-    for( int i = 4; i < 22; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+        //set the position to be the same
+        _keyframes[i] = glm::translate( _model, p_ratio*dest_pos );
     }
-    start_pos = dest_pos;
 
-    //go down to the end of the frames (30)
-    dest_pos.y -= .12 * distance;
-    for( int i = 22; i < MAX_FRAME; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
-    }
     _frame_ticker = 0;
 }
 
 void GLD::anim_MoveDown( float distance ){
     //declare auxiliary variables
-    glm::vec3 start_pos = glm::vec3(_model[3]);
-    glm::vec3 dest_pos = glm::vec3(_model[3]);
-    float ratio;
+    glm::vec3 dest_pos = glm::vec3(0);
+    float t_ratio;
+    float p_ratio;
 
-    //go down to 4 (20%)
-    dest_pos.y += .2f * distance; 
-    for( int i = 0; i < 4; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
-    }
-    start_pos = dest_pos;
+    //go up to (20%) overshot
+    dest_pos.y = distance; 
+    for( int i = 0; i < MAX_FRAME; i++ ){
+        t_ratio = float(i)/float(MAX_FRAME);
+        p_ratio = 1-(1.1 * sin( 2 * t_ratio ));
 
-    //go up to 22 (over shoot by 11.5-%12% )
-    dest_pos.y -= .2f * distance;
-    dest_pos.y -= .12 * distance;
-    for( int i = 4; i < 22; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
+        //set the position to be the same
+        _keyframes[i] = glm::translate( _model, p_ratio*dest_pos );
     }
-    start_pos = dest_pos;
 
-    //go down to the end of the frames (30)
-    dest_pos.y += .12 * distance;
-    for( int i = 22; i < MAX_FRAME; i++ ){
-        ratio = float(i)/float(MAX_FRAME);
-        _keyframes[i] = (1-ratio)*start_pos + ratio*dest_pos;
-    }
     _frame_ticker = 0;
 }
 

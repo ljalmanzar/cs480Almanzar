@@ -202,7 +202,7 @@ void GameDriver::printScores() const {
 		cursor = 0;
 	}
 
-// player 2
+	// player 2
 	glColor3f(0,0,1);
 	glRasterPos2f(.60,.95);
 	tempStr = &information[1][0];
@@ -265,12 +265,14 @@ bool GameDriver::getPU(){
 	if (_activePowerUp)
 		return false;
 
-	srand(time(NULL));
+	//srand(time(NULL));
 
-	int randNum = rand() % 200;
+	int randNum = rand() % 2000;
 
-	if (randNum < 5)
+	if (randNum == 0){
+		activateMysteryBox();
 		return true;
+	}
 
 	return false;
 }
