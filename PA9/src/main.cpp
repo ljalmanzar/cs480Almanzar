@@ -337,9 +337,9 @@ void update()
         }
 
     // check if time for power up and then move box
-    if (mainGame.getPU()){
+   // if (mainGame.getPU()){
         mainGame.activateMysteryBox();
-    }
+   // }
 
     // check if powerup has been hit
 
@@ -477,10 +477,11 @@ bool checkForGoal(){
     unsigned int i = 0;
     for (i = 0; i < allObjects.size(); ++i)
         {
-            if (allObjects[i]->getMovement() == KINEMATIC){
+            if (allObjects[i]->getMovement() == DYNAMIC){
                 break;
             }
         }
+
     // get coordinates
     glm::mat4 tempModel = allObjects[i]->getModel();
 
