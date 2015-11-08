@@ -489,7 +489,7 @@ bool checkForGoal(){
     glm::mat4 tempModel = allObjects[i]->getModel();
 
     glm::vec3 positionOfObject = glm::vec3(tempModel[3]);
-    std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
+    //std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
 
     if (positionOfObject.x >= 13){
         std::cout << "PLAYER 2 GOOOOAL" << endl;

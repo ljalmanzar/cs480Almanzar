@@ -490,9 +490,11 @@ bool GLD::updateObjectAndPhysics(){
             //getRigidBody()->setLinearVelocity( btVector3(0.0,0.0,0.0) );
         }
 
-    } else if ( _frame_ticker < MAX_FRAME ){
+    }
+    if ( _frame_ticker < MAX_FRAME ){
         glm::vec4 newPosition = glm::vec4( _keyframes[_frame_ticker++], _model[3][3] );
         _model[3] = newPosition;
+        cout << "running animaiton with ticker of " << _frame_ticker << endl;
     }
     return true;
 }
