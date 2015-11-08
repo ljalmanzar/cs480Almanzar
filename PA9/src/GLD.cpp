@@ -48,7 +48,8 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
     switch( switchInt ){
         case SPHERE:
             _sphereShape = new btSphereShape(1);
-            break;
+            std::cout << "sphere" << endl;
+             break;
         case BOX:
             _boxShape = new btBoxShape(btVector3(2,2,3));
             break;
@@ -359,7 +360,7 @@ void GLD::addPhysics(){
             _rigidBody -> setAngularFactor(btVector3(0,1,0));
             _rigidBody -> setLinearFactor(btVector3(1,0,1));
 
-            if (_typeOfMovement == KINEMATIC){
+            if (_typeOfMovement == DYNAMIC){
             	_rigidBody -> setFriction(0);
             	_rigidBody -> setRestitution(2);
             }
