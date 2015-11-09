@@ -112,24 +112,14 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 	// add reference to puck to all objects
 	_pucks.push_back(newPuck);
 	_allObjects.push_back(newPuck);
-
-		// make walls bouncy
-	//_table.getRigidBody()->setRestitution(1); // make walls not bouncy
-	//_tableWalls.getRigidBody()->setRestitution(2);
 }
 
 void GameDriver::updateP1Score(GLD* puck){
 	_player1.incrementScore(1);
-	if (_player1.getScore() >= 7){
-		// end game menu
-	}
 }
 
 void GameDriver::updateP2Score(GLD* puck){
 	_player2.incrementScore(1);
-	if (_player2.getScore() >= 7){
-		// end game menu
-	}
 }
 
 bool GameDriver::isGameOver(){
@@ -265,7 +255,7 @@ bool GameDriver::getPU(){
 
 	srand(time(NULL));
 
-	int randNum = rand() % 15;
+	int randNum = rand() % 25;
 
 	if (randNum == 0){
 		activateMysteryBox();
@@ -277,7 +267,6 @@ bool GameDriver::getPU(){
 
 void GameDriver::activateMysteryBox(){
 	_powerup.moveMysteryBoxUp();
-	cout << "MOVING "<< endl;
 	_isPowerupActive = true;
 }
 
@@ -350,15 +339,22 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 			&&  (_pucks[i]->getModel()[3].x >= -radius)
 			&&  (_pucks[i]->getModel()[3].z <= radius) 
 			&&  (_pucks[i]->getModel()[3].z >= -radius)){
-		
-			_powerup.spawnRandPU(_pucks[i]);
-			cout << " DOWN" << endl;
-			_powerup.moveMysteryBoxDown();
+			
 			_isPowerupActive = false;
+
+		// move icon down
+			if (_powerup.getCurrentPu() != NULL)
+				_powerup.moveCurrentPuDown();
+
+			// spawn new pu
+			_powerup.spawnRandPU(_pucks[i]);
+
+			// move ? box down
+			_powerup.moveMysteryBoxDown();
 
 			// spawn another puck if player got multi puck
 			if (_powerup.isMultiPuck()){
-				addPuck(0, "../bin/powerup/puck_yellow_leaf.obj","../bin/powerup/red_black_yellow_colorbars.jpg");
+				addPuck(0, "../bin/powerup/puck_red_leaf.obj","../bin/powerup/red_black_yellow_colorbars.jpg");
 				_pucks[_pucks.size()-1]->addPhysics();
 				world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
 
