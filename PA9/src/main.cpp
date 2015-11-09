@@ -100,7 +100,6 @@ int main(int argc, char **argv)
     // Name and create the Window
     glutCreateWindow("Air Hockey");
 
-    GLuint system_selection_menu = glutCreateMenu(menu_options);
     glutCreateMenu(menu_options);
     glutAddMenuEntry("Start Game", 1);
     glutAddMenuEntry("Exit Game", 3);
@@ -438,10 +437,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void mouse(int x_pos, int y_pos){
-     glm::vec3 mouseRay = mousePicker.calculateMouseRay(x_pos, y_pos, w, h);
      mainGame.setP1PaddleMouse(mousePicker,&camera);
-
-    // std::cout << mouseRay.x << ", " << mouseRay.y << ", " << mouseRay.z << endl;
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)

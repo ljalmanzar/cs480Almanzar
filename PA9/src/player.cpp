@@ -64,10 +64,8 @@ void Player::setPaddlePosMouse(MousePicker mouseRay, Camera* camera){
 
 	glm::vec2 mousePos2D = mouseRay.getMousePos2D();
 	glm::vec2 windowSize = mouseRay.getWindowSize();
-	cout << mousePos2D.x << ", " << mousePos2D.y << endl;
 
 	glm::vec2 middleScreen = glm::vec2(windowSize.x /2.0, windowSize.y / 2.0);
-	glm::vec2 topLeftScreen = glm::vec2(0.0, 0.0);
 	glm::vec2 bottomRightScreen = windowSize;
 	glm::vec2 topRightScreen = glm::vec2(windowSize.x, 0.0);
 	glm::vec2 bottomLeftScreen = glm::vec2(0.0, windowSize.y);
@@ -210,6 +208,18 @@ void Player::setPaddlePosKey(PaddleDirection key, Camera* camera){
 			break;
 		case D_RIGHT:
 			force += sensitivity * puckRight;
+			break;
+		case D_UP_LEFT:
+			force += sensitivity * puckForward - sensitivity * puckRight;
+			break;
+		case D_UP_RIGHT:
+			force += sensitivity * puckForward + sensitivity * puckRight;
+			break;
+		case D_DOWN_LEFT:
+			force -= sensitivity * puckForward + sensitivity * puckRight;
+			break;
+		case D_DOWN_RIGHT:
+			force += sensitivity * puckRight - sensitivity * puckForward;
 			break;
 	}
 
