@@ -24,11 +24,15 @@ class MousePicker{
 		glm::vec3 calculateMouseRay(float x_pos, float y_pos, float width, float height);
 		void initialize(Camera camera, glm::mat4 projection, glm::mat4 view);
 		void update(Camera camera, glm::mat4 view);
+		glm::vec2 getMousePos2D()const;
+		glm::vec2 getWindowSize()const;
 	private:
 
 		glm::vec3 _currentRay;
 		glm::mat4 _projection;
 		glm::mat4 _view;
+		glm::vec2 _mousePos2D;
+		glm::vec2 _windowSize;
 		Camera _camera;
 
 };
@@ -63,9 +67,14 @@ void MousePicker::update(Camera camera, glm::mat4 view){
 
 glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, float height){
 	float x = (2.0*x_pos) / width - 1.0;
-	float y = 1.0 - (2.0*y_pos) / height;
-	glm::vec2 normal = glm::vec2(x,y);
+	float y =(2.0*y_pos) / height - 1.0;
+	float z = 1.0;
+	glm::vec3 normal = glm::vec3(x,-y,z);
 
+	_mousePos2D.x = x_pos;
+	_mousePos2D.y = y_pos;
+	_windowSize.x = width;
+	_windowSize.y = height;
 	glm::vec4 clip = glm::vec4(normal.x, normal.y, -1.0, 1.0);
 
 	// to eye
@@ -79,10 +88,15 @@ glm::vec3 MousePicker::calculateMouseRay(float x_pos, float y_pos, float width, 
 	glm::mat4 invertedView = glm::inverse(_view);
 	glm::vec4 rayWorld = invertedView * rayEye;
 	glm::vec3 mouseRay = glm::vec3(rayWorld.x, rayWorld.y, rayWorld.z);
-		
-	return mouseRay;
+	_currentRay = glm::normalize(mouseRay);
+	return _currentRay;
 }
 
+glm::vec2 MousePicker::getMousePos2D()const{
+	return _mousePos2D;
+}
 
-
+glm::vec2 MousePicker::getWindowSize()const{
+	return _windowSize;
+}
 #endif
