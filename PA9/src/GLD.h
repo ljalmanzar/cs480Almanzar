@@ -87,6 +87,8 @@ class GLD{
 		bool setModel( const glm::mat4& incomingModel );
 		void setMass(int incomingMass);
 		void setRigidBody(btRigidBody * incomingBody);
+		void setVelocity(int x, int y, int z);
+		void setForce(int x, int y, int z);
 		string getFile();
 
 		bool updateObjectAndPhysics();
