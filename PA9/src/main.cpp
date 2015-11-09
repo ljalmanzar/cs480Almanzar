@@ -26,6 +26,8 @@ int NUM_OF_VERTICIES = 0;
 Camera camera;
 MousePicker mousePicker;
 
+float gameCounter = 0.0;
+
 bool LEFTGOAL = false;
 bool RIGHTGOAL = false;
 
@@ -48,6 +50,7 @@ GLD midWall;
 
 std::vector<GLD*> allObjects;
 
+string top10File;
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
@@ -61,6 +64,8 @@ void reshape(int n_w, int n_h);
 
 //Game Menu Call Backs
 void render_Menu();
+void render_Top10();
+void render_END();
 
 //--Resource management
 bool initialize();
@@ -101,6 +106,9 @@ int main(int argc, char **argv)
 
     // Initialize glut
     glutInit(&argc, argv); // just initializes
+
+    // HardCode top10File
+    top10File = "../bin/scoreboard";
 
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
@@ -393,6 +401,80 @@ void render_Menu(){
     glutSwapBuffers();
 }
 
+void render_Top10(){
+    // clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+
+    char * tempStr;
+    int cursor = 0;
+    std::string information[] = {
+        "Scoreboard", 
+        "Quickest Games (Time Measurement - Some computer time)",
+        "1) ",
+        "2) ",
+        "3) ", 
+        "4) ",
+        "5) ",
+        "6) ",
+        "7) ", 
+        "8) ",
+        "9) ",
+        "10) "
+    };
+
+    //print stuff out
+    for( int i = 0; i < 12; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &information[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+}
+
+void render_END(){
+    // clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+
+    char * tempStr;
+    int cursor = 0;
+    std::string information[] = {
+        "Game Over, thanks for playing.", 
+        "Press ESC to exit."
+    };
+
+    //print stuff out
+    for( int i = 0; i < 2; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &information[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+}
+
 void update()
 {
     //if this is the main menu state
@@ -440,13 +522,20 @@ void update()
         }   
         else{
             allObjects[1]->setVelocity(0,0,-5);
-        }  
+        } 
+
         /*
         if(positionOfPuck[0] < 0){
                 allObjects[1]->setVelocity(5,0,0);
             }
         */
     }
+
+    if (mainGame.isGameOver()){
+        glutDisplayFunc(render_END);
+    }
+
+    gameCounter+= .05;
 
     glutPostRedisplay();
 
@@ -537,6 +626,11 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'M':
                 glutDisplayFunc(render_Menu);
                 state = STARTUP;
+                break;
+            case 't':
+            case 'T':
+                glutDisplayFunc(render_Top10);
+                state = SCOREBOARD;
                 break;
             case ' ':
                 if( state == PAUSE )
