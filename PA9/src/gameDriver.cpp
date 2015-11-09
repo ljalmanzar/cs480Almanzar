@@ -42,6 +42,8 @@ void GameDriver::initGame(){
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_table);
 
+	_tableWalls.initialize("../bin/walls.obj", "../bin/ah_final_texture.png", false, TRIMESH, STATIC);
+	_allObjects.push_back(&this->_tableWalls);
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
@@ -273,7 +275,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 	//go through all the pucks
 	for( unsigned int i = 0; i < _pucks.size(); i++ ){
 		//player one scored goal
-		if( _pucks[i]->getModel()[3].x >= 14 ){
+		if( _pucks[i]->getModel()[3].x >= 15.0 ){
 			//remove it from the physics world
 			world->removeRigidBody( _pucks[i]->getRigidBody() );
 
@@ -300,7 +302,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
 			return true;
 
-		} else if ( _pucks[i]->getModel()[3].x <= -14 ){
+		} else if ( _pucks[i]->getModel()[3].x <= -15.0 ){
 			//remove it from the physics world
 			world->removeRigidBody( _pucks[i]->getRigidBody() );
 

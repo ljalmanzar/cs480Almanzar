@@ -57,6 +57,7 @@ class GameDriver{
 		Powerup _powerup;
 
 		GLD _table;
+		GLD _tableWalls;
 		GLD _backGround;
 		
 		std::vector<GLD*> _pucks;
