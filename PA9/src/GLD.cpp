@@ -488,13 +488,8 @@ bool GLD::updateObjectAndPhysics(){
         this->setModel( glm::make_mat4(m) );
 
     }
-    if (_typeOfMovement == KINEMATIC and _frame_ticker < MAX_FRAME){
+    if (_typeOfShape == NONE and _frame_ticker < MAX_FRAME){
         _model = _keyframes[_frame_ticker++];
-        if( _frame_ticker == MAX_FRAME ){
-            //place the rigid body in the world
-        } else {
-            //make sure it's not in the world
-        }
     }
     return true;
 }
