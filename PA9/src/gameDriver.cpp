@@ -55,11 +55,7 @@ void GameDriver::initGame(){
 	glm::mat4 tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
 	_backGround.setModel(tempModel);
 	_isPowerupActive = false;
-<<<<<<< HEAD
 	_isAiActive = false;
-=======
-
->>>>>>> 928b381c1dd042a1dc299bbb5b94c5a48330212b
 }
 
 // setters
