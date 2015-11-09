@@ -361,7 +361,7 @@ void GLD::addPhysics(){
             _rigidBody -> setLinearFactor(btVector3(1,1,1));
 
             if (_typeOfMovement == DYNAMIC){
-            	_rigidBody -> setFriction(0);
+            	_rigidBody -> setFriction(2);
             	_rigidBody -> setRestitution(2);
             }
         }
@@ -375,7 +375,7 @@ void GLD::addPhysics(){
                 _collisionShape->calculateLocalInertia( _mass, _inertia );
             btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_collisionShape,_inertia);
             _rigidBody = new btRigidBody(info);
-            //  _rigidBody->setRestitution(1.0);
+            _rigidBody->setRestitution(1.0);
             //_rigidBody->setFriction(2.0);
             _rigidBody->setCollisionFlags( _rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
             _rigidBody->setActivationState(DISABLE_DEACTIVATION);
