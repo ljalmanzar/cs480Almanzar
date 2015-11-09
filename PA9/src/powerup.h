@@ -25,6 +25,7 @@ class Powerup{
 		GLD* getPutinPaddle();
 
 		void moveMysteryBoxUp();
+		void moveMysteryBoxDown();
 
 		// setters
 

@@ -95,6 +95,7 @@ bool Powerup::spawnRandPU(GLD* puck){
 	// 1 <= randNum < 20
 	if ((randNum >= 1) && (randNum < 20)){
 		_multiPuck.anim_MoveUp(30.0);
+		cout << "MULTI PUCK" << endl;
 
 	} 
 
@@ -102,28 +103,30 @@ bool Powerup::spawnRandPU(GLD* puck){
 	else if ((randNum >= 20) && (randNum < 40)){
 		// show powerup
 		_lightPuck.anim_MoveUp(30.0);
+		cout << "LIGHT PUCK" << endl;
 	}
 
 	// 40 <= randNum < 60
 	else if ((randNum >= 40) && (randNum < 60)){
 		_iceRink.anim_MoveUp(30.0);
-
+		cout << "ICE RING" << endl;
 	}
 	
 	// 40 <= randNum < 60
 	else if ((randNum >= 60) && (randNum < 80)){
 		_minusPoint.anim_MoveUp(30.0);
-
+		cout << "HEALTH " << endl;
 	}
 	
 	// 40 <= randNum <= 100
 	else  if ((randNum >= 80) && (randNum < 100)){
 		_heavyPuck.anim_MoveUp(30.0);
-
+		cout << "HEAVY PUCK" << endl;
 		// update score
 	}
 	else{
 		_putinPaddle.anim_MoveUp(30.0);
+		cout << "PUTIN"; 
 	}
 	return true;
 }
@@ -159,5 +162,9 @@ GLD* Powerup::getPutinPaddle(){
 
 void Powerup::moveMysteryBoxUp(){
 	_mysteryBox.anim_MoveUp(30.0);
+}
+
+void Powerup::moveMysteryBoxDown(){
+	_mysteryBox.anim_MoveDown(30.0);
 }
 #endif
