@@ -44,6 +44,7 @@ void GameDriver::initGame(){
 
 	_tableWalls.initialize("../bin/walls.obj", "../bin/ah_final_texture.png", false, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_tableWalls);
+
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
