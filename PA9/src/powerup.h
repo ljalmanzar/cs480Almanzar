@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "GLD.h"
+#include "player.h"
 #define MAX_ANIMATION_FRAMES 60
 
 // this class is the parent class for all powerup types.s
@@ -11,7 +12,7 @@ class Powerup{
 		Powerup();
 		~Powerup();
 		
-		void init();
+		void init(Player*, Player*, GLD*);
 
 		bool spawnRandPU(GLD*);
 
@@ -41,6 +42,10 @@ class Powerup{
 		GLD _iceRink;
 		GLD _minusPoint;
 		GLD _putinPaddle;
+
+		Player* _p1;
+		Player* _p2;
+		GLD* _table;
 
 		struct {
 			bool nothing;
