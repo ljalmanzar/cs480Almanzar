@@ -17,7 +17,7 @@ void Powerup::init(){
 	// init powerups
 	// (geometry file, texture file) 
 	_mysteryBox.initialize("../bin/powerup/mario_mystery_box.obj"
-						 ,"../bin/powerup/Color_icon_yellow.png",true, BOX, KINEMATIC);
+						 ,"../bin/powerup/Color_icon_yellow.png",true, NONE);
 
 	_multiPuck.initialize("../bin/powerup/puck_yellow_leaf.obj"
 						 ,"../bin/powerup/red_black_yellow_colorbars.jpg",
@@ -85,7 +85,7 @@ void Powerup::init(){
 	_putinPaddle.setModel(tempModel);
 }	
 
-bool Powerup::spawnRandPU(){
+bool Powerup::spawnRandPU(GLD* puck){
 	srand(time(NULL));
 
 	int randNum = rand()% 120 + 1;
@@ -94,38 +94,36 @@ bool Powerup::spawnRandPU(){
 
 	// 1 <= randNum < 20
 	if ((randNum >= 1) && (randNum < 20)){
+		_multiPuck.anim_MoveUp(30.0);
+
 	} 
 
 	// 20 <= randNum < 40
 	else if ((randNum >= 20) && (randNum < 40)){
 		// show powerup
-		_multiPuck.anim_MoveUp(5.0);
-
-		// add new puck... how? idfk 
+		_lightPuck.anim_MoveUp(30.0);
 	}
 
 	// 40 <= randNum < 60
 	else if ((randNum >= 40) && (randNum < 60)){
-		_lightPuck.anim_MoveUp(5.0);
+		_iceRink.anim_MoveUp(30.0);
 
-		// set mass lower..
 	}
 	
 	// 40 <= randNum < 60
 	else if ((randNum >= 60) && (randNum < 80)){
-		_iceRink.anim_MoveUp(5.0);
+		_minusPoint.anim_MoveUp(30.0);
 
-		// make friction 0 and more restituion
 	}
 	
 	// 40 <= randNum <= 100
 	else  if ((randNum >= 80) && (randNum < 100)){
-		_minusPoint.anim_MoveUp(5.0);
+		_heavyPuck.anim_MoveUp(30.0);
 
 		// update score
 	}
 	else{
-		_putinPaddle.anim_MoveUp(5.0);
+		_putinPaddle.anim_MoveUp(30.0);
 	}
 	return true;
 }

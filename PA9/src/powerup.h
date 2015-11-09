@@ -2,7 +2,7 @@
 #define __POWERUP_H_
 
 #include <iostream>
-
+#include "GLD.h"
 #define MAX_ANIMATION_FRAMES 60
 
 // this class is the parent class for all powerup types.s
@@ -13,7 +13,7 @@ class Powerup{
 		
 		void init();
 
-		bool spawnRandPU();
+		bool spawnRandPU(GLD*);
 
 		// getters
 		GLD* getMysteryBox();
