@@ -251,7 +251,7 @@ bool GameDriver::getPU(){
 		return false;
 	}
 
-	//srand(time(NULL));
+	srand(time(NULL));
 
 	int randNum = rand() % 10;
 
@@ -265,6 +265,7 @@ bool GameDriver::getPU(){
 
 void GameDriver::activateMysteryBox(){
 	_powerup.moveMysteryBoxUp();
+	cout << "MOVING "<< endl;
 	_isPowerupActive = true;
 }
 
@@ -342,6 +343,7 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 		
 			_powerup.spawnRandPU(_pucks[i]);
 			_isPowerupActive = false;
+			cout << " DOWN" << endl;
 			_powerup.moveMysteryBoxDown();
 			return true;
 		}
