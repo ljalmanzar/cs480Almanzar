@@ -488,7 +488,7 @@ bool GLD::updateObjectAndPhysics(){
         this->setModel( glm::make_mat4(m) );
 
     }
-    if (_typeOfShape == NONE and _frame_ticker < MAX_FRAME){
+    if (_frame_ticker < MAX_FRAME){
         _model = _keyframes[_frame_ticker++];
     }
     return true;
