@@ -81,6 +81,8 @@ void mouse(int x_pos, int y_pos);
 void menu_options( int id );
 float getDT();
 
+void updateTop10();
+
 GameDriver mainGame;
 
 // BULLET STUFF
@@ -137,7 +139,6 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
-       glutDisplayFunc(win_Menu);
     glutDisplayFunc(render_Menu);// Called continuously by GLUT internal loop when its time to display
 
     glutReshapeFunc(reshape);// Called if the window is resized
@@ -153,6 +154,8 @@ int main(int argc, char **argv)
         t1 = std::chrono::high_resolution_clock::now();
         glutMainLoop();
     }
+
+    updateTop10();
 
     // Clean up after ourselves
     cleanUp();
@@ -413,6 +416,15 @@ void render_Top10(){
     // no program needed to print
     glUseProgram(0);
 
+    string top10scores[10];
+
+    ifstream fin;
+    fin.open(top10File);
+    for (int i = 0; i < 10; ++i)
+    {
+        fin >> top10scores[i];
+    }
+
     //set the text i want to say
 
     char * tempStr;
@@ -420,27 +432,31 @@ void render_Top10(){
     std::string information[] = {
         "Scoreboard", 
         "Quickest Games (Time Measurement - Some computer time)",
-        "1) ",
-        "2) ",
-        "3) ", 
-        "4) ",
-        "5) ",
-        "6) ",
-        "7) ", 
-        "8) ",
-        "9) ",
-        "10) "
+        "1) ",top10scores[0],
+        "2) ",top10scores[1],
+        "3) ", top10scores[2],
+        "4) ",top10scores[3],
+        "5) ",top10scores[4],
+        "6) ",top10scores[5],
+        "7) ", top10scores[6],
+        "8) ",top10scores[7],
+        "9) ",top10scores[8],
+        "10) ",top10scores[9],
+        "   ",
+        "Press 'M' to return to the main menu."
     };
 
     //print stuff out
-    for( int i = 0; i < 12; i++ ){
-        glRasterPos2f(-.2, -float(i)/20);
+    for( int i = 0; i < 24; i++ ){
+        glRasterPos2f(-.2, -float(i)/30);
         tempStr = &information[i][0];
         while( tempStr[cursor] ){
             glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
         }
         cursor = 0;
     }
+
+    fin.close();
 
     glutSwapBuffers();
 }
@@ -515,11 +531,6 @@ void update()
     if (mainGame.isPowerupActive())
         mainGame.checkForMysteryBox(dynamicsWorld);
 
-
-    if( mainGame.isGameOver()){
-        glutDisplayFunc(win_Menu);
-    }
-
     mainGame.checkForMidBoundry();
 
     mainGame.checkForGoal(dynamicsWorld); 
@@ -532,8 +543,6 @@ void update()
         int puckNdx = mainGame.findPuck();
         glm::mat4 puckModel = allObjects[puckNdx]->getModel();
         glm::vec3 positionOfPuck = glm::vec3(puckModel[3]);
-
-        std::cout << positionOfPuck[0]<< " " <<positionOfPuck[1]<<" "<< positionOfPuck[2] << endl;
 
         glm::mat4 p2PaddleModel = allObjects[1]->getModel();
         glm::vec3 positionOfPaddle = glm::vec3(p2PaddleModel[3]);
@@ -556,7 +565,7 @@ void update()
         glutDisplayFunc(render_END);
     }
 
-    gameCounter+= .05;
+    gameCounter+= .001;
 
     glutPostRedisplay();
 
@@ -604,6 +613,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     // Handle keyboard input
     if(key == 27){ //ESC
+        updateTop10();
         exit(0);
     }
     else if(key == '+'){
@@ -702,4 +712,36 @@ void menu_options( int id ){
             mainGame.setAi(false);
             break;
     }
+}
+
+void updateTop10(){
+    ifstream fin;
+    fin.open(top10File);
+
+    float top10scores[10];
+    for (int i = 0; i < 10; ++i){
+        fin >> top10scores[i];
+    }
+
+    for (int scoreNdx = 0; scoreNdx < 10; ++scoreNdx)
+    {
+        if (gameCounter < top10scores[scoreNdx]){
+            for (int j = 9; j > scoreNdx; ++j){
+                top10scores[j] = top10scores[j-1];
+            }
+        top10scores[scoreNdx] = gameCounter;
+        break;
+        }
+    }
+
+    fin.close();
+
+    ofstream fout;
+    fout.open(top10File);
+
+    for (int i = 0; i < 10; ++i){
+        fout << top10scores[i] << endl;
+    }
+
+    fout.close();
 }
