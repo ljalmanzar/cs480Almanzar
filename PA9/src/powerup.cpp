@@ -88,46 +88,38 @@ void Powerup::init(){
 bool Powerup::spawnRandPU(GLD* puck){
 	srand(time(NULL));
 
-	int randNum = rand()% 120 + 1;
+	int randNum = rand()% 5;
 
 	glm::mat4 tempModel;
 
-	// 1 <= randNum < 20
-	if ((randNum >= 1) && (randNum < 20)){
+	if (randNum == 0){
 		_multiPuck.anim_MoveUp(30.0);
 		cout << "MULTI PUCK" << endl;
-
 	} 
 
-	// 20 <= randNum < 40
-	else if ((randNum >= 20) && (randNum < 40)){
+	else if (randNum == 1){
 		// show powerup
 		_lightPuck.anim_MoveUp(30.0);
-		cout << "LIGHT PUCK" << endl;
+		puck->getRigidBody()->setMassProps(.1,btVector3(0,0,0));
+		puck->getRigidBody()->setRestitution(10);
 	}
 
-	// 40 <= randNum < 60
-	else if ((randNum >= 40) && (randNum < 60)){
+	else if (randNum == 2){
 		_iceRink.anim_MoveUp(30.0);
 		cout << "ICE RING" << endl;
 	}
 	
-	// 40 <= randNum < 60
-	else if ((randNum >= 60) && (randNum < 80)){
+	else if (randNum == 3){
 		_minusPoint.anim_MoveUp(30.0);
 		cout << "HEALTH " << endl;
 	}
 	
-	// 40 <= randNum <= 100
-	else  if ((randNum >= 80) && (randNum < 100)){
+	else  if (randNum == 4) {
 		_heavyPuck.anim_MoveUp(30.0);
 		cout << "HEAVY PUCK" << endl;
-		// update score
+		puck->getRigidBody()->setMassProps(50,btVector3(0,0,0));
 	}
-	else{
-		_putinPaddle.anim_MoveUp(30.0);
-		cout << "PUTIN"; 
-	}
+
 	return true;
 }
 

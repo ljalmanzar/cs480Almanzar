@@ -39,6 +39,7 @@ void Player::init(){
 
 	tempModel = glm::scale(tempModel, glm::vec3(0.34));
 	_paddle.setModel(tempModel);
+	
 }
 
 //setters

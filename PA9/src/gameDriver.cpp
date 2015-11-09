@@ -295,7 +295,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 
 			//update player 1 score
 			cout << "added player 1 score" << endl;
-			updateP1Score(NULL);
+			updateP2Score(NULL);
 
 			//add the new rigid body
 			_pucks[_pucks.size()-1]->addPhysics();
@@ -322,7 +322,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 
 			//update player 1 score
 			cout << "added player 2 score" << endl;
-			updateP2Score(NULL);
+			updateP1Score(NULL);
 
 			//add the new rigid body
 			_pucks[_pucks.size()-1]->addPhysics();
