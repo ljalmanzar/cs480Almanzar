@@ -37,18 +37,8 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-//	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC) );
-
-	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC);
-	
-	glm::mat4 tempModel;
-
-	_gamePuck.setModel(tempModel);
-
-	//_allObjects.push_back(&_gamePuck);
-
 	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
-	//this->addPuck(1, "../bin/powerup/puck_yellow_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_table);
