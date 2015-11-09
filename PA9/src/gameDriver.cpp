@@ -247,7 +247,7 @@ std::vector<GLD*>GameDriver::getAllObjects(){
 
 bool GameDriver::getPU(){
 	if (_isPowerupActive){
-		std::cout << "HERE "<< endl;
+
 		return false;
 	}
 
@@ -342,6 +342,7 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 		
 			_powerup.spawnRandPU(_pucks[i]);
 			_isPowerupActive = false;
+			_powerup.moveMysteryBoxDown();
 			return true;
 		}
 	}

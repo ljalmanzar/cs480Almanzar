@@ -160,4 +160,8 @@ GLD* Powerup::getPutinPaddle(){
 void Powerup::moveMysteryBoxUp(){
 	_mysteryBox.anim_MoveUp(30.0);
 }
+
+void Powerup::moveMysteryBoxDown(){
+	_mysteryBox.anim_MoveDown(30.0);
+}
 #endif
