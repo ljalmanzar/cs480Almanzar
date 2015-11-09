@@ -61,6 +61,7 @@ void reshape(int n_w, int n_h);
 
 //Game Menu Call Backs
 void render_Menu();
+void win_Menu();
 
 //--Resource management
 bool initialize();
@@ -342,6 +343,62 @@ void render()
     glutSwapBuffers();
 }
 
+void win_Menu(){
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+    char * tempStr;
+    int cursor = 0;
+
+    std::string endGameText[3];
+
+    if (mainGame.getPlayer1()->getScore() > mainGame.getPlayer2()->getScore()){
+        endGameText[0] = "PLAYER ONE WINS!";
+        endGameText[1] = "Press 'R' to replay";
+        endGameText[2] = "Press 'ESC' to quit";
+       
+    } else{
+        endGameText[0] = "PLAYER TWO WINS!";
+        endGameText[1] = "Press 'R' to replay";
+        endGameText[2] = "Press 'ESC' to quit";
+    }
+    
+     //print the title
+    glRasterPos2f(-.1, .5);
+    tempStr = &endGameText[0][0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    //print the subtitle
+    glRasterPos2f(-.25, .35);
+    tempStr = &endGameText[1][0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    //print out the instructions
+    for( int i = 2; i < 6; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &endGameText[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+
+}
+
 void render_Menu(){
     // clear the screen
     glClearColor(0.174, 0.167, 0.159, 1.0);
@@ -416,6 +473,10 @@ void update()
     if (mainGame.isPowerupActive())
         mainGame.checkForMysteryBox(dynamicsWorld);
 
+
+    if( mainGame.isGameOver()){
+
+    }
 
     mainGame.checkForMidBoundry();
 

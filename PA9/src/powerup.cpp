@@ -56,31 +56,31 @@ void Powerup::init(Player* p1, Player* p2, GLD* table){
 
 	tempModel = glm::translate( 
         _multiPuck.getModel(),
-        glm::vec3(0.0f, -15.0f, 0.0f) 
+        glm::vec3(0.0f, -1.0f, 0.0f) 
         );
 	_multiPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _lightPuck.getModel(),
-        glm::vec3(0.0f, -12.0f, 0.0f) 
+        glm::vec3(0.0f, -1.0f, 0.0f) 
         );
 	_lightPuck.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _iceRink.getModel(),
-        glm::vec3(0.0f, -9.0, 0.0) 
+        glm::vec3(0.0f, -1.0, 0.0) 
         );
 	_iceRink.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _minusPoint.getModel(),
-        glm::vec3(0.0f, -6.0, 0.0) 
+        glm::vec3(0.0f, -1.0, 0.0) 
         );
 	_minusPoint.setModel(tempModel);
 
 	tempModel = glm::translate( 
         _putinPaddle.getModel(),
-        glm::vec3(0.0f, -3.0, 0.0) 
+        glm::vec3(0.0f, -1.0, 0.0) 
         );
 	_putinPaddle.setModel(tempModel);
 
@@ -97,35 +97,38 @@ bool Powerup::spawnRandPU(GLD* puck){
 	glm::mat4 tempModel;
 
 	if (randNum == 0 || randNum == 5){
-		_multiPuck.anim_MoveUp(30.0);
+		_multiPuck.anim_MoveUp(31.0);
 		cout << "MULTI PUCK" << endl;
 		_isMultiPuck = true;
+		//_multiPuck.anim_MoveUp(-30.0);
 	} 
 
 	else if (randNum == 1){
 		// show powerup
-		_lightPuck.anim_MoveUp(30.0);
-		cout << "Light Puck" << endl;
+		_lightPuck.anim_MoveUp(31.0);
 		puck->getRigidBody()->setRestitution(3);
+		//_lightPuck.anim_MoveUp(-30.0);
 	}
 
 	else if (randNum == 2){
-		_iceRink.anim_MoveUp(30.0);
-		cout << "ICE RING" << endl;
+		_iceRink.anim_MoveUp(31.0);
 		_table->getRigidBody()->setFriction(0);
+		//_iceRink.anim_MoveUp(-30.0);
 	}
 	
 	else if (randNum == 3){
-		_minusPoint.anim_MoveUp(30.0);
+		_minusPoint.anim_MoveUp(31.0);
 		cout << "HEALTH " << endl;
 		_p1->incrementScore(-1);
 		_p2->incrementScore(-1);
+		//_minusPoint.anim_MoveUp(30.0);
 	}
 	
 	else  if (randNum == 4) {
-		_heavyPuck.anim_MoveUp(30.0);
+		_heavyPuck.anim_MoveUp(31.0);
 		cout << "HEAVY PUCK" << endl;
 		puck->getRigidBody()->setFriction(5);
+		//_heavyPuck.anim_MoveUp(30.0);
 
 	}
 
