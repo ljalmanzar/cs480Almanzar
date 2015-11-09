@@ -130,7 +130,9 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
+       glutDisplayFunc(win_Menu);
     glutDisplayFunc(render_Menu);// Called continuously by GLUT internal loop when its time to display
+
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
@@ -377,16 +379,8 @@ void win_Menu(){
     }
     cursor = 0;
 
-    //print the subtitle
-    glRasterPos2f(-.25, .35);
-    tempStr = &endGameText[1][0];
-    while( tempStr[cursor] ){
-        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
-    }
-    cursor = 0;
-
     //print out the instructions
-    for( int i = 2; i < 6; i++ ){
+    for( int i = 1; i < 3; i++ ){
         glRasterPos2f(-.2, -float(i)/20);
         tempStr = &endGameText[i][0];
         while( tempStr[cursor] ){
@@ -475,7 +469,7 @@ void update()
 
 
     if( mainGame.isGameOver()){
-
+        glutDisplayFunc(win_Menu);
     }
 
     mainGame.checkForMidBoundry();
