@@ -437,7 +437,8 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void mouse(int x_pos, int y_pos){
-     mainGame.setP1PaddleMouse(mousePicker,&camera);
+    mousePicker.calculateMouseRay(x_pos, y_pos, w, h);
+    mainGame.setP1PaddleMouse(mousePicker,&camera);
 }
 
 void special_keyboard(int key, int x_pos, int y_pos)
