@@ -36,7 +36,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	this->addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
@@ -55,6 +55,7 @@ void GameDriver::initGame(){
 	glm::mat4 tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
 	_backGround.setModel(tempModel);
 	_isPowerupActive = false;
+	_isAiActive = false;
 }
 
 // setters
@@ -115,16 +116,14 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 
 void GameDriver::updateP1Score(GLD* puck){
 	_player1.incrementScore(1);
-	if (_player1.getScore() >= 11){
-		// end game menu
-	}
 }
 
 void GameDriver::updateP2Score(GLD* puck){
 	_player2.incrementScore(1);
-	if (_player2.getScore() >= 11){
-		// end game menu
-	}
+}
+
+bool GameDriver::isGameOver(){
+	return(_player1.getScore() >= 7 ||_player2.getScore() >= 7);
 }
 
 void GameDriver::printScores() const {
@@ -256,7 +255,7 @@ bool GameDriver::getPU(){
 
 	srand(time(NULL));
 
-	int randNum = rand() % 10;
+	int randNum = rand() % 25;
 
 	if (randNum == 0){
 		activateMysteryBox();
@@ -268,7 +267,6 @@ bool GameDriver::getPU(){
 
 void GameDriver::activateMysteryBox(){
 	_powerup.moveMysteryBoxUp();
-	cout << "MOVING "<< endl;
 	_isPowerupActive = true;
 }
 
@@ -295,7 +293,6 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			this->addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 
 			//update player 1 score
-			cout << "added player 1 score" << endl;
 			updateP2Score(NULL);
 
 			//add the new rigid body
@@ -322,7 +319,6 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			this->addPuck(2, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 
 			//update player 1 score
-			cout << "added player 2 score" << endl;
 			updateP1Score(NULL);
 
 			//add the new rigid body
@@ -343,11 +339,27 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 			&&  (_pucks[i]->getModel()[3].x >= -radius)
 			&&  (_pucks[i]->getModel()[3].z <= radius) 
 			&&  (_pucks[i]->getModel()[3].z >= -radius)){
-		
-			_powerup.spawnRandPU(_pucks[i]);
+			
 			_isPowerupActive = false;
-			cout << " DOWN" << endl;
+
+		// move icon down
+			if (_powerup.getCurrentPu() != NULL)
+				_powerup.moveCurrentPuDown();
+
+			// spawn new pu
+			_powerup.spawnRandPU(_pucks[i]);
+
+			// move ? box down
 			_powerup.moveMysteryBoxDown();
+
+			// spawn another puck if player got multi puck
+			if (_powerup.isMultiPuck()){
+				addPuck(0, "../bin/powerup/puck_red_leaf.obj","../bin/powerup/red_black_yellow_colorbars.jpg");
+				_pucks[_pucks.size()-1]->addPhysics();
+				world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
+
+				_powerup.setIsMultiPuck(false);
+			}
 			return true;
 		}
 	}
@@ -355,7 +367,78 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 	return false;
 }
 
+bool GameDriver::checkForMidBoundry(){
+	 //check if player 1 paddle has crossed boundry
+	btVector3 physicsDirection;
+	if (_player1.getPaddle()->getModel()[3].x < 0.5){
+		 physicsDirection  = btVector3(10, 0, 0);
+		_player1.getPaddle()->getRigidBody()->setLinearVelocity(physicsDirection);
+	}
+	if (_player2.getPaddle()->getModel()[3].x > -0.5){
+		 physicsDirection  = btVector3(-10, 0, 0);
+		_player2.getPaddle()->getRigidBody()->setLinearVelocity(physicsDirection);
+	}
+
+	return true;
+}
+
+void GameDriver::addNewObj(GLD * incomingGLD){
+	_allObjects.push_back(incomingGLD);
+}
+
 bool GameDriver::isPowerupActive(){
 	return _isPowerupActive;
 }
+
+bool GameDriver::isAiActive(){
+	return _isAiActive;
+}
+
+void GameDriver::setAi(bool incomingAI){
+	_isAiActive = incomingAI;
+}
+
+int GameDriver::findPuck(){
+	unsigned int i = 0;
+	for (i = 0; i < (_allObjects.size()); ++i)
+		{
+			if (_allObjects[i]->getMovement() == DYNAMIC){
+				break;
+			}
+		}
+
+	return i; 
+}
+
+void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
+	_player1.resetScore();
+	_player2.resetScore();
+	
+	// delete all pucks in game
+	for( unsigned int i = 0; i < _pucks.size(); i++ ){
+		world->removeRigidBody( _pucks[i]->getRigidBody() );
+
+		//remove it from all Objects and Pucks
+		GLD * puckToBeRemoved = _pucks[i];
+		for( unsigned int j = 0; j < _allObjects.size(); j++ ){
+			if( _allObjects[j] == puckToBeRemoved ){
+				_allObjects.erase( _allObjects.begin() + j );
+				break;
+			}
+		}
+		_pucks.erase( _pucks.begin() + i);
+		delete puckToBeRemoved;
+	}
+
+	// add new puck to game
+	this->addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	_pucks[_pucks.size()-1]->addPhysics();
+	world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
+}
+
+void GameDriver::initTableAttributes(){
+	_table.getRigidBody()->setRestitution(0);
+	_tableWalls.getRigidBody()->setRestitution(1);
+}
+
 #endif

@@ -12,6 +12,12 @@ Quick Start
 + To __run__ the program, go to `bin/` and type `./AirHockey`.  However, to run from the build directory, type `make run`.
 + To __clean__ the program to be recompiled, go to `build/` and type  `make clean`.
 
+Extra Credit
+------------
+2 Human Play & AI
+Toggle between 2 Human Play & Playing against AI
+Top 10 Scoreboard (by quickest wins)
+
 Camera Controls
 ---------------
 
@@ -27,13 +33,9 @@ Camera Controls
 
 Game Tutorial
 -------------
-+ Once the game has been loaded, it will default to One Player and both scores are then set to 0.
++ Once the game has been loaded, it will default to Two Player and both scores are then set to 0.
 + Use your mouse to move your paddle.  The object of the game is to get the puck to the goal of the other player.
 + To move the camera around in your scene, it'd preferable to use the numpad rather than the number line at the top of the keyboard for a more natural fealing of pivoting, but this has no effect on the game.
-
-Known Issues
-------------
-There are absolutely no known issues.  If you find one, you can keep it to yourself.
 
 Credits
 -------

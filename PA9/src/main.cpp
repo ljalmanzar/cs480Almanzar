@@ -26,6 +26,8 @@ int NUM_OF_VERTICIES = 0;
 Camera camera;
 MousePicker mousePicker;
 
+float gameCounter = 0.0;
+
 bool LEFTGOAL = false;
 bool RIGHTGOAL = false;
 
@@ -33,7 +35,8 @@ enum GameState{
     STARTUP = 0,
     PLAY,
     PAUSE,
-    SCOREBOARD
+    SCOREBOARD,
+    FINISHED
 } state = STARTUP;
 
 //uniform locations
@@ -47,6 +50,7 @@ GLD midWall;
 
 std::vector<GLD*> allObjects;
 
+string top10File;
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
@@ -60,6 +64,8 @@ void reshape(int n_w, int n_h);
 
 //Game Menu Call Backs
 void render_Menu();
+void render_Top10();
+void render_END();
 
 //--Resource management
 bool initialize();
@@ -101,6 +107,9 @@ int main(int argc, char **argv)
     // Initialize glut
     glutInit(&argc, argv); // just initializes
 
+    // HardCode top10File
+    top10File = "../bin/scoreboard";
+
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -112,7 +121,9 @@ int main(int argc, char **argv)
 
     glutCreateMenu(menu_options);
     glutAddMenuEntry("Start Game", 1);
-    glutAddMenuEntry("Exit Game", 3);
+    glutAddMenuEntry("Exit Game", 2);
+    glutAddMenuEntry("Turn on AI", 3);
+    glutAddMenuEntry("Turn off AI", 4);
     glutAttachMenu( GLUT_RIGHT_BUTTON );
 
     // Now that the window is created the GL context is fully set up
@@ -126,7 +137,9 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
+       glutDisplayFunc(win_Menu);
     glutDisplayFunc(render_Menu);// Called continuously by GLUT internal loop when its time to display
+
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
@@ -158,7 +171,8 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
-    midWall.initialize();
+    midWall.initialize("../bin/middle_wall.obj", "../bin/ah_final_texture.png", true, TRIMESH, STATIC);
+    allObjects.push_back(&midWall);
 
     mousePicker.initialize(camera, projection, view);
     mainGame.initGame();
@@ -173,6 +187,7 @@ bool initialize()
             }
         }
 
+    mainGame.initTableAttributes();
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -388,6 +403,95 @@ void render_Menu(){
     glutSwapBuffers();
 }
 
+void render_Top10(){
+    // clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+
+    char * tempStr;
+    int cursor = 0;
+    std::string information[] = {
+        "Scoreboard", 
+        "Quickest Games (Time Measurement - Some computer time)",
+        "1) ",
+        "2) ",
+        "3) ", 
+        "4) ",
+        "5) ",
+        "6) ",
+        "7) ", 
+        "8) ",
+        "9) ",
+        "10) "
+    };
+
+    //print stuff out
+    for( int i = 0; i < 12; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &information[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+}
+
+void render_END(){
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+    char * tempStr;
+    int cursor = 0;
+
+    std::string endGameText[3];
+
+    if (mainGame.getPlayer1()->getScore() > mainGame.getPlayer2()->getScore()){
+        endGameText[0] = "PLAYER ONE WINS!";
+        endGameText[1] = "Thanks for playing!";
+        endGameText[2] = "Press 'ESC' to quit";
+       
+    } else{
+        endGameText[0] = "PLAYER TWO WINS!";
+        endGameText[1] = "Thanks for playing!";
+        endGameText[2] = "Press 'ESC' to quit";
+    }
+    
+     //print the title
+    glRasterPos2f(-.1, .5);
+    tempStr = &endGameText[0][0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    //print out the instructions
+    for( int i = 1; i < 3; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &endGameText[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+}
+
 void update()
 {
     //if this is the main menu state
@@ -412,10 +516,47 @@ void update()
         mainGame.checkForMysteryBox(dynamicsWorld);
 
 
+    if( mainGame.isGameOver()){
+        glutDisplayFunc(win_Menu);
+    }
+
+    mainGame.checkForMidBoundry();
+
     mainGame.checkForGoal(dynamicsWorld); 
     if (LEFTGOAL || RIGHTGOAL){
 
     }
+
+    // ai stuff
+    if (mainGame.isAiActive()){
+        int puckNdx = mainGame.findPuck();
+        glm::mat4 puckModel = allObjects[puckNdx]->getModel();
+        glm::vec3 positionOfPuck = glm::vec3(puckModel[3]);
+
+        std::cout << positionOfPuck[0]<< " " <<positionOfPuck[1]<<" "<< positionOfPuck[2] << endl;
+
+        glm::mat4 p2PaddleModel = allObjects[1]->getModel();
+        glm::vec3 positionOfPaddle = glm::vec3(p2PaddleModel[3]);
+
+        if (positionOfPuck[2] > positionOfPaddle[2]){
+            allObjects[1]->setVelocity(0,0,5);
+        }   
+        else{
+            allObjects[1]->setVelocity(0,0,-5);
+        } 
+
+        /*
+        if(positionOfPuck[0] < 0){
+                allObjects[1]->setVelocity(5,0,0);
+            }
+        */
+    }
+
+    if (mainGame.isGameOver()){
+        glutDisplayFunc(render_END);
+    }
+
+    gameCounter+= .05;
 
     glutPostRedisplay();
 
@@ -507,6 +648,11 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 glutDisplayFunc(render_Menu);
                 state = STARTUP;
                 break;
+            case 't':
+            case 'T':
+                glutDisplayFunc(render_Top10);
+                state = SCOREBOARD;
+                break;
             case ' ':
                 if( state == PAUSE )
                     state = PLAY;
@@ -547,9 +693,13 @@ void menu_options( int id ){
         case 1:
              break;
         case 2:
+            exit(0);
             break;
         case 3:
-            exit(0);
+            mainGame.setAi(true);
+            break;
+        case 4:
+            mainGame.setAi(false);
             break;
     }
 }

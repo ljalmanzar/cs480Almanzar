@@ -456,6 +456,14 @@ void GLD::setRigidBody(btRigidBody * incomingBody){
     _rigidBody = incomingBody;
 }
 
+void GLD::setVelocity(int x, int y, int z){
+    _rigidBody->setLinearVelocity(btVector3(x,y,z));
+}
+
+void GLD::setForce(int x, int y, int z){
+    _rigidBody->applyCentralForce(btVector3(x,y,z));
+}
+
 string GLD::getFile(){
     return _geometryFile;
 }
