@@ -308,7 +308,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			//add the new rigid body
 			_pucks[_pucks.size()-1]->addPhysics();
 			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
-		} else if ( _pucks[i]->getModel()[3].y <= -14 ){
+		} else if ( _pucks[i]->getModel()[3].x <= -14 ){
 			//remove it from the physics world
 			world->removeRigidBody( _pucks[i]->getRigidBody() );
 
