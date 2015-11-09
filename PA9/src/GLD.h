@@ -93,7 +93,6 @@ class GLD{
 
 		//set animations
 		void anim_MoveUp( float distance );
-		void anim_MoveDown( float distance );
 	private:
 		// maintenance functions
 		

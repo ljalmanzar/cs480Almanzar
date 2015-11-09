@@ -165,6 +165,6 @@ void Powerup::moveMysteryBoxUp(){
 }
 
 void Powerup::moveMysteryBoxDown(){
-	_mysteryBox.anim_MoveDown(30.0);
+	//_mysteryBox.anim_MoveDown(30.0);
 }
 #endif
