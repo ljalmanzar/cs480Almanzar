@@ -1,0 +1,12 @@
+# Blender v2.75 (sub 0) OBJ File: 'air_hockey_table_11.blend'
+# www.blender.org
+mtllib middle_wall.mtl
+o middle_wall_Plane.003
+v 0.000000 22.749565 11.178198
+v 0.000000 4.784551 11.178195
+v -0.000000 22.749565 -11.178195
+v 0.000000 4.784551 -11.178198
+vn 1.000000 0.000000 -0.000000
+usemtl None
+s off
+f 1//1 2//1 4//1 3//1
