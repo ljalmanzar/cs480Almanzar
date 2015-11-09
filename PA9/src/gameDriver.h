@@ -50,6 +50,8 @@ class GameDriver{
 	
 		bool isPowerupActive();
 
+		void addNewObj(GLD * incomingGLD);
+
 	private:
 		Player _player1;
 		Player _player2;

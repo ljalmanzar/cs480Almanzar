@@ -359,6 +359,10 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 	return false;
 }
 
+void GameDriver::addNewObj(GLD * incomingGLD){
+	_allObjects.push_back(incomingGLD);
+}
+
 bool GameDriver::isPowerupActive(){
 	return _isPowerupActive;
 }

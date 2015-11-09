@@ -159,7 +159,8 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
-    midWall.initialize();
+    midWall.initialize("../bin/middle_wall.obj", "../bin/ah_final_texture.png", true, TRIMESH, STATIC);
+    allObjects.push_back(&midWall);
 
     mousePicker.initialize(camera, projection, view);
     mainGame.initGame();
