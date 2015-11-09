@@ -43,6 +43,8 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 
+GLD midWall; 
+
 std::vector<GLD*> allObjects;
 
 //transform matrices
@@ -152,6 +154,8 @@ bool initialize()
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase,
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
+
+    midWall.initialize();
 
     mousePicker.initialize(camera, projection, view);
     mainGame.initGame();

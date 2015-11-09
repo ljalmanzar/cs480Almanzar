@@ -42,6 +42,10 @@ void GameDriver::initGame(){
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_table);
 
+	_wall.initialize("../bin/walls.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
+	_allObjects.push_back(&this->_wall);
+
+
 	// reset player's score
 	_player1.resetScore();
 	_player2.resetScore();
