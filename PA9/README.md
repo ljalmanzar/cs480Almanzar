@@ -14,9 +14,10 @@ Quick Start
 
 Extra Credit
 ------------
-2 Human Play & AI
-Toggle between 2 Human Play & Playing against AI
-Top 10 Scoreboard (by quickest wins)
++ 2 Human Play & AI
++ Toggle between 2 Human Play & Playing against AI
++ Top 10 Scoreboard (by quickest wins)
++ Implementation of various powerups
 
 Camera Controls
 ---------------
