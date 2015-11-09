@@ -92,20 +92,21 @@ void Powerup::init(Player* p1, Player* p2, GLD* table){
 bool Powerup::spawnRandPU(GLD* puck){
 	srand(time(NULL));
 
-	int randNum = rand()% 5;
+	int randNum = rand()% 6;
 
 	glm::mat4 tempModel;
 
-	if (randNum == 0){
+	if (randNum == 0 || randNum == 5){
 		_multiPuck.anim_MoveUp(30.0);
 		cout << "MULTI PUCK" << endl;
+		_isMultiPuck = true;
 	} 
 
 	else if (randNum == 1){
 		// show powerup
 		_lightPuck.anim_MoveUp(30.0);
-		puck->getRigidBody()->setMassProps(.1,btVector3(0,0,0));
-		puck->getRigidBody()->setRestitution(10);
+		cout << "Light Puck" << endl;
+		puck->getRigidBody()->setRestitution(3);
 	}
 
 	else if (randNum == 2){
@@ -124,7 +125,7 @@ bool Powerup::spawnRandPU(GLD* puck){
 	else  if (randNum == 4) {
 		_heavyPuck.anim_MoveUp(30.0);
 		cout << "HEAVY PUCK" << endl;
-		puck->getRigidBody()->setFriction(10);
+		puck->getRigidBody()->setFriction(5);
 
 	}
 
@@ -172,8 +173,8 @@ bool Powerup::isMultiPuck(){
 	return _isMultiPuck;
 }
 
-void Powerup::setIsMultiPuck(){
-
+void Powerup::setIsMultiPuck(bool flag){
+	_isMultiPuck = flag;
 }
 
 #endif

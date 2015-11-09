@@ -29,7 +29,7 @@ class Powerup{
 		void moveMysteryBoxDown();
 
 		// setters
-		void setIsMultiPuck();
+		void setIsMultiPuck(bool flag);
 
 	private:
 

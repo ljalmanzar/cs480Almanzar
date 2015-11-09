@@ -23,19 +23,21 @@ class GameDriver{
 		void updateP2Score(GLD* puck);
 		void printScores() const;
 
+		void resetGame(btDiscreteDynamicsWorld * world);
+
 		//game logic checkers
 		bool checkForGoal( btDiscreteDynamicsWorld * world );
 		bool checkForMysteryBox(btDiscreteDynamicsWorld * world);
 		bool checkIfPlayerOK();
 		bool isGameOver();
-
+		bool checkForMidBoundry();
 		// setters
 		void stepPhysicsAnimation( float dt );
 		void setP1PaddlePos(PaddleDirection, Camera*);
 		void setP1PaddleMouse(MousePicker, Camera* camera);
 		void setP2PaddlePos(PaddleDirection, Camera* );
 		void addPuck(int side, const std::string &objFile, const std::string &textureFile);
-
+		void initTableAttributes();
 		// getters
 		Player* getPlayer1();
 		Player* getPlayer2(); 
