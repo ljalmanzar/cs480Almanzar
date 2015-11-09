@@ -51,6 +51,10 @@ class GameDriver{
 		bool isPowerupActive();
 
 		void addNewObj(GLD * incomingGLD);
+		bool isAiActive();
+		void setAi(bool incomingAI);
+
+		int findPuck(); 
 
 	private:
 		Player _player1;
@@ -66,6 +70,7 @@ class GameDriver{
 		std::vector<GLD*> _allObjects;
 
 		bool _isPowerupActive;
+		bool _isAiActive;
 };
 
 #endif

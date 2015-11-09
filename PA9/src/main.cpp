@@ -113,7 +113,9 @@ int main(int argc, char **argv)
 
     glutCreateMenu(menu_options);
     glutAddMenuEntry("Start Game", 1);
-    glutAddMenuEntry("Exit Game", 3);
+    glutAddMenuEntry("Exit Game", 2);
+    glutAddMenuEntry("Turn on AI", 3);
+    glutAddMenuEntry("Turn off AI", 4);
     glutAttachMenu( GLUT_RIGHT_BUTTON );
 
     // Now that the window is created the GL context is fully set up
@@ -419,6 +421,25 @@ void update()
 
     }
 
+    // ai stuff
+    if (mainGame.isAiActive()){
+        int puckNdx = mainGame.findPuck();
+        glm::mat4 puckModel = allObjects[puckNdx]->getModel();
+        glm::vec3 positionOfPuck = glm::vec3(puckModel[3]);
+
+        std::cout << positionOfPuck[0]<< " " <<positionOfPuck[1]<<" "<< positionOfPuck[2] << endl;
+
+        glm::mat4 p2PaddleModel = allObjects[1]->getModel();
+        glm::vec3 positionOfPaddle = glm::vec3(p2PaddleModel[3]);
+
+        if (positionOfPuck[2] > positionOfPaddle[2]){
+            mainGame.setP2PaddlePos(D_LEFT, &camera);
+        }   
+        else{
+            mainGame.setP2PaddlePos(D_RIGHT, &camera);
+        }     
+    }
+
     glutPostRedisplay();
 
 }
@@ -549,9 +570,13 @@ void menu_options( int id ){
         case 1:
              break;
         case 2:
+            exit(0);
             break;
         case 3:
-            exit(0);
+            mainGame.setAi(true);
+            break;
+        case 4:
+            mainGame.setAi(false);
             break;
     }
 }

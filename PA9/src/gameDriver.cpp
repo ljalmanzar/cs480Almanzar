@@ -55,6 +55,7 @@ void GameDriver::initGame(){
 	glm::mat4 tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
 	_backGround.setModel(tempModel);
 	_isPowerupActive = false;
+	_isAiActive = false;
 }
 
 // setters
@@ -365,5 +366,25 @@ void GameDriver::addNewObj(GLD * incomingGLD){
 
 bool GameDriver::isPowerupActive(){
 	return _isPowerupActive;
+}
+
+bool GameDriver::isAiActive(){
+	return _isAiActive;
+}
+
+void GameDriver::setAi(bool incomingAI){
+	_isAiActive = incomingAI;
+}
+
+int GameDriver::findPuck(){
+	unsigned int i = 0;
+	for (i = 0; i < (_allObjects.size()); ++i)
+		{
+			if (_allObjects[i]->getMovement() == DYNAMIC){
+				break;
+			}
+		}
+
+	return i; 
 }
 #endif
