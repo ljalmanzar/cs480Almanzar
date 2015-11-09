@@ -358,7 +358,7 @@ void GLD::addPhysics(){
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
             _rigidBody -> setAngularFactor(btVector3(0,1,0));
-            _rigidBody -> setLinearFactor(btVector3(1,0,1));
+            _rigidBody -> setLinearFactor(btVector3(1,1,1));
 
             if (_typeOfMovement == DYNAMIC){
             	_rigidBody -> setFriction(0);
