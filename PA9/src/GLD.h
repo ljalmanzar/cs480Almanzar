@@ -136,7 +136,7 @@ class GLD{
 		bool _needPhysics;
 
 		//Animation Specific
-		glm::mat4 _keyframes [MAX_FRAME];
+		glm::mat4 _keyframes [120];
 		int _frame_ticker;
 };
 
