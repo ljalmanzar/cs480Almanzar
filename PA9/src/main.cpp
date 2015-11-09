@@ -62,8 +62,6 @@ void special_keyboard(int key, int x_pos, int y_pos);
 void mouse(int x_pos, int y_pos);
 void menu_options( int id );
 float getDT();
-bool checkForGoal();
-bool checkForMysteryBox();
 
 GameDriver mainGame;
 
@@ -337,17 +335,14 @@ void update()
         }
 
     // check if time for power up and then move box
-    if (mainGame.getPU()){
-        mainGame.activateMysteryBox();
-    }
+    mainGame.getPU();
 
     // check if powerup has been hit
-    if(checkForMysteryBox()){
-        // if hit, get type of powerup
-        mainGame.activatePowerUp();
-    }
+    if (mainGame.isPowerupActive())
+        mainGame.checkForMysteryBox(dynamicsWorld);
 
-    checkForGoal(); 
+
+    mainGame.checkForGoal(dynamicsWorld); 
     if (LEFTGOAL || RIGHTGOAL){
 
     }
@@ -470,27 +465,4 @@ void menu_options( int id ){
             exit(0);
             break;
     }
-}
-
-bool checkForGoal(){
-    return mainGame.checkForGoal( dynamicsWorld );
-}
-
-bool checkForMysteryBox(){
-    // find object
-    unsigned int i = 0;
-    for (i = 0; i < allObjects.size(); ++i)
-        {
-            if (allObjects[i]->getMovement() == DYNAMIC){
-                break;
-            }
-        }
-
-    // get coordinates
-    glm::mat4 tempModel = allObjects[i]->getModel();
-
-    glm::vec3 positionOfObject = glm::vec3(tempModel[3]);
-    //std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
-
-    return false;
 }

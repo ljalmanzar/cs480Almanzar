@@ -4,8 +4,7 @@
 #include "gameDriver.h"
 
 GameDriver::GameDriver(){
-	//initialize the puck(s)
-	_activePowerUp = false;
+
 }
 
 GameDriver::~GameDriver(){
@@ -62,6 +61,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(&_backGround);
 	tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
 	_backGround.setModel(tempModel);
+	_isPowerupActive = false;
 }
 
 // setters
@@ -256,12 +256,14 @@ std::vector<GLD*>GameDriver::getAllObjects(){
 }
 
 bool GameDriver::getPU(){
-	if (_activePowerUp)
+	if (_isPowerupActive){
+		std::cout << "HERE "<< endl;
 		return false;
+	}
 
 	//srand(time(NULL));
 
-	int randNum = rand() % 2000;
+	int randNum = rand() % 10;
 
 	if (randNum == 0){
 		activateMysteryBox();
@@ -273,10 +275,7 @@ bool GameDriver::getPU(){
 
 void GameDriver::activateMysteryBox(){
 	_powerup.moveMysteryBoxUp();
-}
-
-void GameDriver::activatePowerUp(){
-	_powerup.spawnRandPU();
+	_isPowerupActive = true;
 }
 
 bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
@@ -308,7 +307,8 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			//add the new rigid body
 			_pucks[_pucks.size()-1]->addPhysics();
 			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
-		} else if ( _pucks[i]->getModel()[3].y <= -14 ){
+			return true;
+		} else if ( _pucks[i]->getModel()[3].x <= -14 ){
 			//remove it from the physics world
 			world->removeRigidBody( _pucks[i]->getRigidBody() );
 
@@ -333,9 +333,32 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			//add the new rigid body
 			_pucks[_pucks.size()-1]->addPhysics();
 			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
+			return true;
 		}
 	}
 	//I made it through all of the pucks, none of them won
 	return false;
+}
+
+bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
+	for( unsigned int i = 0; i < _pucks.size(); i++ ){
+		float radius = 1.7;
+
+		if (    (_pucks[i]->getModel()[3].x <= radius) // puck is within box
+			&&  (_pucks[i]->getModel()[3].x >= -radius)
+			&&  (_pucks[i]->getModel()[3].z <= radius) 
+			&&  (_pucks[i]->getModel()[3].z >= -radius)){
+		
+			_powerup.spawnRandPU(_pucks[i]);
+			_isPowerupActive = false;
+			return true;
+		}
+	}
+	//I made it through all of the pucks, none of them won
+	return false;
+}
+
+bool GameDriver::isPowerupActive(){
+	return _isPowerupActive;
 }
 #endif
