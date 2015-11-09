@@ -265,7 +265,7 @@ bool GameDriver::getPU(){
 
 	srand(time(NULL));
 
-	int randNum = rand() % 10;
+	int randNum = rand() % 15;
 
 	if (randNum == 0){
 		activateMysteryBox();
@@ -373,12 +373,13 @@ bool GameDriver::checkForMysteryBox(btDiscreteDynamicsWorld * world){
 
 bool GameDriver::checkForMidBoundry(){
 	 //check if player 1 paddle has crossed boundry
+	btVector3 physicsDirection;
 	if (_player1.getPaddle()->getModel()[3].x < 0.5){
-		btVector3 physicsDirection = physicsDirection = btVector3(10, 0, 0);
+		 physicsDirection  = btVector3(10, 0, 0);
 		_player1.getPaddle()->getRigidBody()->setLinearVelocity(physicsDirection);
 	}
 	if (_player2.getPaddle()->getModel()[3].x > -0.5){
-		btVector3 physicsDirection = physicsDirection = btVector3(-10, 0, 0);
+		 physicsDirection  = btVector3(-10, 0, 0);
 		_player2.getPaddle()->getRigidBody()->setLinearVelocity(physicsDirection);
 	}
 
