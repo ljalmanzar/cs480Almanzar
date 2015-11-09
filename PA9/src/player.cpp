@@ -71,7 +71,7 @@ void Player::setPaddlePosMouse(MousePicker mouseRay, Camera* camera){
 	glm::vec2 topRightScreen = glm::vec2(windowSize.x, 0.0);
 	glm::vec2 bottomLeftScreen = glm::vec2(0.0, windowSize.y);
 
-	PaddleDirection key;
+	PaddleDirection key = D_UP;
 
 	glm::vec2 newMidPoint;
 
