@@ -436,11 +436,16 @@ void update()
         glm::vec3 positionOfPaddle = glm::vec3(p2PaddleModel[3]);
 
         if (positionOfPuck[2] > positionOfPaddle[2]){
-            mainGame.setP2PaddlePos(D_LEFT, &camera);
+            allObjects[1]->setVelocity(0,0,5);
         }   
         else{
-            mainGame.setP2PaddlePos(D_RIGHT, &camera);
-        }     
+            allObjects[1]->setVelocity(0,0,-5);
+        }  
+        /*
+        if(positionOfPuck[0] < 0){
+                allObjects[1]->setVelocity(5,0,0);
+            }
+        */
     }
 
     glutPostRedisplay();
