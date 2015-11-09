@@ -10,7 +10,11 @@ enum PaddleDirection {
 	D_UP,
 	D_DOWN,
 	D_LEFT,
-	D_RIGHT
+	D_RIGHT,
+	D_UP_LEFT,
+	D_UP_RIGHT,
+	D_DOWN_LEFT,
+	D_DOWN_RIGHT
 };
 
 class Player{

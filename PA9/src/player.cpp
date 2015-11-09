@@ -59,18 +59,129 @@ void Player::setPlayerNumber(int playerNumber){
 }
 
 void Player::setPaddlePosMouse(MousePicker mouseRay, Camera* camera){
-	float sensitivity = 1;
+	float sensitivity = 10;
 	btVector3 physicsDirection;
 
 	glm::vec2 mousePos2D = mouseRay.getMousePos2D();
-
+	glm::vec2 windowSize = mouseRay.getWindowSize();
 	cout << mousePos2D.x << ", " << mousePos2D.y << endl;
+
+	glm::vec2 middleScreen = glm::vec2(windowSize.x /2.0, windowSize.y / 2.0);
+	glm::vec2 topLeftScreen = glm::vec2(0.0, 0.0);
+	glm::vec2 bottomRightScreen = windowSize;
+	glm::vec2 topRightScreen = glm::vec2(windowSize.x, 0.0);
+	glm::vec2 bottomLeftScreen = glm::vec2(0.0, windowSize.y);
+
+	PaddleDirection key;
+
+	glm::vec2 newMidPoint;
+
+	if (mousePos2D.x <= middleScreen.x && mousePos2D.y <= middleScreen.y){ // top left of screen
+		newMidPoint = glm::vec2(
+			middleScreen.x/2.0
+			, middleScreen.y/2.0
+		);
+		
+		if ( 
+			(mousePos2D.x <= newMidPoint.x && mousePos2D.y <= newMidPoint.y)
+			|| (mousePos2D.x > newMidPoint.x && mousePos2D.y > newMidPoint.y)
+		)
+			key = D_UP_LEFT;
+		
+		else if(mousePos2D.x <= newMidPoint.x && mousePos2D.y > newMidPoint.y)
+			key = D_LEFT;
+		else
+			key = D_UP;
+	}
+
+	else if (mousePos2D.x >= middleScreen.x && mousePos2D.y >= middleScreen.y){ // bottom right of screen
+		newMidPoint = glm::vec2(
+				(bottomRightScreen.x + middleScreen.x)/2.0
+				, (bottomRightScreen.y + middleScreen.y)/2.0
+			);
+		
+		if ( 
+			(mousePos2D.x <= newMidPoint.x && mousePos2D.y <= newMidPoint.y)
+			|| (mousePos2D.x > newMidPoint.x && mousePos2D.y > newMidPoint.y)
+		 )
+			key = D_DOWN_RIGHT;
+		
+		else if(mousePos2D.x <= newMidPoint.x && mousePos2D.y > newMidPoint.y)
+			key = D_DOWN;
+		else
+			key = D_RIGHT;
+	}
+
+	else if (mousePos2D.x <= middleScreen.x && mousePos2D.y >= middleScreen.y){ // bottom left of screen
+		newMidPoint = glm::vec2(
+			(bottomLeftScreen.x + middleScreen.x)/2.0
+			, (bottomLeftScreen.y + middleScreen.y)/2.0
+		);
+		
+		if ( 
+			(mousePos2D.x <= newMidPoint.x && mousePos2D.y <= newMidPoint.y)
+			|| (mousePos2D.x < newMidPoint.x && mousePos2D.y > newMidPoint.y)
+		 )
+			key = D_DOWN_LEFT;
+		
+		else if(mousePos2D.x >= newMidPoint.x && mousePos2D.y > newMidPoint.y)
+			key = D_DOWN;
+		else
+			key = D_LEFT;
+	}
+
+	else if (mousePos2D.x >= middleScreen.x && mousePos2D.y <= middleScreen.y){ // top right of screen
+		newMidPoint = glm::vec2(
+			(topRightScreen.x + middleScreen.x)/2.0
+			, (topRightScreen.y + middleScreen.y)/2.0
+		);
+		
+		if ( 
+			(mousePos2D.x >= newMidPoint.x && mousePos2D.y <= newMidPoint.y)
+			|| (mousePos2D.x < newMidPoint.x && mousePos2D.y > newMidPoint.y) 
+		)
+			key = D_UP_RIGHT;
+		
+		else if(mousePos2D.x >= newMidPoint.x && mousePos2D.y > newMidPoint.y)
+			key = D_RIGHT;
+		else
+			key = D_UP;
+	}
+
 	glm::vec3 puckForward = glm::vec3(_paddle.getModel()[3]) - camera->cam_pos;
 	puckForward.y = 0.0; // bind to y axis
 	puckForward = glm::normalize(puckForward);
 	glm::vec3 puckRight = glm::normalize(glm::cross(puckForward, glm::vec3(0.0,1.0,0.0)));
+	glm::vec3 force = glm::vec3 (1.0,0.0,1.0);
 
+	switch( key ){
+		case D_UP:
+			force += sensitivity * puckForward;
+			break;
+		case D_DOWN:
+			force -= sensitivity * puckForward;
+			break;
+		case D_LEFT:
+			force -= sensitivity * puckRight;
+			break;
+		case D_RIGHT:
+			force += sensitivity * puckRight;
+			break;
+		case D_UP_LEFT:
+			force += sensitivity * puckForward - sensitivity * puckRight;
+			break;
+		case D_UP_RIGHT:
+			force += sensitivity * puckForward + sensitivity * puckRight;
+			break;
+		case D_DOWN_LEFT:
+			force -= sensitivity * puckForward + sensitivity * puckRight;
+			break;
+		case D_DOWN_RIGHT:
+			force += sensitivity * puckRight - sensitivity * puckForward;
+			break;
+	}
 	
+	physicsDirection = btVector3(force.x, force.y, force.z);
 	btRigidBody * tempBody = _paddle.getRigidBody();
 	tempBody->setLinearVelocity(physicsDirection);
 }
