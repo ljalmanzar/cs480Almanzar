@@ -175,6 +175,7 @@ bool initialize()
             }
         }
 
+    mainGame.initTableAttributes();
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -413,6 +414,8 @@ void update()
     if (mainGame.isPowerupActive())
         mainGame.checkForMysteryBox(dynamicsWorld);
 
+
+    mainGame.checkForMidBoundry();
 
     mainGame.checkForGoal(dynamicsWorld); 
     if (LEFTGOAL || RIGHTGOAL){
