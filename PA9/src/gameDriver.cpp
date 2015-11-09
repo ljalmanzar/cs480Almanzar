@@ -36,18 +36,8 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-//	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC) );
-
-	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC);
-	
-	glm::mat4 tempModel;
-
-	_gamePuck.setModel(tempModel);
-
-	//_allObjects.push_back(&_gamePuck);
-
 	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
-	//this->addPuck(1, "../bin/powerup/puck_yellow_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_table);
@@ -59,7 +49,7 @@ void GameDriver::initGame(){
 	// create background
 	_backGround.initialize("../bin/planet.obj", "../bin/background.jpeg");
 	_allObjects.push_back(&_backGround);
-	tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
+	glm::mat4 tempModel = glm::scale(_backGround.getModel(), glm::vec3(100));
 	_backGround.setModel(tempModel);
 	_isPowerupActive = false;
 }
@@ -308,6 +298,7 @@ bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
 			_pucks[_pucks.size()-1]->addPhysics();
 			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
 			return true;
+
 		} else if ( _pucks[i]->getModel()[3].x <= -14 ){
 			//remove it from the physics world
 			world->removeRigidBody( _pucks[i]->getRigidBody() );

@@ -29,9 +29,10 @@ class Player{
 		void incrementScore(int amount);
 		void setScore(int score);
 		void resetScore();
-		void setPlayerNumber(int);
+		void setPlayerNumber(int playerNumber);
 		void setPaddlePosMouse(MousePicker, Camera*);
 		void setPaddlePosKey(PaddleDirection key, Camera*);
+		void resetPaddlePosition();
 		//getters 
 		int getScore() const;
 		GLD* getPaddle();

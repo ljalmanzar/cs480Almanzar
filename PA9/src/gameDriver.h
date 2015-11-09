@@ -26,6 +26,8 @@ class GameDriver{
 		//game logic checkers
 		bool checkForGoal( btDiscreteDynamicsWorld * world );
 		bool checkForMysteryBox(btDiscreteDynamicsWorld * world);
+		bool checkIfPlayerOK();
+
 
 		// setters
 		void stepPhysicsAnimation( float dt );
@@ -55,7 +57,6 @@ class GameDriver{
 		Powerup _powerup;
 
 		GLD _table;
-		GLD _gamePuck;
 		GLD _backGround;
 		
 		std::vector<GLD*> _pucks;

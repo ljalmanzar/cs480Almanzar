@@ -238,4 +238,17 @@ GLD* Player::getPaddle(){
 	return &_paddle;
 }
 
+void Player::resetPaddlePosition(){
+	//declare variables
+	glm::mat4 tempModel =  _paddle.getModel();
+	//reset it by the color
+	if( _playerNumber == 1 ){
+		tempModel[3] = glm::vec4(10.0f, 6.0f, 0.0f, _paddle.getModel()[3][3] );
+		_paddle.setModel( tempModel );
+	} else if ( _playerNumber == 2 ){
+		tempModel[3] = glm::vec4(-10.0f, 6.0f, 0.0f, _paddle.getModel()[3][3] );
+		_paddle.setModel( tempModel );
+	}
+}
+
 #endif
