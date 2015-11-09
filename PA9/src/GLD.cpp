@@ -361,7 +361,7 @@ void GLD::addPhysics(){
             _rigidBody -> setLinearFactor(btVector3(1,1,1));
 
             if (_typeOfMovement == DYNAMIC){
-            	_rigidBody -> setFriction(0);
+            	_rigidBody -> setFriction(2);
             	_rigidBody -> setRestitution(2);
             }
         }
@@ -375,7 +375,7 @@ void GLD::addPhysics(){
                 _collisionShape->calculateLocalInertia( _mass, _inertia );
             btRigidBody::btRigidBodyConstructionInfo info(_mass,_shapeMotionState,_collisionShape,_inertia);
             _rigidBody = new btRigidBody(info);
-            //  _rigidBody->setRestitution(1.0);
+            _rigidBody->setRestitution(1.0);
             //_rigidBody->setFriction(2.0);
             _rigidBody->setCollisionFlags( _rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT );
             _rigidBody->setActivationState(DISABLE_DEACTIVATION);
@@ -506,8 +506,8 @@ void GLD::anim_MoveUp( float distance ){
 
     //go up to (20%) overshot
     dest_pos.y = distance; 
-    for( int i = 0; i < MAX_FRAME; i++ ){
-        t_ratio = float(i)/float(MAX_FRAME);
+    for( int i = 0; i < 40; i++ ){
+        t_ratio = float(i)/float(40);
         p_ratio = 1.1 * sin( 2 * t_ratio );
         r_ratio = M_PI*(1-t_ratio);
 
@@ -520,33 +520,23 @@ void GLD::anim_MoveUp( float distance ){
             );
     }
 
-    _frame_ticker = 0;
-}
-
-void GLD::anim_MoveDown( float distance ){
-    //declare auxiliary variables
-    glm::vec3 dest_pos = glm::vec3(0);
-    float t_ratio;
-    float p_ratio;
-    float r_ratio;
-
-    //go up to (20%) overshot
-    dest_pos.y = distance; 
-    for( int i = 0; i < MAX_FRAME; i++ ){
-        t_ratio = float(i)/float(MAX_FRAME);
-        p_ratio = 1-(1.1 * sin( 2 * t_ratio ));
+    dest_pos.y = -distance; 
+    for( int i = 0; i < 40; i++ ){
+        t_ratio = float(i)/float(40);
+        p_ratio = -(1.1 * sin( 2 * t_ratio ));
         r_ratio = M_PI*(1-t_ratio);
 
         //set the position to be the same
-        _keyframes[i] = glm::translate( _model, p_ratio*dest_pos );
-        _keyframes[i] = glm::rotate(
-            _keyframes[i],
+        _keyframes[i+80] = glm::translate( _model, p_ratio*dest_pos );
+        _keyframes[i+80] = glm::rotate(
+            _keyframes[i+80],
             r_ratio,
             glm::vec3(0.0,1.0,0.0)
             );
     }
+    
 
-    _frame_ticker = 0-60;
+    _frame_ticker = 0;
 }
 
 TypeOfMovement GLD::getMovement() const{

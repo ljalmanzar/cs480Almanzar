@@ -12,7 +12,7 @@ Powerup::~Powerup(){
 
 }
 
-void Powerup::init(){
+void Powerup::init(Player* p1, Player* p2, GLD* table){
 
 	// init powerups
 	// (geometry file, texture file) 
@@ -83,6 +83,10 @@ void Powerup::init(){
         glm::vec3(0.0f, -3.0, 0.0) 
         );
 	_putinPaddle.setModel(tempModel);
+
+	_p1 = p1;
+	_p2 = p2;
+	_table = table;
 }	
 
 bool Powerup::spawnRandPU(GLD* puck){
@@ -107,17 +111,21 @@ bool Powerup::spawnRandPU(GLD* puck){
 	else if (randNum == 2){
 		_iceRink.anim_MoveUp(30.0);
 		cout << "ICE RING" << endl;
+		_table->getRigidBody()->setFriction(0);
 	}
 	
 	else if (randNum == 3){
 		_minusPoint.anim_MoveUp(30.0);
 		cout << "HEALTH " << endl;
+		_p1->incrementScore(-1);
+		_p2->incrementScore(-1);
 	}
 	
 	else  if (randNum == 4) {
 		_heavyPuck.anim_MoveUp(30.0);
 		cout << "HEAVY PUCK" << endl;
-		puck->getRigidBody()->setMassProps(50,btVector3(0,0,0));
+		puck->getRigidBody()->setFriction(10);
+
 	}
 
 	return true;

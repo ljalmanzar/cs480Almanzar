@@ -26,7 +26,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_player2.getPaddle());
 
 	// init/add powerups
-	_powerup.init();
+	_powerup.init(&_player1,&_player2, &_table);
 
 	_allObjects.push_back(_powerup.getMysteryBox());
 	_allObjects.push_back(_powerup.getMultiPuck());
@@ -167,7 +167,7 @@ void GameDriver::printScores() const {
 	cursor = 0;
 	
 	// show health
-	for (int i = 0; i < 11 - _player2.getScore(); i++ )
+	for (int i = 0; i < 7 - _player2.getScore(); i++ )
 		playerHealth[0].append(heart);
 
 
@@ -199,7 +199,7 @@ void GameDriver::printScores() const {
 	cursor = 0;
 
 	// show health
-	for (int i = 0; i < 11 - _player1.getScore(); i++ )
+	for (int i = 0; i < 7 - _player1.getScore(); i++ )
 		playerHealth[1].append(heart);
 
 
