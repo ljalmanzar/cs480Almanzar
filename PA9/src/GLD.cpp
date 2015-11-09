@@ -489,7 +489,10 @@ bool GLD::updateObjectAndPhysics(){
 
     }
     if (_frame_ticker < MAX_FRAME){
-        _model = _keyframes[_frame_ticker++];
+        if( _frame_ticker >= 0 ){
+            _model = _keyframes[_frame_ticker++];
+
+        }
     }
     return true;
 }
@@ -499,15 +502,22 @@ void GLD::anim_MoveUp( float distance ){
     glm::vec3 dest_pos = glm::vec3(0);
     float t_ratio;
     float p_ratio;
+    float r_ratio;
 
     //go up to (20%) overshot
     dest_pos.y = distance; 
     for( int i = 0; i < MAX_FRAME; i++ ){
         t_ratio = float(i)/float(MAX_FRAME);
         p_ratio = 1.1 * sin( 2 * t_ratio );
+        r_ratio = M_PI*(1-t_ratio);
 
         //set the position to be the same
         _keyframes[i] = glm::translate( _model, p_ratio*dest_pos );
+        _keyframes[i] = glm::rotate(
+            _keyframes[i],
+            r_ratio,
+            glm::vec3(0.0,1.0,0.0)
+            );
     }
 
     _frame_ticker = 0;
@@ -518,18 +528,25 @@ void GLD::anim_MoveDown( float distance ){
     glm::vec3 dest_pos = glm::vec3(0);
     float t_ratio;
     float p_ratio;
+    float r_ratio;
 
     //go up to (20%) overshot
     dest_pos.y = distance; 
     for( int i = 0; i < MAX_FRAME; i++ ){
         t_ratio = float(i)/float(MAX_FRAME);
         p_ratio = 1-(1.1 * sin( 2 * t_ratio ));
+        r_ratio = M_PI*(1-t_ratio);
 
         //set the position to be the same
         _keyframes[i] = glm::translate( _model, p_ratio*dest_pos );
+        _keyframes[i] = glm::rotate(
+            _keyframes[i],
+            r_ratio,
+            glm::vec3(0.0,1.0,0.0)
+            );
     }
 
-    _frame_ticker = 0;
+    _frame_ticker = 0-60;
 }
 
 TypeOfMovement GLD::getMovement() const{
