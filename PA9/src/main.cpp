@@ -29,6 +29,13 @@ MousePicker mousePicker;
 bool LEFTGOAL = false;
 bool RIGHTGOAL = false;
 
+enum GameState{
+    STARTUP = 0,
+    PLAY,
+    PAUSE,
+    SCOREBOARD
+} state;
+
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 
