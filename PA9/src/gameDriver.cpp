@@ -37,18 +37,18 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-	//_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER) );
+//	_pucks.push_back( GLD("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC) );
 
-	_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC);
+	//_gamePuck.initialize("../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg", true, CYLINDER, DYNAMIC);
 	
 	glm::mat4 tempModel;
 
 	_gamePuck.setModel(tempModel);
 
-	_allObjects.push_back(&_gamePuck);
+	//_allObjects.push_back(&_gamePuck);
 
-	//this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
-	
+	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	//this->addPuck(1, "../bin/powerup/puck_yellow_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
 	_allObjects.push_back(&this->_table);
@@ -83,29 +83,29 @@ void GameDriver::setP2PaddlePos(PaddleDirection key, Camera* camera){
 
 void GameDriver::addPuck(int side, const std::string &objFile, const std::string &textureFile){
 	// create puck in puck vector
-	_pucks.push_back( new GLD(objFile, textureFile, true, CYLINDER, DYNAMIC) );
+	GLD * newPuck = new GLD();
 
 	glm::mat4 tempModel;
 	// place it on side
 	switch(side){
 		case 0: // spawn center
 			 tempModel = glm::translate( 
-	        	_pucks[_pucks.size() - 1]->getModel(),
-	        	glm::vec3(0.0f, 5.4f, 0.0f) 
+	        	newPuck->getModel(),
+	        	glm::vec3(0.0f, 0.0f, 0.0f) 
        		); 		
 		break;
 
 		case 1: // spawn at player 1
 			 tempModel = glm::translate( 
-	        	_pucks[_pucks.size() - 1]->getModel(),
-	        	glm::vec3(-10.0f, 5.0f, 0.0f) 
+	        	newPuck->getModel(),
+	        	glm::vec3(-8.0f, 0.0f, 0.0f) 
        		);
 		break;
 
 		case 2: // spawn at player 2
 			 tempModel = glm::translate( 
-	        	_pucks[_pucks.size() - 1]->getModel(),
-	        	glm::vec3(10.0f, 5.0f, 0.0f) 
+	        	newPuck->getModel(),
+	        	glm::vec3(8.0f, 0.0f, 0.0f) 
        		);
 		break;
 	}
@@ -113,19 +113,17 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 	// scale puck
 	//tempModel = glm::scale(tempModel, glm::vec3(0.14));
 
-	_pucks[_pucks.size() - 1]->setModel(tempModel);
+	newPuck->initialize(objFile, textureFile, true, CYLINDER, DYNAMIC);
+	newPuck->setModel(tempModel);
 	// add reference to puck to all objects
-	_allObjects.push_back(_pucks[_pucks.size() - 1]);
+	_pucks.push_back(newPuck);
+	_allObjects.push_back(newPuck);
 }
 
 void GameDriver::updateP1Score(GLD* puck){
 	_player1.incrementScore(1);
 	if (_player1.getScore() >= 11){
 		// end game menu
-
-	} else{
-		// reset puck pos in front of p2
-		this -> addPuck(2, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	}
 }
 
@@ -133,10 +131,6 @@ void GameDriver::updateP2Score(GLD* puck){
 	_player2.incrementScore(1);
 	if (_player2.getScore() >= 11){
 		// end game menu
-
-	} else{
-		// reset puck pos in front of p1
-		this -> addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 	}
 }
 
@@ -285,4 +279,63 @@ void GameDriver::activatePowerUp(){
 	_powerup.spawnRandPU();
 }
 
+bool GameDriver::checkForGoal( btDiscreteDynamicsWorld * world ){
+	//go through all the pucks
+	for( unsigned int i = 0; i < _pucks.size(); i++ ){
+		//player one scored goal
+		if( _pucks[i]->getModel()[3].x >= 14 ){
+			//remove it from the physics world
+			world->removeRigidBody( _pucks[i]->getRigidBody() );
+
+			//remove it from all Objects and Pucks
+			GLD * puckToBeRemoved = _pucks[i];
+			for( unsigned int j = 0; j < _allObjects.size(); j++ ){
+				if( _allObjects[j] == puckToBeRemoved ){
+					_allObjects.erase( _allObjects.begin() + j );
+					break;
+				}
+			}
+			_pucks.erase( _pucks.begin() + i);
+			delete puckToBeRemoved;
+			
+			//add a brand new one to pucks and all objects
+			this->addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+
+			//update player 1 score
+			cout << "added player 1 score" << endl;
+			updateP1Score(NULL);
+
+			//add the new rigid body
+			_pucks[_pucks.size()-1]->addPhysics();
+			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
+		} else if ( _pucks[i]->getModel()[3].y <= -14 ){
+			//remove it from the physics world
+			world->removeRigidBody( _pucks[i]->getRigidBody() );
+
+			//remove it from all Objects and Pucks
+			GLD * puckToBeRemoved = _pucks[i];
+			for( unsigned int j = 0; j < _allObjects.size(); j++ ){
+				if( _allObjects[j] == puckToBeRemoved ){
+					_allObjects.erase( _allObjects.begin() + j );
+					break;
+				}
+			}
+			_pucks.erase( _pucks.begin() + i);
+			delete puckToBeRemoved;
+			
+			//add a brand new one to pucks and all objects
+			this->addPuck(2, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+
+			//update player 1 score
+			cout << "added player 2 score" << endl;
+			updateP2Score(NULL);
+
+			//add the new rigid body
+			_pucks[_pucks.size()-1]->addPhysics();
+			world->addRigidBody( _pucks[_pucks.size()-1]->getRigidBody() );
+		}
+	}
+	//I made it through all of the pucks, none of them won
+	return false;
+}
 #endif

@@ -476,34 +476,7 @@ void menu_options( int id ){
 }
 
 bool checkForGoal(){
-    // find object
-    unsigned int i = 0;
-    for (i = 0; i < allObjects.size(); ++i)
-        {
-            if (allObjects[i]->getMovement() == DYNAMIC){
-                break;
-            }
-        }
-
-    // get coordinates
-    glm::mat4 tempModel = allObjects[i]->getModel();
-
-    glm::vec3 positionOfObject = glm::vec3(tempModel[3]);
-    //std::cout << positionOfObject.x << " "<< positionOfObject.y << " "<< positionOfObject.z << endl;
-
-    if (positionOfObject.x >= 13){
-        std::cout << "PLAYER 2 GOOOOAL" << endl;
-        return true;
-    } 
-    else if(positionOfObject.x >= 14.85){
-        std::cout << "PLAYER 1 GOOOOAL" << endl;
-        return true;
-    }
-    else{
-        return false;
-    }
-
-    return false;
+    return mainGame.checkForGoal( dynamicsWorld );
 }
 
 bool checkForMysteryBox(){

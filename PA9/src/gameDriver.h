@@ -22,6 +22,9 @@ class GameDriver{
 		void updateP2Score(GLD* puck);
 		void printScores() const;
 
+		//game logic checkers
+		bool checkForGoal( btDiscreteDynamicsWorld * world );
+
 		// setters
 		void stepPhysicsAnimation( float dt );
 		void setP1PaddlePos(PaddleDirection, Camera*);

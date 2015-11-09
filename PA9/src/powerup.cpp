@@ -127,6 +127,7 @@ bool Powerup::spawnRandPU(){
 	else{
 		_putinPaddle.anim_MoveUp(5.0);
 	}
+	return true;
 }
 
 // getters
