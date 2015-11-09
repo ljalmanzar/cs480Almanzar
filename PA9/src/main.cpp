@@ -66,6 +66,7 @@ void reshape(int n_w, int n_h);
 void render_Menu();
 void render_Top10();
 void render_END();
+void win_Menu();
 
 //--Resource management
 bool initialize();
@@ -137,7 +138,7 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
-       glutDisplayFunc(win_Menu);
+    //glutDisplayFunc(win_Menu);
     glutDisplayFunc(render_Menu);// Called continuously by GLUT internal loop when its time to display
 
     glutReshapeFunc(reshape);// Called if the window is resized
@@ -489,6 +490,10 @@ void render_END(){
         cursor = 0;
     }
 
+    glutSwapBuffers();
+}
+
+void win_Menu(){
     glutSwapBuffers();
 }
 
