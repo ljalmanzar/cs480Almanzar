@@ -34,7 +34,7 @@ enum GameState{
     PLAY,
     PAUSE,
     SCOREBOARD
-} state;
+} state = STARTUP;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -57,6 +57,9 @@ glm::mat4 mvp;//premultiplied modelviewprojection
 void render();
 void update();
 void reshape(int n_w, int n_h);
+
+//Game Menu Call Backs
+void render_Menu();
 
 //--Resource management
 bool initialize();
@@ -123,7 +126,7 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
-    glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
+    glutDisplayFunc(render_Menu);// Called continuously by GLUT internal loop when its time to display
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
@@ -334,16 +337,72 @@ void render()
     glutSwapBuffers();
 }
 
+void render_Menu(){
+    // clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+    char * tempStr;
+    int cursor = 0;
+    std::string information[] = {
+        "Air Hockey", 
+        "by Gunnar, Luis and Daniel (GLD)",
+        "Press 'P'     to play a New Game",
+        "Press 'SPACE' to pause the game",
+        "Press 'T'     to view the the 10 scoreboard", 
+        "Press 'ESC'   to quit"
+    };
+
+    //print the title
+    glRasterPos2f(-.1, .5);
+    tempStr = &information[0][0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    //print the subtitle
+    glRasterPos2f(-.25, .35);
+    tempStr = &information[1][0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    //print out the instructions
+    for( int i = 2; i < 6; i++ ){
+        glRasterPos2f(-.2, -float(i)/20);
+        tempStr = &information[i][0];
+        while( tempStr[cursor] ){
+            glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+        }
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+}
+
 void update()
 {
+    //if this is the main menu state
+        //draw the main menu
+        //listen for input
+    //if this is the play state
+        //do all the upkeep
+    //if this is the top 10 scoreboard state
     allObjects = mainGame.getAllObjects();
 
     dynamicsWorld->stepSimulation(getDT(), 10);
     
-    for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj)
-        {
-            allObjects[currentObj]->updateObjectAndPhysics();
-        }
+    for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj){
+        allObjects[currentObj]->updateObjectAndPhysics();
+    }
 
     // check if time for power up and then move box
     mainGame.getPU();
@@ -392,6 +451,9 @@ float getDT()
 {
     float ret;
     t2 = std::chrono::high_resolution_clock::now();
+    if( state != PLAY ){
+        t2 = t1;
+    }
     ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
     t1 = std::chrono::high_resolution_clock::now();
     return ret;
@@ -400,17 +462,15 @@ float getDT()
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     // Handle keyboard input
-    if(key == 27)//ESC
-       {
-           exit(0);
-       }
-    if(key == '+'){
+    if(key == 27){ //ESC
+        exit(0);
+    }
+    else if(key == '+'){
         camera.zoom( 1 );     
     }
-    if(key == '-'){
+    else if(key == '-'){
         camera.zoom( -1 );     
     }
-
     else {
         switch( key ){
             case '8':
@@ -435,7 +495,23 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                  mainGame.setP1PaddlePos(D_DOWN, &camera);
                 break;
             case 'd':
-                    mainGame.setP1PaddlePos(D_RIGHT, &camera);
+                mainGame.setP1PaddlePos(D_RIGHT, &camera);
+                break;
+            case 'p':
+            case 'P':
+                glutDisplayFunc(render);
+                state = PLAY;
+                break;
+            case 'm':
+            case 'M':
+                glutDisplayFunc(render_Menu);
+                state = STARTUP;
+                break;
+            case ' ':
+                if( state == PAUSE )
+                    state = PLAY;
+                else if (state == PLAY)
+                    state = PAUSE;
                 break;
         }        
     }

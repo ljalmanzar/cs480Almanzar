@@ -358,7 +358,7 @@ void GLD::addPhysics(){
             _rigidBody -> setRestitution(1);
             _rigidBody -> setFriction(1);
             _rigidBody -> setAngularFactor(btVector3(0,1,0));
-            _rigidBody -> setLinearFactor(btVector3(1,0,1));
+            _rigidBody -> setLinearFactor(btVector3(1,1,1));
 
             if (_typeOfMovement == DYNAMIC){
             	_rigidBody -> setFriction(0);
@@ -488,13 +488,8 @@ bool GLD::updateObjectAndPhysics(){
         this->setModel( glm::make_mat4(m) );
 
     }
-    if (_typeOfMovement == KINEMATIC and _frame_ticker < MAX_FRAME){
+    if (_frame_ticker < MAX_FRAME){
         _model = _keyframes[_frame_ticker++];
-        if( _frame_ticker == MAX_FRAME ){
-            //place the rigid body in the world
-        } else {
-            //make sure it's not in the world
-        }
     }
     return true;
 }
