@@ -24,11 +24,12 @@ class Powerup{
 		GLD* getIceRink();
 		GLD* getHealth();
 		GLD* getPutinPaddle();
-
+		bool isMultiPuck();
 		void moveMysteryBoxUp();
 		void moveMysteryBoxDown();
 
 		// setters
+		void setIsMultiPuck();
 
 	private:
 
@@ -46,6 +47,8 @@ class Powerup{
 		Player* _p1;
 		Player* _p2;
 		GLD* _table;
+
+		bool _isMultiPuck;
 
 		struct {
 			bool nothing;

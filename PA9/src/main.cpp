@@ -33,7 +33,8 @@ enum GameState{
     STARTUP = 0,
     PLAY,
     PAUSE,
-    SCOREBOARD
+    SCOREBOARD,
+    FINISHED
 } state = STARTUP;
 
 //uniform locations

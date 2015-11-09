@@ -36,7 +36,7 @@ void GameDriver::initGame(){
 	_allObjects.push_back(_powerup.getHealth());
 	_allObjects.push_back(_powerup.getPutinPaddle());
 
-	this->addPuck(0, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
+	this->addPuck(1, "../bin/powerup/puck_red_leaf.obj", "../bin/powerup/red_black_yellow_colorbars.jpg");
 
 	//get the table in here as well
 	_table.initialize("../bin/GEO_airhockeytable.obj","../bin/ah_final_texture.png", true, TRIMESH, STATIC);
@@ -115,16 +115,20 @@ void GameDriver::addPuck(int side, const std::string &objFile, const std::string
 
 void GameDriver::updateP1Score(GLD* puck){
 	_player1.incrementScore(1);
-	if (_player1.getScore() >= 11){
+	if (_player1.getScore() >= 7){
 		// end game menu
 	}
 }
 
 void GameDriver::updateP2Score(GLD* puck){
 	_player2.incrementScore(1);
-	if (_player2.getScore() >= 11){
+	if (_player2.getScore() >= 7){
 		// end game menu
 	}
+}
+
+bool GameDriver::isGameOver(){
+	return(_player1.getScore() >= 7 ||_player2.getScore() >= 7);
 }
 
 void GameDriver::printScores() const {

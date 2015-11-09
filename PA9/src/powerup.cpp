@@ -165,6 +165,15 @@ void Powerup::moveMysteryBoxUp(){
 }
 
 void Powerup::moveMysteryBoxDown(){
-	_mysteryBox.anim_MoveDown(30.0);
+	_mysteryBox.anim_MoveUp(-30.0);
 }
+
+bool Powerup::isMultiPuck(){
+	return _isMultiPuck;
+}
+
+void Powerup::setIsMultiPuck(){
+
+}
+
 #endif

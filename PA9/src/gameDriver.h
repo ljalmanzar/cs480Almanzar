@@ -27,7 +27,7 @@ class GameDriver{
 		bool checkForGoal( btDiscreteDynamicsWorld * world );
 		bool checkForMysteryBox(btDiscreteDynamicsWorld * world);
 		bool checkIfPlayerOK();
-
+		bool isGameOver();
 
 		// setters
 		void stepPhysicsAnimation( float dt );
