@@ -12,16 +12,16 @@ LIBS= -lglut -lGLEW -lGL -lassimp $(MAGICKLIBS) $(BULLETLIBS)
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
-all: ../bin/AirHockey
+all: ../bin/LightExercise
 
 ../bin/AirHockey: ../src/main.cpp
-	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/AirHockey $(LIBS)
+	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/LightExercise $(LIBS)
 
 test: ../src/GLD.h ../src/GLD.cpp
 	$(CC) $(CXXFLAGS) -c ../src/GLD.cpp 
 
 clean:
-	rm ../bin/AirHockey -f
+	rm ../bin/LightExercise -f
 
 run: ../bin/AirHockey
-	../bin/AirHockey
+	../bin/LightExercise
