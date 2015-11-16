@@ -14,7 +14,7 @@ CXXFLAGS= -g -Wall -std=c++0x $(MAGICKFLAGS)
 
 all: ../bin/LightExercise
 
-../bin/AirHockey: ../src/main.cpp
+../bin/LightExercise: ../src/main.cpp
 	$(CC) $(CXXFLAGS) ../src/main.cpp -o ../bin/LightExercise $(LIBS)
 
 test: ../src/GLD.h ../src/GLD.cpp
@@ -23,5 +23,5 @@ test: ../src/GLD.h ../src/GLD.cpp
 clean:
 	rm ../bin/LightExercise -f
 
-run: ../bin/AirHockey
+run: ../bin/LightExercise
 	../bin/LightExercise
