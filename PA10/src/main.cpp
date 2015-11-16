@@ -4,51 +4,55 @@
 #include <GL/freeglut.h> // extension to glut
 #include <iostream>
 #include <chrono>
+#include "vertex.cpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 #include "shaderLoader.cpp"
+
 #include "GLD.cpp"
 #include "camera.h"
-#include "vertex.cpp"
 
 
 //--Evil Global variables
-//Just for this example!
-int w = 640, h = 480;// Window size
+int w = 800, h = 800;// Window size
 GLuint program;// The GLSL program handle
 GLuint vbo_geometry;// VBO handle for our geometry
+int NUM_OF_VERTICIES = 0;
+Camera camera;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
-
-Camera camera;
 
 //attribute locations
 GLint loc_position;
 GLuint loc_texture;
 
-GLD sampleObj; 
-
-std::vector<GLD*> allObjects;
+GLD allObjects[2];
 
 //transform matrices
-glm::mat4 moon_model;
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
 glm::mat4 projection;//eye->clip
 glm::mat4 mvp;//premultiplied modelviewprojection
 
-//direction change int
-int PLANET_ROTAION_DIRECTION = 1;
-int PLANET_ORBIT_DIRECTION = 1;
+//--GLUT Callbacks
+void render();
+void update();
+void reshape(int n_w, int n_h);
 
-int MOON_ROTAION_DIRECTION = 1;
-int MOON_ORBIT_DIRECTION = 1;
+//--Resource management
+bool initialize();
+void cleanUp();
 
-// spin pause flag
-bool PAUSED = false; 
+//--Random time things
+std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
+
+//--I/O callbacks
+void keyboard(unsigned char key, int x_pos, int y_pos);
+void special_keyboard(int key, int x_pos, int y_pos);
+float getDT();
 
 // BULLET STUFF
 //check for collisions, (broad or narrow, broad eliminates the non-colliding objs)
@@ -62,34 +66,18 @@ btSequentialImpulseConstraintSolver *solver;
 // the world
 btDiscreteDynamicsWorld *dynamicsWorld;
 
-//--GLUT Callbacks
-void render();
-void update();
-void reshape(int n_w, int n_h);
-void keyboard(unsigned char key, int x_pos, int y_pos);
-void special_keyboard(int key, int x_pos, int y_pos);
-
-//--Resource management
-bool initialize();
-void cleanUp();
-
-//--Random time things
-float getDT();
-std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
-
-//--I/O callbacks
-void menu_options(int id);
-void mouse_options(int button, int state, int x_pos, int y_pos);
-
-
 /********
 --MAIN--
 ********/
 
 int main(int argc, char **argv)
 {
+    // Initialize Magick
+    Magick::InitializeMagick(*argv);
+
     // Initialize glut
     glutInit(&argc, argv); // just initializes
+
     /* changes options...  
     GLUT_DOUBLE enables double buffering (drawing to a background buffer while another buffer is displayed), 
     GLUT_DEPTH bit mask to select a window with a depth buffer */
@@ -97,28 +85,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Adding I/O");
-
-    // Create menus
-    // sub menu creation
-    GLuint sub_menu;
-    sub_menu = glutCreateMenu(menu_options);
-    glutAddMenuEntry("start all movement", 1); // common sense
-    glutAddMenuEntry("stop all movement", 2);
-
-    GLuint direction_change;
-    direction_change = glutCreateMenu(menu_options);
-    glutAddMenuEntry("toggle planet orbit", 3); 
-    glutAddMenuEntry("toggle planet rotation", 4);
-    glutAddMenuEntry("toggle moon orbit", 5); 
-    glutAddMenuEntry("toggle moon rotation", 6);
-
-    // main menu creation
-    glutCreateMenu(menu_options);
-    glutAddSubMenu("start/stop", sub_menu);
-    glutAddSubMenu("changing rotations & orbits", direction_change);
-    glutAddMenuEntry("quit program", 7);
-    glutAttachMenu(GLUT_RIGHT_BUTTON); // attached menu to right click
+    glutCreateWindow("Lighting");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -131,13 +98,10 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
-    glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
+     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
-    glutSpecialFunc(special_keyboard);// Called for arrow keys
-
-    glutMouseFunc(mouse_options); //Called if there is a mouse input
 
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
@@ -164,15 +128,16 @@ bool initialize()
                                                 solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
-    sampleObj.initialize("../bin/planet.obj", "../bin/outdoor_background.jpg", true, TRIMESH, STATIC);
-    allObjects.push_back(&sampleObj);
+
+    allObjects[0].initialize("../bin/planet.obj","../bin/metal.jpg");
+    allObjects[1].initialize("../bin/planet.obj","../bin/metal.jpg");
 
     // add physics where needed & and add to world
-    for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
+    for (unsigned int objectNdx = 0; objectNdx < 2; ++objectNdx)
         {
-            if (allObjects[objectNdx]->getShape() != NONE){
-                allObjects[objectNdx]->addPhysics();
-                dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
+            if (allObjects[objectNdx].getShape() != NONE){
+                allObjects[objectNdx].addPhysics();
+                dynamicsWorld->addRigidBody(allObjects[objectNdx].getRigidBody());
             }
         }
 
@@ -249,6 +214,7 @@ bool initialize()
         return false;
     }
     
+    
 
     //--Init the view and projection matrices
     //  if you will be having a moving camera the view matrix will need to more dynamic
@@ -286,14 +252,14 @@ void render()
     //get the most recent camera data
     view = camera.getViewMatrix();
 
-    for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
+    for( unsigned int objIndex = 0; objIndex < 2; objIndex++ ){
         //draw only the objects we want to see and skip elseways
-        if( !allObjects[objIndex]->isDrawable() ){
+        if( !allObjects[objIndex].isDrawable() ){
             continue;
         }
 
         //premultiply the matrix for this example
-        model = allObjects[objIndex]->getModel();
+        model = allObjects[objIndex].getModel();
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -301,13 +267,13 @@ void render()
 
         //Bind each texture to the corresponding object
         glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, allObjects[objIndex]->getPicTexture() );
+        glBindTexture( GL_TEXTURE_2D, allObjects[objIndex].getPicTexture() );
 
         //set up the Vertex Buffer Object so it can be drawn
         glEnableVertexAttribArray(loc_position);
         glEnableVertexAttribArray(loc_texture);
 
-        glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex]->getVBO());
+        glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex].getVBO());
 
         //set pointers into the vbo for each of the attributes(position and color)
         glVertexAttribPointer( loc_position,//location of attribute
@@ -324,7 +290,7 @@ void render()
                                 sizeof(Vertex),
                                 (void*)offsetof(Vertex,uv));
 
-        glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex]->getNumOfVerticies()));//mode, starting index, count
+        glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
         //clean up
         glDisableVertexAttribArray(loc_position);
@@ -337,36 +303,11 @@ void render()
 
 void update()
 {
-    //total time
-    static float planet_orbit_angle = 0.0;
-    static float planet_rotation_angle = 0.0;
-    static float moon_orbit_angle = 0.0;
-    static float moon_rotation_angle = 0.0;
+    dynamicsWorld->stepSimulation(getDT(), 10);
 
-    float dt = getDT();// if you have anything moving, use dt.
+    glutPostRedisplay();
 
-    // variables for the moon
-    planet_orbit_angle += dt * (M_PI/2) * PLANET_ORBIT_DIRECTION; //move through 90 degrees a second
-    planet_rotation_angle += dt * (M_PI/2) * PLANET_ROTAION_DIRECTION; 
-    moon_orbit_angle += .01 * (M_PI/2) * MOON_ORBIT_DIRECTION; 
-    moon_rotation_angle += dt * (M_PI/2) * MOON_ROTAION_DIRECTION; 
-
-    model = glm::translate( glm::mat4(1.0f), glm::vec3(3.5 * sin(planet_orbit_angle), 0.0, 3.5 * cos(planet_orbit_angle)));
-
-    model = glm::rotate(model, // what youre starting with
-    planet_rotation_angle * 2, // angle of rotation (how much it rotates)
-    glm::vec3(0.0,1.0,0.0)); // a three vector, axis
-
-    // this controls the orbit of the "moon" around the orignal planet
-    moon_model = glm::translate( model, glm::vec3(3.0 * sin(moon_orbit_angle), 0.0, 3.0 * cos(moon_orbit_angle)));
-
-    // the rotation of the moon
-    moon_model = glm::rotate(moon_model, moon_rotation_angle*2 , glm::vec3(0.0,1.0,0.0)); 
-
-    // Update the state of the scene
-    glutPostRedisplay();//call the display callback
 }
-
 
 void reshape(int n_w, int n_h)
 {
@@ -374,11 +315,11 @@ void reshape(int n_w, int n_h)
     h = n_h;
     //Change the viewport to be correct
     glViewport( 0, 0, w, h);
+
     //Update the projection matrix as well
     //See the init function for an explaination
-    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 100.0f);
+    projection = glm::perspective(45.0f, float(w)/float(h), 0.01f, 200.0f);
 }
-
 
 
 void cleanUp()
@@ -386,98 +327,62 @@ void cleanUp()
     // Clean up, Clean up
     glDeleteProgram(program);
     glDeleteBuffers(1, &vbo_geometry);
+    
+    delete dynamicsWorld;
+    delete solver;
+    delete collisionConfiguration;
+    delete dispatcher;
+    delete broadphase;
 }
 
-//returns the time delta
 float getDT()
 {
-   // check global "PAUSED" variable, if true make times equal
-   if (PAUSED == true)
-      t1 = std::chrono::high_resolution_clock::now();
-
-   float ret;
-   t2 = std::chrono::high_resolution_clock::now();
-   ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
-   t1 = std::chrono::high_resolution_clock::now();
-   return ret;
+    float ret;
+    t2 = std::chrono::high_resolution_clock::now();
+    ret = std::chrono::duration_cast< std::chrono::duration<float> >(t2-t1).count();
+    t1 = std::chrono::high_resolution_clock::now();
+    return ret;
 }
 
 void keyboard(unsigned char key, int x_pos, int y_pos)
 {
     // Handle keyboard input
-    if(key == 27)//ESC
-       {
-           exit(0);
-       }
-
-    if(key == 'r' || key == 'R')
-      {
-         // reverse spin 
-         PLANET_ROTAION_DIRECTION *= -1;
-      }
-   if(key == ' ')
-      {
-         if (PAUSED == false)
-            {
-               PAUSED = true;
-               t2 = t1;
-            }
-         else
-            {
-               PAUSED = false;
-            }
-      }
-}
-
-void special_keyboard(int key, int x_pos, int y_pos)
-{
-   switch(key)
-      {
-         case GLUT_KEY_LEFT:
-         PLANET_ORBIT_DIRECTION = 1;
-         break;
-
-         case GLUT_KEY_RIGHT:
-         PLANET_ORBIT_DIRECTION = -1;
-         break;
-      }
-}
-
-void menu_options(int id)
-{
-   // commands for corresponding selection
-	switch(id)
-		{
-         case 1: // start rotation
-            PAUSED = false;
-            break;
-
-         case 2: // stop rotation
-            PAUSED = true;
-            break;
-         case 3:
-            PLANET_ORBIT_DIRECTION *= -1;
-            break;
-         case 4: 
-            PLANET_ROTAION_DIRECTION *= -1;
-            break;
-         case 5: 
-            MOON_ORBIT_DIRECTION *= -1;
-            break;
-         case 6:
-            MOON_ROTAION_DIRECTION *= -1;
-            break;
-         case 7:
-            exit(0);
-            break;
-		}
-
-   glutPostRedisplay(); // not sure what this does yet
-
-}
-
-void mouse_options(int button, int state, int x_pos, int y_pos)
-{
-   if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-         PLANET_ROTAION_DIRECTION *= -1;
+    if(key == 27){ //ESC
+        exit(0);
+    }
+    else if(key == '+'){
+        camera.zoom( 1 );     
+    }
+    else if(key == '-'){
+        camera.zoom( -1 );     
+    }
+    else {
+        switch( key ){
+            case '8':
+                camera.pivot( P_UP );
+                break;
+            case '2':
+                camera.pivot( P_DOWN );
+                break;
+            case '4':
+                camera.pivot( P_LEFT );
+                break;
+            case '6':
+                camera.pivot( P_RIGHT );
+                break;
+            case 'p':
+            case 'P':
+                glutDisplayFunc(render);
+                break;
+            case 'm':
+            case 'M':
+                break;
+            case 't':
+            case 'T':
+                break;
+            case ' ':
+                break;
+        }        
+    }
+    glutPostRedisplay();
 }
