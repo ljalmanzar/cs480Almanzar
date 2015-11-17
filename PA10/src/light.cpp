@@ -4,7 +4,7 @@
 //This object will determine a light
 struct Light
 {
-	GLfloat position[4];
-	GLfloat diffuse[4];
+	glm::vec4 position;
+	glm::vec4 diffuse;
 };
 #endif

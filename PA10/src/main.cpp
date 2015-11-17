@@ -37,6 +37,13 @@ GLD allObjects[2];
 
 Light allLights[4]; // 0 ambient, 1 distant, 2 point, 3 spot
 
+enum GameState{
+    AMBIENT = 0,
+    DISTANT,
+    POINT,
+    SPOT
+} lightType = AMBIENT;
+
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
@@ -103,6 +110,11 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    for (int i = 0; i < 4; ++i){
+        allLights[i].position = glm::vec4(0.0,5.0,5.0,i);
+        allLights[i].diffuse = glm::vec4(1.0,1.0,1.0,i);
+    }
+
     // Set all of the callbacks to GLUT that we need
     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
     glutReshapeFunc(reshape);// Called if the window is resized
@@ -124,23 +136,6 @@ int main(int argc, char **argv)
 
 bool initialize()
 {
-	//light stuff
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-
-	// Set lighting intensity and color
-	GLfloat qaAmbientLight[]	= {0.2, 0.2, 0.2, 1.0};
-	GLfloat qaDiffuseLight[]	= {0.8, 0.8, 0.8, 1.0};
-	GLfloat qaSpecularLight[]	= {1.0, 1.0, 1.0, 1.0};
-	glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
-
-	// Set the light position
-	GLfloat qaLightPosition[]	= {.5, .5, 0.0, 1.0};
-	glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
-
     //bullet allocating stuff
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -152,7 +147,7 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
 
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/blueball.jpg",true,NONE,STATIC);
+    allObjects[0].initialize("../bin/peeps_model.obj","../bin/blueball.jpg");
     allObjects[0].translate(glm::vec3(5,0,0));
     allObjects[1].initialize("../bin/planet.obj","../bin/blueball.jpg");
 
@@ -346,9 +341,9 @@ void render()
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
 
-        glUniform4fv(loc_lightpos, 1, &allLights[objIndex].position[0]);
+        glUniform4fv(loc_lightpos, 1, &allLights[lightType].position[0]);
 
-        glUniform4fv(loc_diffuse, 1, &allLights[objIndex].diffuse[0]);
+        glUniform4fv(loc_diffuse, 1, &allLights[lightType].diffuse[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
