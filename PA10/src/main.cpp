@@ -35,7 +35,8 @@ GLint loc_diffuse;
 
 GLD allObjects[2];
 
-Light singleLight; // 0 ambient, 1 distant, 2 point, 3 spot
+// Suggested by gunnar
+Light theLight; // 0 ambient, 1 distant, 2 point, 3 spot
 
 enum GameState{
     AMBIENT = 0,
@@ -110,8 +111,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    singleLight.position = glm::vec4(0.0,5.0,5.0,0.0);
-    singleLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
+    theLight.position = glm::vec4(0.0,5.0,5.0,0.0);
+    theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
     // Set all of the callbacks to GLUT that we need
     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
@@ -148,17 +149,6 @@ bool initialize()
     allObjects[0].initialize("../bin/peeps_model.obj","../bin/blueball.jpg");
     allObjects[0].translate(glm::vec3(5,0,0));
     allObjects[1].initialize("../bin/planet.obj","../bin/blueball.jpg");
-
-    // add physics where needed & and add to world
-/*
-    for (unsigned int objectNdx = 0; objectNdx < 2; ++objectNdx)
-        {
-            if (allObjects[objectNdx].getShape() != NONE){
-                allObjects[objectNdx].addPhysics();
-                dynamicsWorld->addRigidBody(allObjects[objectNdx].getRigidBody());
-            }
-        }
-*/
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -339,8 +329,8 @@ void render()
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
 
-        glUniform4fv(loc_lightpos, 1, &singleLight.position[0]);
-        glUniform4fv(loc_diffuse, 1, &singleLight.diffuse[0]);
+        glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
+        glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
@@ -429,15 +419,26 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'P':
                 glutDisplayFunc(render);
                 break;
-            case 'm':
-            case 'M':
-                break;
-            case 't':
-            case 'T':
-                break;
-            case ' ':
-                break;
             case 'a':
+            case 'A':
+            theLight.position[3] = AMBIENT;
+            theLight.diffuse[3] = AMBIENT;
+                break;
+            case 's':
+            case 'S':
+            theLight.position[3] = SPOT;
+            theLight.diffuse[3] = SPOT;
+                break;
+            case 'd':
+            case 'D':
+            theLight.position[3] = DISTANT;
+            theLight.diffuse[3] = DISTANT;
+                break;
+            case 'f':
+            case 'F':
+            theLight.position[3] = POINT;
+            theLight.diffuse[3] = POINT;
+                break;
         }        
     }
     glutPostRedisplay();
