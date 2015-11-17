@@ -48,7 +48,6 @@ GLD::GLD( const std::string& geometry_file, const std::string& texture_file, boo
     switch( switchInt ){
         case SPHERE:
             _sphereShape = new btSphereShape(1);
-            std::cout << "sphere" << endl;
              break;
         case BOX:
             _boxShape = new btBoxShape(btVector3(2,2,3));
@@ -466,6 +465,10 @@ void GLD::setForce(int x, int y, int z){
 
 string GLD::getFile(){
     return _geometryFile;
+}
+
+void GLD::translate(glm::vec3 newTranslation){
+    _model = glm::translate(_model, newTranslation);
 }
 
 bool GLD::updateObjectAndPhysics(){

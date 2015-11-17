@@ -91,6 +91,8 @@ class GLD{
 		void setForce(int x, int y, int z);
 		string getFile();
 
+		void translate(glm::vec3 newTranslation);
+
 		bool updateObjectAndPhysics();
 
 		//set animations

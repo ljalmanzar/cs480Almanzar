@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     }
 
     // Set all of the callbacks to GLUT that we need
-     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
+    glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
@@ -118,6 +118,23 @@ int main(int argc, char **argv)
 
 bool initialize()
 {
+	//light stuff
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+	// Set lighting intensity and color
+	GLfloat qaAmbientLight[]	= {0.2, 0.2, 0.2, 1.0};
+	GLfloat qaDiffuseLight[]	= {0.8, 0.8, 0.8, 1.0};
+	GLfloat qaSpecularLight[]	= {1.0, 1.0, 1.0, 1.0};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
+
+	// Set the light position
+	GLfloat qaLightPosition[]	= {.5, .5, 0.0, 1.0};
+	glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
+
     //bullet allocating stuff
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -129,10 +146,12 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
 
-    allObjects[0].initialize("../bin/planet.obj","../bin/metal.jpg");
+    allObjects[0].initialize("../bin/peeps_model.obj","../bin/metal.jpg",true,NONE,STATIC);
+    allObjects[0].translate(glm::vec3(5,0,0));
     allObjects[1].initialize("../bin/planet.obj","../bin/metal.jpg");
 
     // add physics where needed & and add to world
+/*
     for (unsigned int objectNdx = 0; objectNdx < 2; ++objectNdx)
         {
             if (allObjects[objectNdx].getShape() != NONE){
@@ -140,6 +159,7 @@ bool initialize()
                 dynamicsWorld->addRigidBody(allObjects[objectNdx].getRigidBody());
             }
         }
+*/
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -249,6 +269,31 @@ void render()
     //enable the shader program
     glUseProgram(program);
 
+    // Set material properties
+	GLfloat qaBlack[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat qaGreen[] = {0.0, 1.0, 0.0, 1.0};
+	GLfloat qaWhite[] = {1.0, 1.0, 1.0, 1.0};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, qaGreen);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, qaGreen);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, qaWhite);
+	glMaterialf(GL_FRONT, GL_SHININESS, 60.0);
+
+	// Draw square with many little squares
+	glBegin(GL_QUADS);
+		glNormal3f(0.0, 0.0, 1.0);
+		const GLfloat kqDelta = .01;
+		for (int i = -90; i < 90; ++i) {
+			for (int j = -90; j < 90; ++j) {
+				glVertex3f(j*kqDelta, i*kqDelta, -.2);
+				glVertex3f((j+1)*kqDelta, i*kqDelta, -.2);
+				glVertex3f((j+1)*kqDelta, (i+1)*kqDelta, -.2);
+				glVertex3f(j*kqDelta, (i+1)*kqDelta, -.2);
+			}
+		}
+	glEnd();
+
+	glFlush();
+
     //get the most recent camera data
     view = camera.getViewMatrix();
 
@@ -290,12 +335,23 @@ void render()
                                 sizeof(Vertex),
                                 (void*)offsetof(Vertex,uv));
 
+        /*
+        glVertexAttribPointer( loc_normal,
+        						3,
+        						GL_FLOAT,
+        						GL_FALSE,
+        						sizeof(Vertex),
+        						(void*)offsetof(Vertex,normal));
+        */
+
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
         //clean up
         glDisableVertexAttribArray(loc_position);
         glDisableVertexAttribArray(loc_texture);
     }
+
+
                            
     //swap the buffers
     glutSwapBuffers();
