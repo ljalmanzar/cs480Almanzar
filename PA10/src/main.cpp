@@ -147,7 +147,7 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
 
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/metal.jpg",true,NONE,STATIC);
+    allObjects[0].initialize("../bin/peeps_model.obj","../bin/ah_final_texture.png",true,NONE,STATIC);
     allObjects[0].translate(glm::vec3(5,0,0));
     allObjects[1].initialize("../bin/planet.obj","../bin/metal.jpg");
 
@@ -168,7 +168,7 @@ bool initialize()
 
     // Load the shaders
     std::string vs = shaderLoader::insertLoader("../bin/p_vertex_light.txt");   
-    std::string fs = shaderLoader::insertLoader("../bin/frgshdr.txt");
+    std::string fs = shaderLoader::insertLoader("../bin/pass_through_fragment.txt");
 
     //compile the shaders
     GLint shader_status;
@@ -227,7 +227,7 @@ bool initialize()
         return false;
     }
 
-    loc_normal  = glGetAttribLocation(program,
+    loc_normal = glGetAttribLocation(program,
                     const_cast<const char*>("v_normal"));
     if(loc_normal == -1){
         std::cerr << "[F] NORMAL NOT FOUND" << std::endl;
