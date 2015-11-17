@@ -4,6 +4,10 @@ attribute vec3 v_normal;
 
 varying vec4 color;
 varying vec2 uv;
+
+uniform vec4 l_lightpos;
+uniform vec4 l_diffuse;
+
 uniform mat4 mvpMatrix;
 
 void main(void){

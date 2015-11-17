@@ -13,6 +13,7 @@
 
 #include "GLD.cpp"
 #include "camera.h"
+#include "light.cpp"
 
 
 //--Evil Global variables
@@ -29,8 +30,12 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 GLint loc_normal;
+GLint loc_lightpos;
+GLint loc_diffuse;
 
 GLD allObjects[2];
+
+Light allLights[4]; // 0 ambient, 1 distant, 2 point, 3 spot
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
@@ -147,9 +152,9 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
 
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/ah_final_texture.png",true,NONE,STATIC);
+    allObjects[0].initialize("../bin/peeps_model.obj","../bin/blueball.jpg",true,NONE,STATIC);
     allObjects[0].translate(glm::vec3(5,0,0));
-    allObjects[1].initialize("../bin/planet.obj","../bin/metal.jpg");
+    allObjects[1].initialize("../bin/planet.obj","../bin/blueball.jpg");
 
     // add physics where needed & and add to world
 /*
@@ -234,6 +239,20 @@ bool initialize()
         return false;
     }
 
+    loc_lightpos = glGetUniformLocation(program,
+                    const_cast<const char*>("l_lightpos"));
+    if(loc_lightpos == -1){
+        std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
+        return false;
+    }
+
+    loc_diffuse = glGetUniformLocation(program,
+                    const_cast<const char*>("l_diffuse"));
+    if(loc_diffuse == -1){
+        std::cerr << "[F] LIGHT DIFFUSE NOT FOUND" << std::endl;
+        return false;
+    }
+
     loc_mvpmat = glGetUniformLocation(program,
                     const_cast<const char*>("mvpMatrix"));
     if(loc_mvpmat == -1)
@@ -276,31 +295,6 @@ void render()
     
     //enable the shader program
     glUseProgram(program);
-
-    // Set material properties
-	GLfloat qaBlack[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat qaGreen[] = {0.0, 1.0, 0.0, 1.0};
-	GLfloat qaWhite[] = {1.0, 1.0, 1.0, 1.0};
-	glMaterialfv(GL_FRONT, GL_AMBIENT, qaGreen);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, qaGreen);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, qaWhite);
-	glMaterialf(GL_FRONT, GL_SHININESS, 60.0);
-
-	// Draw square with many little squares
-	glBegin(GL_QUADS);
-		glNormal3f(0.0, 0.0, 1.0);
-		const GLfloat kqDelta = .01;
-		for (int i = -90; i < 90; ++i) {
-			for (int j = -90; j < 90; ++j) {
-				glVertex3f(j*kqDelta, i*kqDelta, -.2);
-				glVertex3f((j+1)*kqDelta, i*kqDelta, -.2);
-				glVertex3f((j+1)*kqDelta, (i+1)*kqDelta, -.2);
-				glVertex3f(j*kqDelta, (i+1)*kqDelta, -.2);
-			}
-		}
-	glEnd();
-
-	glFlush();
 
     //get the most recent camera data
     view = camera.getViewMatrix();
@@ -351,7 +345,10 @@ void render()
         						GL_FALSE,
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
-        
+
+        glUniform4fv(loc_lightpos, 1, &allLights[objIndex].position[0]);
+
+        glUniform4fv(loc_diffuse, 1, &allLights[objIndex].diffuse[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
