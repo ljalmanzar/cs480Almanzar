@@ -35,7 +35,7 @@ GLint loc_diffuse;
 
 GLD allObjects[2];
 
-Light allLights[4]; // 0 ambient, 1 distant, 2 point, 3 spot
+Light singleLight; // 0 ambient, 1 distant, 2 point, 3 spot
 
 enum GameState{
     AMBIENT = 0,
@@ -110,10 +110,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    for (int i = 0; i < 4; ++i){
-        allLights[i].position = glm::vec4(0.0,5.0,5.0,i);
-        allLights[i].diffuse = glm::vec4(1.0,1.0,1.0,i);
-    }
+    singleLight.position = glm::vec4(0.0,5.0,5.0,0.0);
+    singleLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
     // Set all of the callbacks to GLUT that we need
     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
@@ -341,9 +339,8 @@ void render()
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
 
-        glUniform4fv(loc_lightpos, 1, &allLights[lightType].position[0]);
-
-        glUniform4fv(loc_diffuse, 1, &allLights[lightType].diffuse[0]);
+        glUniform4fv(loc_lightpos, 1, &singleLight.position[0]);
+        glUniform4fv(loc_diffuse, 1, &singleLight.diffuse[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
@@ -440,6 +437,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case ' ':
                 break;
+            case 'a':
         }        
     }
     glutPostRedisplay();
