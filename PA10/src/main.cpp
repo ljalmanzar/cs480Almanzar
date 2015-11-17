@@ -111,7 +111,7 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    theLight.position = glm::vec4(0.0,5.0,5.0,0.0);
+    theLight.position = glm::vec4(5.0,5.0,5.0,0.0);
     theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
     // Set all of the callbacks to GLUT that we need
