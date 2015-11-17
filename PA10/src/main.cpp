@@ -28,6 +28,7 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 //attribute locations
 GLint loc_position;
 GLuint loc_texture;
+GLint loc_normal;
 
 GLD allObjects[2];
 
@@ -166,7 +167,7 @@ bool initialize()
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Load the shaders
-    std::string vs = shaderLoader::insertLoader("../bin/vrtxshdr.txt");   
+    std::string vs = shaderLoader::insertLoader("../bin/p_vertex_light.txt");   
     std::string fs = shaderLoader::insertLoader("../bin/frgshdr.txt");
 
     //compile the shaders
@@ -222,7 +223,14 @@ bool initialize()
                     const_cast<const char*>("v_uv"));
     if(loc_texture < 0)
     {
-        std::cerr << "[F] V_COLOR NOT FOUND" << std::endl;
+        std::cerr << "[F] UV NOT FOUND" << std::endl;
+        return false;
+    }
+
+    loc_normal  = glGetAttribLocation(program,
+                    const_cast<const char*>("v_normal"));
+    if(loc_normal == -1){
+        std::cerr << "[F] NORMAL NOT FOUND" << std::endl;
         return false;
     }
 
@@ -317,6 +325,7 @@ void render()
         //set up the Vertex Buffer Object so it can be drawn
         glEnableVertexAttribArray(loc_position);
         glEnableVertexAttribArray(loc_texture);
+        glEnableVertexAttribArray(loc_normal);
 
         glBindBuffer(GL_ARRAY_BUFFER, allObjects[objIndex].getVBO());
 
@@ -335,20 +344,21 @@ void render()
                                 sizeof(Vertex),
                                 (void*)offsetof(Vertex,uv));
 
-        /*
+        
         glVertexAttribPointer( loc_normal,
         						3,
         						GL_FLOAT,
         						GL_FALSE,
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
-        */
+        
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
         //clean up
         glDisableVertexAttribArray(loc_position);
         glDisableVertexAttribArray(loc_texture);
+        glDisableVertexAttribArray(loc_normal);
     }
 
 

@@ -263,15 +263,29 @@ void GLD::orderVerticies(){
             for( int i = 0; i < 3; i++ ){
                 //go to aiMesh's mVertices Array
                 int vertice_index = _myScene->mMeshes[meshIndex]->mFaces[faceIndex].mIndices[i];
+                
                 //get position 
                 for (int j = 0; j < 3; ++j){
                     tempVert.position[j] = _myScene->mMeshes[meshIndex]->mVertices[vertice_index][j];
                 }
                 triArray[i] = btVector3( tempVert.position[0], tempVert.position[1], tempVert.position[2] );
 
-                if( _myScene->mMeshes[meshIndex]->mNormals != NULL && _myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
+                //get texture coordinates (UV)
+                if(_myScene->mMeshes[meshIndex]->HasTextureCoords(0) ){
                     tempVert.uv[0] = _myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].x;
                     tempVert.uv[1] = 1-_myScene->mMeshes[meshIndex]->mTextureCoords[0][vertice_index].y;
+                }
+
+                //get normals
+                if( _myScene->mMeshes[meshIndex]->mNormals != NULL ){
+                    tempVert.normal[0] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].x;
+                    tempVert.normal[1] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].y;
+                    tempVert.normal[2] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].z;
+                    /*
+                    cout << "Normals are " << tempVert.normal[0] << " "
+                                            << tempVert.normal[1] << " "
+                                            << tempVert.normal[2] << endl;
+                    */
                 }
                 
                 //add to the final vec

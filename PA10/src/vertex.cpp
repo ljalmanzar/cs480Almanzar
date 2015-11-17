@@ -6,6 +6,7 @@ struct Vertex
 {
     GLfloat position[3];
     GLfloat uv[2];
+    GLfloat normal[3];
 };
 
 #endif
