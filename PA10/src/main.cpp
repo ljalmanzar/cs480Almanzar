@@ -119,6 +119,7 @@ int main(int argc, char **argv)
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
+    glutSpecialFunc(special_keyboard);
 
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
@@ -440,6 +441,23 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             theLight.diffuse[3] = POINT;
                 break;
         }        
+    }
+    glutPostRedisplay();
+}
+
+void special_keyboard(int key, int x_pos, int y_pos){
+    switch(key){
+        case GLUT_KEY_UP:
+            allObjects[0].translate(glm::vec3(0,1,0));
+            break;
+        case GLUT_KEY_LEFT:
+            allObjects[0].translate(glm::vec3(-1,0,0));
+            break;
+        case GLUT_KEY_DOWN:
+            allObjects[0].translate(glm::vec3(0,-1,0));
+            break;
+        case GLUT_KEY_RIGHT:
+            allObjects[0].translate(glm::vec3(1,0,0));
     }
     glutPostRedisplay();
 }
