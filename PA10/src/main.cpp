@@ -404,6 +404,12 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
     else {
         switch( key ){
+            case '[':
+                theLight.position[0] += 0.25;
+                break;
+            case ']':
+                theLight.position[0] -= 0.25;
+                break;
             case '8':
                 camera.pivot( P_UP );
                 break;
