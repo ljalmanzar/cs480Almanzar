@@ -35,12 +35,15 @@ class GameDriver{
 
 	private:
 		GLD _backGround;
+		GLD _casket;
 		vector<GLD*> _mazes;
 		vector<GLD*> _balls;
 		vector<GLD*> _allObjects;
 		
 		glm::mat4 _empty;
 
+		timeval startingTime;
+		timeval totalLength;
 };
 
 #endif
