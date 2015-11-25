@@ -300,7 +300,7 @@ void render()
         }
 
         //premultiply the matrix for this example
-        model = allObjects[objIndex]->getModel();
+        model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -459,20 +459,19 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void special_keyboard(int key, int x_pos, int y_pos){
-    /*
     switch(key){
         case GLUT_KEY_UP:
-            allObjects[0]->translate(glm::vec3(0,1,0));
-            break;
-        case GLUT_KEY_LEFT:
-            allObjects[0]->translate(glm::vec3(-1,0,0));
+            maingame.tiltOnX( 1.0f );
             break;
         case GLUT_KEY_DOWN:
-            allObjects[0]->translate(glm::vec3(0,-1,0));
+            maingame.tiltOnX( -1.0f );
+            break;
+        case GLUT_KEY_LEFT:
+            maingame.tiltOnZ( 1.0f );
             break;
         case GLUT_KEY_RIGHT:
-            allObjects[0]->translate(glm::vec3(1,0,0));
+            maingame.tiltOnZ( -1.0f );
+            break;
     }
-    */
     glutPostRedisplay();
 }

@@ -31,12 +31,16 @@ class GameDriver{
 
 		// printing encalsulators
 		std::vector<GLD*> getAllObjects();
+		glm::mat4 getMasterTransform();
 
 	private:
 		GLD _backGround;
 		vector<GLD*> _mazes;
 		vector<GLD*> _balls;
 		vector<GLD*> _allObjects;
+		
+		glm::mat4 _empty;
+
 };
 
 #endif
