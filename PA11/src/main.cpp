@@ -149,13 +149,6 @@ bool initialize()
     theLight.position = glm::vec4(5.0,5.0,5.0,0.0);
     theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
-/*
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/ice.jpg");
-    allObjects[0].translate(glm::vec3(5,0,0));
-    allObjects[1].initialize("../bin/planet.obj","../bin/ice.jpg");
-    allObjects[1].translate(glm::vec3(-5,0,0));
-*/
-
     maingame.initGame();
 
     // Creation of shaders
@@ -349,7 +342,8 @@ void render()
         glDisableVertexAttribArray(loc_normal);
     }
 
-
+    //print the time elapsed
+    maingame.printTimeElapsed();
                            
     //swap the buffers
     glutSwapBuffers();
