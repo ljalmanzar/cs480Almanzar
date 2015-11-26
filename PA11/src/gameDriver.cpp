@@ -44,6 +44,9 @@ void GameDriver::initGame(){
 
 	//set the master transformation
 	_empty = glm::mat4(1.0f);
+
+	//set the starting time
+	gettimeofday( &_startingTime, NULL );
 }
 
 void GameDriver::addBall(){
@@ -53,14 +56,47 @@ void GameDriver::addBall(){
 	_balls.push_back( temp );
 }
 
-void GameDriver::printTimeElapsed() const {
+void GameDriver::printTimeElapsed() {
+	//declare variables
+	char buffer[100];
+	int cursor = 0;
 
+	//get the new time
+	gettimeofday( &_endingTime, NULL );
+	int seconds = _endingTime.tv_sec - _startingTime.tv_sec;
+	int microseconds = _endingTime.tv_usec - _startingTime.tv_usec;
+	if( microseconds < 0 ){
+		microseconds += 1000000;
+		seconds--;
+	}
+	microseconds /= 10000;
+
+	//make the string
+	snprintf( buffer, 100, "Time Elapsed: [%4i.%.2i]",
+		seconds, microseconds );
+	string tempStr( buffer );
+
+	//print the amount of time it's taken
+		//no program for printing
+		glUseProgram(0);
+		glColor3f(1,1,1);
+		glRasterPos2f( -.95, .95 );
+		while( tempStr[cursor] ){
+			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+		}
+		cursor = 0;
 }
 
 void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
 	//set the time
-	//
-	timeval startingTime;
+	gettimeofday( &_startingTime, NULL );
+	//flush out all of the balls and start over
+	for( int i = 0; i < _balls.size(); i++ ){
+		delete _balls[i];
+	}
+
+	//put in the default ball
+	addBall();
 }
 
 void GameDriver::tiltOnX( float angle ){
