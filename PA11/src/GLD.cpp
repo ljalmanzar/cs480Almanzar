@@ -336,8 +336,9 @@ void GLD::addPhysics(){
 
         if ( _typeOfShape == SPHERE ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
+            _mass = 5;
             _sphereShape->calculateLocalInertia(_mass,_inertia);    //it can be determined by this function (for all kind of shapes)
-            _shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 1, 0, 1), 
+            _shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 0, 0, 1), 
                                                             btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));    //set the position (and motion)
             btRigidBody::btRigidBodyConstructionInfo info(1,_shapeMotionState,_sphereShape,_inertia);   //create the constructioninfo, you can create multiple bodies with the same info
             _rigidBody=new btRigidBody(info);
@@ -506,12 +507,12 @@ bool GLD::updateObjectAndPhysics(){
         //_shapeMotionState->setWorldTransform(newTrans); 
     }
 */
-    if (_typeOfShape != NONE and _typeOfShape != BOX){
+    if (_typeOfShape != NONE && _typeOfShape != BOX){
+        std::cout << "hi" << std::endl;
         //get the transformation
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);
         this->setModel( glm::make_mat4(m) );
-
     }
     if (_frame_ticker < MAX_FRAME){
         if( _frame_ticker >= 0 ){
@@ -566,6 +567,11 @@ void GLD::anim_MoveUp( float distance ){
 
 TypeOfMovement GLD::getMovement() const{
     return _typeOfMovement;
+}
+
+void GLD::setShape(TypeOfShape incoming){
+    _typeOfShape = incoming;
+
 }
 
 #endif

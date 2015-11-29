@@ -153,6 +153,18 @@ bool initialize()
 
     maingame.initGame();
 
+    //add physics
+    allObjects = maingame.getAllObjects();
+
+    // add physics where needed & and add to world
+    for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
+        {
+            if (allObjects[objectNdx]->getShape() != NONE){
+                allObjects[objectNdx]->addPhysics();
+                dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
+            }
+        }
+
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -302,6 +314,7 @@ void render()
     glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
     glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
+    allObjects = maingame.getAllObjects();
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
         //draw only the objects we want to see and skip elseways
         if( !allObjects[objIndex]->isDrawable() ){
@@ -369,8 +382,14 @@ void render()
 
 void update()
 {
-    dynamicsWorld->stepSimulation(getDT(), 10);
     allObjects = maingame.getAllObjects();
+
+    dynamicsWorld->stepSimulation(getDT(), 10);
+
+    for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj){
+        allObjects[currentObj]->updateObjectAndPhysics();
+    }
+
     glutPostRedisplay();
 }
 
@@ -474,15 +493,19 @@ void special_keyboard(int key, int x_pos, int y_pos){
     switch(key){
         case GLUT_KEY_UP:
             maingame.tiltOnX( 1.0f );
+            //dynamicsWorld->setGravity(btVector3(0.0f,9.8f,0.0f));
             break;
         case GLUT_KEY_DOWN:
             maingame.tiltOnX( -1.0f );
+            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_LEFT:
             maingame.tiltOnZ( 1.0f );
+            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_RIGHT:
             maingame.tiltOnZ( -1.0f );
+            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
     }
     glutPostRedisplay();

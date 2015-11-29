@@ -20,7 +20,7 @@ void GameDriver::initGame(){
 		"../bin/maze_interm_1.obj"
 	};
 	for( int i = 0; i < 1; i++ ){
-		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg" ) );
+		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, STATIC ) );
 	}
 
 	//add the default ball
@@ -36,7 +36,7 @@ void GameDriver::initGame(){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg");
+	_casket.initialize("../bin/casket.obj", "../bin/ice.jpg", true, TRIMESH, STATIC );
 
 	//set all the appropriate pointers
 	_allObjects.push_back( &_backGround );
@@ -50,7 +50,9 @@ void GameDriver::initGame(){
 }
 
 void GameDriver::addBall(){
-	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg" );
+	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg", true, SPHERE, DYNAMIC );
+	temp->translate(glm::vec3(0,10,0));
+	temp->setShape(SPHERE);
 
 	//add it to the correct places
 	_balls.push_back( temp );

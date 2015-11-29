@@ -95,6 +95,8 @@ class GLD{
 
 		bool updateObjectAndPhysics();
 
+		void setShape(TypeOfShape incoming);
+
 		//set animations
 		void anim_MoveUp( float distance );
 	private:
