@@ -26,6 +26,8 @@ GameDriver maingame;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
+GLint loc_mmat;
+GLint loc_vmat;
 
 //attribute locations
 GLint loc_position;
@@ -244,6 +246,20 @@ bool initialize()
         std::cerr << "[F] MVPMATRIX NOT FOUND" << std::endl;
         return false;
     }
+
+    loc_mmat = glGetUniformLocation(program,
+                    const_cast<const char*>("mMatrix"));
+    if(loc_mmat < 0){
+        std::cerr << "[F] MMATRIX NOT FOUND" << std::endl;
+        return false;
+    }
+
+    loc_vmat = glGetUniformLocation(program,
+                    const_cast<const char*>("vMatrix"));
+    if(loc_vmat < 0){
+        std::cerr << "[F] VMATRIX NOT FOUND" << std::endl;
+        return false;
+    }
     
     
 
@@ -298,6 +314,8 @@ void render()
 
         //upload the matrix to the shader
         glUniformMatrix4fv(loc_mvpmat, 1, GL_FALSE, glm::value_ptr(mvp));
+        glUniformMatrix4fv(loc_mmat, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(loc_vmat, 1, GL_FALSE, glm::value_ptr(view));
 
         //Bind each texture to the corresponding object
         glActiveTexture( GL_TEXTURE0 );

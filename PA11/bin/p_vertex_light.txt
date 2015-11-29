@@ -8,33 +8,53 @@ varying vec2 uv;
 uniform vec4 l_lightpos;
 uniform vec4 l_diffuse;
 uniform mat4 mvpMatrix;
-uniform mat4 mvMatrix;
+uniform mat4 vMatrix;
+uniform mat4 mMatrix;
 
 void main(void){
 	float attenuation = 1.0;
 	vec3 normalDirection = normalize( v_normal );
 	vec3 lightDirection = normalize( vec3(l_lightpos) );
 
+	//get the position in world space and camera space
+	vec3 v_position_world = vec3( mMatrix * vec4(v_position, 1.0) );
+	vec3 v_position_camera = vec3( vMatrix * mMatrix * vec4(v_position, 1.0) );
+	vec3 v_normal_camera = vec3( vMatrix * mMatrix * vec4(v_normal, 1.0) );
+	vec3 l_position_camera = vec3( vMatrix * l_lightpos );
+
+
+	//vector that goes from the vertex to the camera (camera space)
+	vec3 vertToCam = v_position_camera - vec3(0.0, 0.0, 0.0);
+
+	//vector that goes from the vertex to the light (camera space)
+	vec3 vertToLight = l_position_camera + vertToCam;
+
+	//declare variables for actual math
+	float distance = length( vec3(l_lightpos) - v_position_world );
+	vec3 normal = normalize( v_normal_camera );
+	vec3 light = normalize( l_position_camera );
+	vec3 eye = normalize( vertToCam );
+	vec3 reflect = reflect( -light, normal );
+/*
 	if( l_diffuse[3] == 0.0f ){
 		attenuation == 1.0;
-		lightDirection = normalize( vec3(l_lightpos) );
 	}
 	else if ( l_diffuse[3] == 1.0 ){
-		lightDirection = normalize( vec3(l_lightpos) - v_position );
 		attenuation = 1.0;
 	}
 	else if ( l_diffuse[3] == 2.0 ){
-		lightDirection = normalize( vec3(l_lightpos) - v_position );
-		float clampedCosine = max( 0.0, dot(-lightDirection, vec3(l_lightpos) ) );
+*/
+		float clampedCosine = max( 0.0, dot(light, normal) );
 		if( clampedCosine < 30.0/180.0*3.14159265 ){
 			attenuation = 0.0;
 		} else {
 			attenuation = pow( clampedCosine, 0.2 );
 		}
-	}
+//	}
 
-	vec3 diffuseReflection = attenuation * vec3(l_diffuse) * max(0.0, dot(normalDirection, lightDirection));
+	vec3 diffuseReflection = attenuation * vec3(l_diffuse) * max(0.0, dot(normal, light));
 
+	//position of the vertex (clip space)
 	gl_Position = mvpMatrix * vec4(v_position, 1.0);
 	uv = v_uv;
 	color = vec4( diffuseReflection, 1.0 );
