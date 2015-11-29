@@ -355,7 +355,8 @@ void render()
         glDisableVertexAttribArray(loc_normal);
     }
 
-
+    //print the time elapsed
+    maingame.printTimeElapsed();
                            
     //swap the buffers
     glutSwapBuffers();

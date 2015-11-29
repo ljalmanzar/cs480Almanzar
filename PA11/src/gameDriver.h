@@ -2,6 +2,8 @@
 #define __GAMEDRIVER_H_
 
 #include <iostream>
+#include <ctime>
+#include <sys/time.h>
 #include "GLD.cpp"
 #include "camera.h"
 
@@ -25,7 +27,7 @@ class GameDriver{
 
 		// level advancing
 		void resetGame(btDiscreteDynamicsWorld * world);
-		void printTimeElapsed() const;
+		void printTimeElapsed();
 		void pickLevel();
 
 
@@ -42,8 +44,8 @@ class GameDriver{
 		
 		glm::mat4 _empty;
 
-		timeval startingTime;
-		timeval totalLength;
+		timeval _startingTime;
+		timeval _endingTime;
 };
 
 #endif
