@@ -36,7 +36,7 @@ void GameDriver::initGame(){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg");
+	_casket.initialize("../bin/casket.obj", "../bin/ice.jpg");
 
 	//set all the appropriate pointers
 	_allObjects.push_back( &_backGround );
@@ -47,7 +47,9 @@ void GameDriver::initGame(){
 }
 
 void GameDriver::addBall(){
-	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg" );
+	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg", true, SPHERE, DYNAMIC );
+	temp->translate(glm::vec3(0,10,0));
+	temp->setShape(SPHERE);
 
 	//add it to the correct places
 	_balls.push_back( temp );

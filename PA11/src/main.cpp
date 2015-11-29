@@ -149,14 +149,19 @@ bool initialize()
     theLight.position = glm::vec4(5.0,5.0,5.0,0.0);
     theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
-/*
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/ice.jpg");
-    allObjects[0].translate(glm::vec3(5,0,0));
-    allObjects[1].initialize("../bin/planet.obj","../bin/ice.jpg");
-    allObjects[1].translate(glm::vec3(-5,0,0));
-*/
-
     maingame.initGame();
+
+    //add physics
+    allObjects = maingame.getAllObjects();
+
+    // add physics where needed & and add to world
+    for (unsigned int objectNdx = 0; objectNdx < allObjects.size(); ++objectNdx)
+        {
+            if (allObjects[objectNdx]->getShape() != NONE){
+                allObjects[objectNdx]->addPhysics();
+                dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
+            }
+        }
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -293,6 +298,7 @@ void render()
     glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
     glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
+    allObjects = maingame.getAllObjects();
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
         //draw only the objects we want to see and skip elseways
         if( !allObjects[objIndex]->isDrawable() ){
@@ -357,8 +363,14 @@ void render()
 
 void update()
 {
-    dynamicsWorld->stepSimulation(getDT(), 10);
     allObjects = maingame.getAllObjects();
+
+    dynamicsWorld->stepSimulation(getDT(), 10);
+
+    for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj){
+        allObjects[currentObj]->updateObjectAndPhysics();
+    }
+
     glutPostRedisplay();
 }
 
