@@ -323,7 +323,12 @@ void render()
         }
 
         //premultiply the matrix for this example
-        model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
+        if (objIndex > 1){
+            model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
+        }
+        else{
+            model = allObjects[objIndex]->getModel();
+        }
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -496,19 +501,15 @@ void special_keyboard(int key, int x_pos, int y_pos){
     switch(key){
         case GLUT_KEY_UP:
             tilt = maingame.tiltOnX( 1.0f );
-            //dynamicsWorld->setGravity(btVector3(0.0f,9.8f,0.0f));
             break;
         case GLUT_KEY_DOWN:
             tilt = maingame.tiltOnX( -1.0f );
-            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_LEFT:
             tilt = maingame.tiltOnZ( 1.0f );
-            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_RIGHT:
             tilt = maingame.tiltOnZ( -1.0f );
-            //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
     }
 

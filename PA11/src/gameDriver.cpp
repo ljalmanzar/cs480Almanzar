@@ -44,6 +44,7 @@ void GameDriver::initGame(){
 
 	//initialize the static object
 	_casket.initialize("../bin/casket.obj", "../bin/ice.jpg", true, TRIMESH, STATIC );
+	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
 	_allObjects.push_back( &_casket );
@@ -62,7 +63,7 @@ void GameDriver::addBall(){
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
-	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.2, .2, .2) );
+	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.025, .025, .025) );
 	temp->setModel( translation );
 	
 	temp->setShape(SPHERE);
