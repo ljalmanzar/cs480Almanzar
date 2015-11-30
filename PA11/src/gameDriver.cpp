@@ -46,8 +46,8 @@ void GameDriver::initGame(){
 	_casket.initialize("../bin/casket.obj", "../bin/ice.jpg", true, TRIMESH, STATIC );
 
 	//set all the appropriate pointers
-	_allObjects.push_back( &_backGround );
 	_allObjects.push_back( &_casket );
+	_allObjects.push_back( &_backGround );
 
 	//set the master transformation
 	_empty = glm::mat4(1.0f);
@@ -108,14 +108,14 @@ void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
 	//flush out all of the balls and start over
 	for( unsigned int i = 0; i < _balls.size(); i++ ){
 		//remove the rigid body
-
+		world->removeRigidBody( _balls[i]->getRigidBody() );
 		delete _balls[i];
 	}
 
 	//put in the default ball
 	addBall();
 	//add in the new rigid body
-
+	world->addRigidBody( _balls[0]->getRigidBody() );
 }
 
 glm::vec3 GameDriver::tiltOnX( float angle ){
