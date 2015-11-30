@@ -1,7 +1,26 @@
-varying vec4 color;
 varying vec2 uv;
+
+varying vec3 v_position_world;
+varying vec3 v_position_camera;
+varying vec3 v_normal_camera;
+varying vec3 l_position_world;
+varying vec3 l_position_camera;
+
 uniform sampler2D gSampler;
 
 void main(void){
-	gl_FragColor = color * texture2D( gSampler, uv.xy );
+	vec3 normal = normalize( v_normal_camera );
+	vec3 light = normalize( l_position_camera );
+
+	float attenuation = 0.0;
+	float cosTheta = max( 0.0, dot(-(l_position_world - v_position_world), l_position_world));
+	if( cosTheta < 30.0f/180.0f*3.14159265f ){
+		attenuation = 0.0;
+	} else {
+		attenuation = pow( cosTheta, 0.2 );
+	}
+	vec3 finalColorIntensity = attenuation * max(0.0, dot(normal, light)) * vec3(1.0f);
+
+	//diffuse color
+	gl_FragColor = vec4(finalColorIntensity, 1.0) * texture2D( gSampler, uv.xy );
 }
