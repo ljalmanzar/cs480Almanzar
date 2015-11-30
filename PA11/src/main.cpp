@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(w, h);
 
     // Name and create the Window
-    glutCreateWindow("Lighting");
+    glutCreateWindow("Labyrinth");
 
     // Now that the window is created the GL context is fully set up
     // Because of that we can now initialize GLEW to prepare work with shaders
@@ -148,7 +148,7 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
     //light
-    theLight.position = glm::vec4(5.0,5.0,5.0,0.0);
+    theLight.position = glm::vec4(5.0,5.0,5.0,1.0);
     theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
     maingame.initGame();
@@ -170,8 +170,8 @@ bool initialize()
     GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Load the shaders
-    std::string vs = shaderLoader::insertLoader("../bin/p_vertex_light.txt");   
-    std::string fs = shaderLoader::insertLoader("../bin/pass_through_fragment.txt");
+    std::string vs = shaderLoader::insertLoader("../bin/tutorial_vertex_shader.txt");   
+    std::string fs = shaderLoader::insertLoader("../bin/tutorial_fragment_shader.txt");
 
     //compile the shaders
     GLint shader_status;
@@ -243,13 +243,14 @@ bool initialize()
         std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
         return false;
     }
-
+/*
     loc_diffuse = glGetUniformLocation(program,
                     const_cast<const char*>("l_diffuse"));
     if(loc_diffuse == -1){
         std::cerr << "[F] LIGHT DIFFUSE NOT FOUND" << std::endl;
         return false;
     }
+*/
 
     loc_mvpmat = glGetUniformLocation(program,
                     const_cast<const char*>("mvpMatrix"));
@@ -312,7 +313,7 @@ void render()
     view = camera.getViewMatrix();
     //give information to shades for static lights
     glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
-    glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
+    //glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
     allObjects = maingame.getAllObjects();
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
@@ -466,22 +467,22 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 'a':
             case 'A':
-            theLight.position[3] = AMBIENT;
+            //theLight.position[3] = AMBIENT;
             theLight.diffuse[3] = AMBIENT;
                 break;
             case 's':
             case 'S':
-            theLight.position[3] = SPOT;
+            //theLight.position[3] = SPOT;
             theLight.diffuse[3] = SPOT;
                 break;
             case 'd':
             case 'D':
-            theLight.position[3] = DISTANT;
+            //theLight.position[3] = DISTANT;
             theLight.diffuse[3] = DISTANT;
                 break;
             case 'f':
             case 'F':
-            theLight.position[3] = POINT;
+            //theLight.position[3] = POINT;
             theLight.diffuse[3] = POINT;
                 break;
         }        

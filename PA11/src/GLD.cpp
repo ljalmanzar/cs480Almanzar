@@ -508,7 +508,7 @@ bool GLD::updateObjectAndPhysics(){
     }
 */
     if (_typeOfShape != NONE && _typeOfShape != BOX){
-        std::cout << "hi" << std::endl;
+        //std::cout << "hi" << std::endl;
         //get the transformation
         getRigidBody()->getMotionState()->getWorldTransform(trans);
         trans.getOpenGLMatrix(m);

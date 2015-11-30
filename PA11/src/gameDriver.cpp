@@ -9,6 +9,13 @@ GameDriver::GameDriver(){
 
 GameDriver::~GameDriver(){
 	//deconstructor
+	//destroy everything
+	for( unsigned int i = 0; i < _mazes.size(); i++ ){
+		delete _mazes[i];
+	}
+	for( unsigned int i = 0; i < _balls.size(); i++ ){
+		delete _balls[i];
+	}
 }
 
 void GameDriver::initGame(){
@@ -16,10 +23,10 @@ void GameDriver::initGame(){
 	glm::mat4 transformation;
 
 	//initialize the mazes
-	string files[] = {
-		"../bin/maze_interm_1.obj"
+	vector<string> files = {
+		"../bin/Grid.obj"
 	};
-	for( int i = 0; i < 1; i++ ){
+	for( unsigned int i = 0; i < files.size(); i++ ){
 		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, STATIC ) );
 	}
 
@@ -90,7 +97,7 @@ void GameDriver::printTimeElapsed() {
 }
 
 void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
-	//set the time
+	//reset the time
 	gettimeofday( &_startingTime, NULL );
 	//flush out all of the balls and start over
 	for( int i = 0; i < _balls.size(); i++ ){
