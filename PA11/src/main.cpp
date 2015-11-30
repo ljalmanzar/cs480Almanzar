@@ -491,23 +491,27 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
 }
 
 void special_keyboard(int key, int x_pos, int y_pos){
+    glm::vec3 tilt;
+
     switch(key){
         case GLUT_KEY_UP:
-            maingame.tiltOnX( 1.0f );
+            tilt = maingame.tiltOnX( 1.0f );
             //dynamicsWorld->setGravity(btVector3(0.0f,9.8f,0.0f));
             break;
         case GLUT_KEY_DOWN:
-            maingame.tiltOnX( -1.0f );
+            tilt = maingame.tiltOnX( -1.0f );
             //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_LEFT:
-            maingame.tiltOnZ( 1.0f );
+            tilt = maingame.tiltOnZ( 1.0f );
             //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
         case GLUT_KEY_RIGHT:
-            maingame.tiltOnZ( -1.0f );
+            tilt = maingame.tiltOnZ( -1.0f );
             //dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
             break;
     }
+
+    dynamicsWorld->setGravity( btVector3(-tilt.x, tilt.y, -tilt.z) );
     glutPostRedisplay();
 }

@@ -18,8 +18,8 @@ class GameDriver{
 		void addBall();
 
 		// board tilters (to tilt the world)
-		void tiltOnX( float angle );
-		void tiltOnZ( float angle );
+		glm::vec3 tiltOnX( float angle );
+		glm::vec3 tiltOnZ( float angle );
 
 		// check for win
 		bool checkForWin();

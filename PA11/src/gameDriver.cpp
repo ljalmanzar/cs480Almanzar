@@ -24,7 +24,7 @@ void GameDriver::initGame(){
 
 	//initialize the mazes
 	vector<string> files = {
-		"../bin/Grid.obj"
+		"../bin/maze_intermediate_1.obj"
 	};
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, STATIC ) );
@@ -57,8 +57,14 @@ void GameDriver::initGame(){
 }
 
 void GameDriver::addBall(){
+	//creating a new ball
 	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg", true, SPHERE, DYNAMIC );
+
+	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
+	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.2, .2, .2) );
+	temp->setModel( translation );
+	
 	temp->setShape(SPHERE);
 
 	//add it to the correct places
@@ -100,15 +106,19 @@ void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
 	//reset the time
 	gettimeofday( &_startingTime, NULL );
 	//flush out all of the balls and start over
-	for( int i = 0; i < _balls.size(); i++ ){
+	for( unsigned int i = 0; i < _balls.size(); i++ ){
+		//remove the rigid body
+
 		delete _balls[i];
 	}
 
 	//put in the default ball
 	addBall();
+	//add in the new rigid body
+
 }
 
-void GameDriver::tiltOnX( float angle ){
+glm::vec3 GameDriver::tiltOnX( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
@@ -116,24 +126,33 @@ void GameDriver::tiltOnX( float angle ){
 		glm::vec3(1.0,0.0,0.0)
 		);
 	//_backGround.setModel( glm::mat4(1.0f) * glm::inverse(_empty) );
+	glm::mat3 rotationMatrix( _empty );
+
+	//use newGravity to update shit
+	return rotationMatrix * glm::vec3(0.0, -9.81, 0.0);
 }
 
-void GameDriver::tiltOnZ( float angle ){
+glm::vec3 GameDriver::tiltOnZ( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
 		angle/180.0f*3.14159265f,
 		glm::vec3(0.0,0.0,1.0)
 		);
+	
 	//_backGround.setModel( glm::mat4(1.0f) * glm::inverse(_empty) );
+	glm::mat3 rotationMatrix( _empty );
+
+	//use newGravity to update shit
+	return rotationMatrix * glm::vec3(0.0, -9.81, 0.0);
 }  
 
 bool GameDriver::checkForWin(){
-
+	return false;
 }
 
 bool GameDriver::checkIfBallOK(){
-
+	return false;
 }
 
 void GameDriver::pickLevel(){
