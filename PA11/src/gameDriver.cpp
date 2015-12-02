@@ -45,7 +45,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg", true, TRIMESH, KINEMATIC );
+	_casket.initialize("../bin/casket.obj", "../bin/deathStar.jpg", true, TRIMESH, KINEMATIC );
 	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
@@ -61,7 +61,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 void GameDriver::addBall(){
 	//creating a new ball
-	GLD * temp = new GLD( "../bin/planet.obj", "../bin/metal.jpg", true, SPHERE, DYNAMIC );
+	GLD * temp = new GLD( "../bin/planet.obj", "../bin/deathStar.jpg", true, SPHERE, DYNAMIC );
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
