@@ -43,7 +43,7 @@ void GameDriver::initGame(){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/ice.jpg", true, TRIMESH, STATIC );
+	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg", true, TRIMESH, STATIC );
 	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
@@ -63,7 +63,7 @@ void GameDriver::addBall(){
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
-	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.025, .025, .025) );
+	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.01, .01, .01) );
 	temp->setModel( translation );
 	
 	temp->setShape(SPHERE);
@@ -123,7 +123,7 @@ glm::vec3 GameDriver::tiltOnX( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
-		angle/180.0f*3.14159265f,
+		angle/180.0f,
 		glm::vec3(1.0,0.0,0.0)
 		);
 	//_backGround.setModel( glm::mat4(1.0f) * glm::inverse(_empty) );
@@ -137,7 +137,7 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
-		angle/180.0f*3.14159265f,
+		angle/180.0f,
 		glm::vec3(0.0,0.0,1.0)
 		);
 	
