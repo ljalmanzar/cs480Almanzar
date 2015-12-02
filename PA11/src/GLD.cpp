@@ -191,7 +191,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
     int switchInt = incomingType;
     switch( switchInt ){
         case SPHERE:
-            _sphereShape = new btSphereShape(1);
+            _sphereShape = new btSphereShape(.5);
             break;
         case BOX:
             _boxShape = new btBoxShape(btVector3(2,2,3));
@@ -281,11 +281,6 @@ void GLD::orderVerticies(){
                     tempVert.normal[0] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].x;
                     tempVert.normal[1] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].y;
                     tempVert.normal[2] = _myScene->mMeshes[meshIndex]->mNormals[vertice_index].z;
-                    /*
-                    cout << "Normals are " << tempVert.normal[0] << " "
-                                            << tempVert.normal[1] << " "
-                                            << tempVert.normal[2] << endl;
-                    */
                 }
                 
                 //add to the final vec
@@ -336,7 +331,7 @@ void GLD::addPhysics(){
 
         if ( _typeOfShape == SPHERE ){
             glm::vec3 positionOfObject = glm::vec3(_model[3]);
-            _mass = 5;
+            _mass = 10;
             _sphereShape->calculateLocalInertia(_mass,_inertia);    //it can be determined by this function (for all kind of shapes)
             _shapeMotionState=new btDefaultMotionState((btTransform(btQuaternion(0, 0, 0, 1), 
                                                             btVector3(positionOfObject[0], positionOfObject[1], positionOfObject[2]))));    //set the position (and motion)

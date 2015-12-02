@@ -151,7 +151,7 @@ bool initialize()
     theLight.position = glm::vec4(5.0,5.0,5.0,1.0);
     theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
 
-    maingame.initGame();
+    maingame.initGame( dynamicsWorld );
 
     //add physics
     allObjects = maingame.getAllObjects();

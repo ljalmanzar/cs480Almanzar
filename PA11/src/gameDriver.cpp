@@ -18,7 +18,9 @@ GameDriver::~GameDriver(){
 	}
 }
 
-void GameDriver::initGame(){
+void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
+	_world = incomingWorld;
+
 	//declare helper variables
 	glm::mat4 transformation;
 
@@ -43,7 +45,7 @@ void GameDriver::initGame(){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg", true, TRIMESH, STATIC );
+	_casket.initialize("../bin/casket.obj", "../bin/metal.jpg", true, TRIMESH, KINEMATIC );
 	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
@@ -67,6 +69,8 @@ void GameDriver::addBall(){
 	temp->setModel( translation );
 	
 	temp->setShape(SPHERE);
+
+	temp->addPhysics();
 
 	//add it to the correct places
 	_balls.push_back( temp );
@@ -103,20 +107,20 @@ void GameDriver::printTimeElapsed() {
 		cursor = 0;
 }
 
-void GameDriver::resetGame(btDiscreteDynamicsWorld * world){
+void GameDriver::resetGame(){
 	//reset the time
 	gettimeofday( &_startingTime, NULL );
 	//flush out all of the balls and start over
 	for( unsigned int i = 0; i < _balls.size(); i++ ){
 		//remove the rigid body
-		world->removeRigidBody( _balls[i]->getRigidBody() );
+		_world->removeRigidBody( _balls[i]->getRigidBody() );
 		delete _balls[i];
 	}
 
 	//put in the default ball
 	addBall();
 	//add in the new rigid body
-	world->addRigidBody( _balls[0]->getRigidBody() );
+	_world->addRigidBody( _balls[0]->getRigidBody() );
 }
 
 glm::vec3 GameDriver::tiltOnX( float angle ){
@@ -126,7 +130,6 @@ glm::vec3 GameDriver::tiltOnX( float angle ){
 		angle/180.0f,
 		glm::vec3(1.0,0.0,0.0)
 		);
-	//_backGround.setModel( glm::mat4(1.0f) * glm::inverse(_empty) );
 	glm::mat3 rotationMatrix( _empty );
 
 	//use newGravity to update shit
@@ -141,7 +144,6 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 		glm::vec3(0.0,0.0,1.0)
 		);
 	
-	//_backGround.setModel( glm::mat4(1.0f) * glm::inverse(_empty) );
 	glm::mat3 rotationMatrix( _empty );
 
 	//use newGravity to update shit
@@ -153,6 +155,11 @@ bool GameDriver::checkForWin(){
 }
 
 bool GameDriver::checkIfBallOK(){
+	//is the balls position too low?
+	if( _balls.size() == 1 && _balls[0]->getModel()[3][1] > -5 ){
+		//if it is, reset the positions
+		resetGame();
+	}
 	return false;
 }
 

@@ -14,7 +14,7 @@ class GameDriver{
 		~GameDriver();
 
 		// game changes (teehee)
-		void initGame();
+		void initGame(btDiscreteDynamicsWorld * incomingWorld);
 		void addBall();
 
 		// board tilters (to tilt the world)
@@ -26,7 +26,7 @@ class GameDriver{
 		bool checkIfBallOK();
 
 		// level advancing
-		void resetGame(btDiscreteDynamicsWorld * world);
+		void resetGame();
 		void printTimeElapsed();
 		void pickLevel();
 
@@ -46,6 +46,8 @@ class GameDriver{
 
 		timeval _startingTime;
 		timeval _endingTime;
+
+		btDiscreteDynamicsWorld * _world;
 };
 
 #endif
