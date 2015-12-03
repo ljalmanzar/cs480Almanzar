@@ -500,16 +500,16 @@ void special_keyboard(int key, int x_pos, int y_pos){
 
     switch(key){
         case GLUT_KEY_UP:
-            tilt = 2.0f * maingame.tiltOnX( 1.0f );
+            tilt = 10.0f * maingame.tiltOnX( 1.0f );
             break;
         case GLUT_KEY_DOWN:
-            tilt = 2.0f * maingame.tiltOnX( -1.0f );
+            tilt = 10.0f * maingame.tiltOnX( -1.0f );
             break;
         case GLUT_KEY_LEFT:
-            tilt = 2.0f * maingame.tiltOnZ( 1.0f );
+            tilt = 10.0f * maingame.tiltOnZ( 1.0f );
             break;
         case GLUT_KEY_RIGHT:
-            tilt = 2.0f * maingame.tiltOnZ( -1.0f );
+            tilt = 10.0f * maingame.tiltOnZ( -1.0f );
             break;
     }
 
