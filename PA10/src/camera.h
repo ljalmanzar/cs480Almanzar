@@ -66,7 +66,7 @@ class Camera{
 };
 
 Camera::Camera(){
-	cam_pos = glm::vec3(0.0, 20.0, -30.0);
+	cam_pos = glm::vec3(0.0, 20.0, 30.0);
 	cam_focus = glm::vec3(0.0, 0.0, 0.0);
 	cam_yaw = glm::vec3(0.0, 1.0, 0.0);
 	_dir_UP = cam_yaw;

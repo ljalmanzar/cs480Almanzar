@@ -1,0 +1,21 @@
+# Geometry file (.obj)
+model ../bin/asteroid_belt.obj
+# Center of rotation (Planet or xyz floats)
+planet ../bin/planetData/sun.txt
+# Direction of rotation (1 for clockwise -1 for counter)
+dir 1
+# Rotation speed (float)
+rspeed 0.1
+# Orbit Radius (float)
+oradius 0
+# Oribit speed (float)
+ospeed 0
+# Planet Radius 
+pradius 1.25
+# Texture file
+texture ../bin/planetData/asteroid_belt_map.jpg
+# Rings?
+ring 0
+# Tilt
+tilt 0
+end

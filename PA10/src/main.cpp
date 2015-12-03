@@ -13,6 +13,7 @@
 
 #include "GLD.cpp"
 #include "camera.h"
+#include "light.cpp"
 
 
 //--Evil Global variables
@@ -29,8 +30,20 @@ GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
 GLint loc_position;
 GLuint loc_texture;
 GLint loc_normal;
+GLint loc_lightpos;
+GLint loc_diffuse;
 
 GLD allObjects[2];
+
+// Suggested by gunnar
+Light theLight; // 0 ambient, 1 distant, 2 point, 3 spot
+
+enum GameState{
+    AMBIENT = 0,
+    DISTANT,
+    POINT,
+    SPOT
+} lightType = AMBIENT;
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
@@ -98,11 +111,15 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    theLight.position = glm::vec4(5.0,5.0,5.0,0.0);
+    theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
+
     // Set all of the callbacks to GLUT that we need
     glutDisplayFunc(render);// Called continuously by GLUT internal loop when its time to display
     glutReshapeFunc(reshape);// Called if the window is resized
     glutIdleFunc(update);// Called if there is nothing else to do
     glutKeyboardFunc(keyboard);// Called if there is keyboard input
+    glutSpecialFunc(special_keyboard);
 
     // Initialize all of our resources(shaders, geometry)
     bool init = initialize();
@@ -119,23 +136,6 @@ int main(int argc, char **argv)
 
 bool initialize()
 {
-	//light stuff
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-
-	// Set lighting intensity and color
-	GLfloat qaAmbientLight[]	= {0.2, 0.2, 0.2, 1.0};
-	GLfloat qaDiffuseLight[]	= {0.8, 0.8, 0.8, 1.0};
-	GLfloat qaSpecularLight[]	= {1.0, 1.0, 1.0, 1.0};
-	glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
-
-	// Set the light position
-	GLfloat qaLightPosition[]	= {.5, .5, 0.0, 1.0};
-	glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
-
     //bullet allocating stuff
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -147,20 +147,9 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
 
-    allObjects[0].initialize("../bin/peeps_model.obj","../bin/ah_final_texture.png",true,NONE,STATIC);
+    allObjects[0].initialize("../bin/peeps_model.obj","../bin/blueball.jpg");
     allObjects[0].translate(glm::vec3(5,0,0));
-    allObjects[1].initialize("../bin/planet.obj","../bin/metal.jpg");
-
-    // add physics where needed & and add to world
-/*
-    for (unsigned int objectNdx = 0; objectNdx < 2; ++objectNdx)
-        {
-            if (allObjects[objectNdx].getShape() != NONE){
-                allObjects[objectNdx].addPhysics();
-                dynamicsWorld->addRigidBody(allObjects[objectNdx].getRigidBody());
-            }
-        }
-*/
+    allObjects[1].initialize("../bin/planet.obj","../bin/blueball.jpg");
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -234,6 +223,20 @@ bool initialize()
         return false;
     }
 
+    loc_lightpos = glGetUniformLocation(program,
+                    const_cast<const char*>("l_lightpos"));
+    if(loc_lightpos == -1){
+        std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
+        return false;
+    }
+
+    loc_diffuse = glGetUniformLocation(program,
+                    const_cast<const char*>("l_diffuse"));
+    if(loc_diffuse == -1){
+        std::cerr << "[F] LIGHT DIFFUSE NOT FOUND" << std::endl;
+        return false;
+    }
+
     loc_mvpmat = glGetUniformLocation(program,
                     const_cast<const char*>("mvpMatrix"));
     if(loc_mvpmat == -1)
@@ -276,31 +279,6 @@ void render()
     
     //enable the shader program
     glUseProgram(program);
-
-    // Set material properties
-	GLfloat qaBlack[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat qaGreen[] = {0.0, 1.0, 0.0, 1.0};
-	GLfloat qaWhite[] = {1.0, 1.0, 1.0, 1.0};
-	glMaterialfv(GL_FRONT, GL_AMBIENT, qaGreen);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, qaGreen);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, qaWhite);
-	glMaterialf(GL_FRONT, GL_SHININESS, 60.0);
-
-	// Draw square with many little squares
-	glBegin(GL_QUADS);
-		glNormal3f(0.0, 0.0, 1.0);
-		const GLfloat kqDelta = .01;
-		for (int i = -90; i < 90; ++i) {
-			for (int j = -90; j < 90; ++j) {
-				glVertex3f(j*kqDelta, i*kqDelta, -.2);
-				glVertex3f((j+1)*kqDelta, i*kqDelta, -.2);
-				glVertex3f((j+1)*kqDelta, (i+1)*kqDelta, -.2);
-				glVertex3f(j*kqDelta, (i+1)*kqDelta, -.2);
-			}
-		}
-	glEnd();
-
-	glFlush();
 
     //get the most recent camera data
     view = camera.getViewMatrix();
@@ -351,7 +329,9 @@ void render()
         						GL_FALSE,
         						sizeof(Vertex),
         						(void*)offsetof(Vertex,normal));
-        
+
+        glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
+        glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
         glDrawArrays(GL_TRIANGLES, 0, (allObjects[objIndex].getNumOfVerticies()));//mode, starting index, count
 
@@ -424,6 +404,12 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
     else {
         switch( key ){
+            case '[':
+                theLight.position[0] += 0.25;
+                break;
+            case ']':
+                theLight.position[0] -= 0.25;
+                break;
             case '8':
                 camera.pivot( P_UP );
                 break;
@@ -440,15 +426,44 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'P':
                 glutDisplayFunc(render);
                 break;
-            case 'm':
-            case 'M':
+            case 'a':
+            case 'A':
+            theLight.position[3] = AMBIENT;
+            theLight.diffuse[3] = AMBIENT;
                 break;
-            case 't':
-            case 'T':
+            case 's':
+            case 'S':
+            theLight.position[3] = SPOT;
+            theLight.diffuse[3] = SPOT;
                 break;
-            case ' ':
+            case 'd':
+            case 'D':
+            theLight.position[3] = DISTANT;
+            theLight.diffuse[3] = DISTANT;
+                break;
+            case 'f':
+            case 'F':
+            theLight.position[3] = POINT;
+            theLight.diffuse[3] = POINT;
                 break;
         }        
+    }
+    glutPostRedisplay();
+}
+
+void special_keyboard(int key, int x_pos, int y_pos){
+    switch(key){
+        case GLUT_KEY_UP:
+            allObjects[0].translate(glm::vec3(0,1,0));
+            break;
+        case GLUT_KEY_LEFT:
+            allObjects[0].translate(glm::vec3(-1,0,0));
+            break;
+        case GLUT_KEY_DOWN:
+            allObjects[0].translate(glm::vec3(0,-1,0));
+            break;
+        case GLUT_KEY_RIGHT:
+            allObjects[0].translate(glm::vec3(1,0,0));
     }
     glutPostRedisplay();
 }
