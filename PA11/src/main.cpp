@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "light.cpp"
 #include "gameDriver.cpp"
+#include "wiiController.cpp"
 
 //--Evil Global variables
 int w = 800, h = 800;// Window size
