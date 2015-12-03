@@ -36,17 +36,25 @@ GLint loc_normal;
 GLint loc_lightpos;
 GLint loc_diffuse;
 
+vector<GLD*> titlePage;
 vector<GLD*> allObjects;
 
 // Suggested by gunnar
 Light theLight; // 0 ambient, 1 distant, 2 point, 3 spot
 
-enum GameState{
+enum LightSource{
     AMBIENT = 0,
     DISTANT,
     POINT,
     SPOT
 } lightType = AMBIENT;
+
+enum GameState{
+    MAINTITLE,
+    GAMEPLAY,
+    LEVELPAGE,
+    SCOREBOARD
+} state = MAINTITLE;
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
@@ -153,7 +161,7 @@ bool initialize()
 
     maingame.initGame( dynamicsWorld );
 
-    //add physics
+    //assign the main name of the objects
     allObjects = maingame.getAllObjects();
 
     // add physics where needed & and add to world
@@ -164,6 +172,13 @@ bool initialize()
                 dynamicsWorld->addRigidBody(allObjects[objectNdx]->getRigidBody());
             }
         }
+
+    //assign the title characters
+    titlePage.push_back( new GLD( "../bin/text_MainTitle.obj", "../bin/Color_icon_yellow.png" ) );
+    titlePage.push_back( new GLD( "../bin/text_Options.obj", "../bin/Color_icon_yellow.png" ) );
+    titlePage[0]->translate( glm::vec3(0.0,5.0,0.0) );
+    titlePage[1]->translate( glm::vec3(0.0,-0.2,0.0) );
+    allObjects = titlePage;
 
     // Creation of shaders
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -277,17 +292,15 @@ bool initialize()
     
 
     //--Init the view and projection matrices
-    //  if you will be having a moving camera the view matrix will need to more dynamic
-    //  ...Like you should update it before you render more dynamic 
-    //  for this project having them static will be fine
-    view = glm::lookAt( glm::vec3(0.0, 8.0, -8.0), //Eye Position
-                        glm::vec3(0.0, 0.0, 0.0), //Focus point
-                        glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
+    view = camera.getViewMatrix();
 
     projection = glm::perspective( 45.0f, //the FoV typically 90 degrees is good which is what this is set to
                                    float(w)/float(h), //Aspect Ratio, so Circles stay Circular
                                    0.01f, //Distance to the near plane, normally a small value like this
                                    100.0f); //Distance to the far plane, 
+
+    //put an initialize zoom in animation on the camera
+    camera.setAnimation( glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0) );
 
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
@@ -303,7 +316,7 @@ void render()
     //--Render the scene
 
     //clear the screen
-    glClearColor(0.174, 0.167, 0.159, 1.0); // sets color for clearing the frame buffer
+    glClearColor(0.0, 0.0, 0.0, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     
     //enable the shader program
@@ -315,20 +328,27 @@ void render()
     glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
     //glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
-    allObjects = maingame.getAllObjects();
+    //get the right objects for the game play
+    if( state == MAINTITLE ){
+        allObjects = titlePage;
+    } else if ( state == GAMEPLAY ){
+        allObjects = maingame.getAllObjects(); 
+    }
+
     for( unsigned int objIndex = 0; objIndex < allObjects.size(); objIndex++ ){
         //draw only the objects we want to see and skip elseways
         if( !allObjects[objIndex]->isDrawable() ){
             continue;
         }
 
-        //premultiply the matrix for this example
-        if (objIndex > 1){
+        //add rotation to model matrix if necessary
+        if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
-        }
-        else{
+        } else{
             model = allObjects[objIndex]->getModel();
         }
+
+        //premultiply the matrix for this example
         mvp = projection * view * model;
 
         //upload the matrix to the shader
@@ -380,7 +400,9 @@ void render()
     }
 
     //print the time elapsed
-    maingame.printTimeElapsed();
+    if( state == GAMEPLAY ){    
+        maingame.printTimeElapsed();
+    }
                            
     //swap the buffers
     glutSwapBuffers();
@@ -395,6 +417,9 @@ void update()
     for (unsigned int currentObj = 0; currentObj < allObjects.size(); ++currentObj){
         allObjects[currentObj]->updateObjectAndPhysics();
     }
+
+    //move the camera
+    camera.update();
 
     glutPostRedisplay();
 }
@@ -468,7 +493,13 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 'p':
             case 'P':
-                glutDisplayFunc(render);
+                state = GAMEPLAY;
+                maingame.resetGame();
+                camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                break;
+            case 'm':
+            case 'M':
+                state = MAINTITLE;
                 break;
             case 'a':
             case 'A':
@@ -500,19 +531,22 @@ void special_keyboard(int key, int x_pos, int y_pos){
 
     switch(key){
         case GLUT_KEY_UP:
-            tilt = 2.0f * maingame.tiltOnX( 1.0f );
+            tilt = 10.0f * maingame.tiltOnX( 1.0f );
             break;
         case GLUT_KEY_DOWN:
-            tilt = 2.0f * maingame.tiltOnX( -1.0f );
+            tilt = 10.0f * maingame.tiltOnX( -1.0f );
             break;
         case GLUT_KEY_LEFT:
-            tilt = 2.0f * maingame.tiltOnZ( 1.0f );
+            tilt = 10.0f * maingame.tiltOnZ( 1.0f );
             break;
         case GLUT_KEY_RIGHT:
-            tilt = 2.0f * maingame.tiltOnZ( -1.0f );
+            tilt = 10.0f * maingame.tiltOnZ( -1.0f );
             break;
     }
 
-    dynamicsWorld->setGravity( btVector3(-tilt.x, tilt.y, -tilt.z) );
+    //update the gravity if in the game
+    if( state == GAMEPLAY ){
+        dynamicsWorld->setGravity( btVector3(-tilt.x, tilt.y, -tilt.z) );
+    }
     glutPostRedisplay();
 }

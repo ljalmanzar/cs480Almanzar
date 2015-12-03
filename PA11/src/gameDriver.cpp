@@ -19,6 +19,7 @@ GameDriver::~GameDriver(){
 }
 
 void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
+	//set incoming variables
 	_world = incomingWorld;
 
 	//declare helper variables
@@ -116,6 +117,9 @@ void GameDriver::resetGame(){
 		_world->removeRigidBody( _balls[i]->getRigidBody() );
 		delete _balls[i];
 	}
+
+	//set the empty back to normal
+	_empty = glm::mat4(1.0f);
 
 	//put in the default ball
 	addBall();
