@@ -13,7 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> //Makes passing matrices to shaders easier
 
-#define MAX_FRAME 40
+#define CAMERA_MAX_FRAME 500
 
 enum Pivot {
 	P_UP,
@@ -62,17 +62,17 @@ class Camera{
 		struct{
 			glm::vec3 _mid_pos;
 			glm::vec3 _mid_focus;
-		} keyframes [MAX_FRAME];
+		} keyframes [CAMERA_MAX_FRAME];
 };
 
 Camera::Camera(){
-	cam_pos = glm::vec3(0.0, 20.0, 30.0);
+	cam_pos = glm::vec3(0.0, 0.0, 40.0);
 	cam_focus = glm::vec3(0.0, 0.0, 0.0);
 	cam_yaw = glm::vec3(0.0, 1.0, 0.0);
 	_dir_UP = cam_yaw;
 	_cam_speed = 1.0f;
 
-	_frameTicker = MAX_FRAME;
+	_frameTicker = CAMERA_MAX_FRAME;
 
 	//set the rest of the attributes
 	_updateAttributes();
@@ -83,12 +83,14 @@ Camera::~Camera(){
 }
 
 void Camera::update(){
-	if( _frameTicker < MAX_FRAME ){
+	static bool flag = true;
+	if( flag && _frameTicker < CAMERA_MAX_FRAME ){
 		cam_pos = keyframes[_frameTicker]._mid_pos;
 		cam_focus = keyframes[_frameTicker]._mid_focus;
 		_frameTicker++;
 		_updateAttributes();
 	}
+	flag = !flag;
 }
 
 void Camera::moveInDirection( glm::vec3 transformation ){
@@ -103,12 +105,14 @@ glm::mat4 Camera::getViewMatrix() const {
 
 bool Camera::setAnimation( glm::vec3 endingPos, glm::vec3 endingFocus ){
 	//declare varibles
-	float ratio;
-	for( int i = 0; i < MAX_FRAME; i++ ){
-		ratio = float(i)/float(MAX_FRAME);
+	float t_ratio;
+	float p_ratio;
+	for( int i = 0; i < CAMERA_MAX_FRAME; i++ ){
+		t_ratio = float(i)/float(CAMERA_MAX_FRAME);
+		p_ratio = 1.0 / ( 1.0 + 32 * pow(2.1818, -7*t_ratio) );
 		//fill in the intermediate keyframes
-		keyframes[i]._mid_pos = (1-ratio)*cam_pos + ratio*endingPos;
-		keyframes[i]._mid_focus = (1-ratio)*cam_focus + ratio*endingFocus;
+		keyframes[i]._mid_pos = (1-p_ratio)*cam_pos + p_ratio*endingPos;
+		keyframes[i]._mid_focus = (1-p_ratio)*cam_focus + p_ratio*endingFocus;
 	}
 	_frameTicker = 0;
 	return true;
