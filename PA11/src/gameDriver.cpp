@@ -113,10 +113,14 @@ void GameDriver::resetGame(){
 	gettimeofday( &_startingTime, NULL );
 	//flush out all of the balls and start over
 	for( unsigned int i = 0; i < _balls.size(); i++ ){
+		//how many balls?
+
 		//remove the rigid body
 		_world->removeRigidBody( _balls[i]->getRigidBody() );
 		delete _balls[i];
 	}
+	//clear out everything in that array
+	_balls.clear();
 
 	//set the empty back to normal
 	_empty = glm::mat4(1.0f);
