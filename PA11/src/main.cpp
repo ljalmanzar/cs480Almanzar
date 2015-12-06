@@ -179,7 +179,7 @@ bool initialize()
 
     //assign the title characters
         /*text_MainTitle*/
-    titlePage.push_back( new GLD( "../bin/xwing.obj", "../bin/WINGTOP.TGA" ) );
+    titlePage.push_back( new GLD( "../bin/xwing.obj", "../bin/WINGTOP.jpg" ) );
     titlePage.push_back( new GLD( "../bin/text_Options.obj", "../bin/Color_icon_yellow.png" ) );
     titlePage[0]->translate( glm::vec3(0.0,5.0,0.0) );
     titlePage[1]->translate( glm::vec3(0.0,-0.2,0.0) );
@@ -555,16 +555,16 @@ void special_keyboard(int key, int x_pos, int y_pos){
 
     switch(key){
         case GLUT_KEY_UP:
-            tilt = 10.0f * maingame.tiltOnX( 1.0f );
+            tilt = 22.0f * maingame.tiltOnX( 1.0f );
             break;
         case GLUT_KEY_DOWN:
-            tilt = 10.0f * maingame.tiltOnX( -1.0f );
+            tilt = 22.0f * maingame.tiltOnX( -1.0f );
             break;
         case GLUT_KEY_LEFT:
-            tilt = 10.0f * maingame.tiltOnZ( 1.0f );
+            tilt = 22.0f * maingame.tiltOnZ( 1.0f );
             break;
         case GLUT_KEY_RIGHT:
-            tilt = 10.0f * maingame.tiltOnZ( -1.0f );
+            tilt = 22.0f * maingame.tiltOnZ( -1.0f );
             break;
     }
 

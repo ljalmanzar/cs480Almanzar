@@ -1,10 +1,10 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'maze_4.blend'
 # Material Count: 2
 
 newmtl None
 Ns 0.000000
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.512000 0.512000 0.512000
 Ks 0.800000 0.800000 0.800000
 Ni 1.000000
 d 1.000000
@@ -14,9 +14,9 @@ map_Kd C:\Users\HP\Dropbox\UNR stuff\CS - 480\models\maze\generated_mazes\wood_p
 newmtl None_NONE
 Ns 0.000000
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.512000 0.512000 0.512000
 Ks 0.800000 0.800000 0.800000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:\\Users\\HP\\Dropbox\\UNR stuff\\CS - 480\\models\\maze\\generated_mazes\\wood_planks___d632_by_agf81-d5fz4zl.jpg
+map_Kd C:\Users\HP\Dropbox\UNR stuff\CS - 480\models\maze\generated_mazes\wood_planks___d632_by_agf81-d5fz4zl.jpg
