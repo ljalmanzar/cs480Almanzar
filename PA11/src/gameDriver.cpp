@@ -50,7 +50,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/deathStar2.jpg", true, TRIMESH, KINEMATIC );
+	_casket.initialize("../bin/casket.obj", "../bin/deathStar2.jpg");//, true, TRIMESH, KINEMATIC );
 	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
@@ -140,11 +140,12 @@ glm::vec3 GameDriver::tiltOnX( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
-		angle/180.0f,
+		angle/90.0f,
 		glm::vec3(1.0,0.0,0.0)
 		);
 	glm::mat3 rotationMatrix( _empty );
 
+/*
 	//tilt the mazes accordingly
 	for( unsigned int i = 0; i < _mazes.size(); i++ ){
 		btTransform trans;
@@ -155,6 +156,7 @@ glm::vec3 GameDriver::tiltOnX( float angle ){
 		cout << "debug" << endl;
 //		_mazes[i]->getRigidBody()->getMotionState()->getWorldTransform(trans);
 	}
+*/
 
 
 	//use newGravity to update shit
@@ -165,7 +167,7 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 	//angle is given in degrees
 	_empty = glm::rotate(
 		_empty,
-		angle/180.0f,
+		angle/90.0f,
 		glm::vec3(0.0,0.0,1.0)
 		);
 	
