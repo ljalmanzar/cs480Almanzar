@@ -60,6 +60,8 @@ enum GameState{
     SCOREBOARD
 } state = MAINTITLE;
 
+enum Difficulty;
+
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
 glm::mat4 view;//world->eye
@@ -75,6 +77,7 @@ void reshape(int n_w, int n_h);
 bool initialize();
 void cleanUp();
 void render_ScoreBoard();
+void render_LevelSelect();
 
 //--Random time things
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
@@ -363,7 +366,7 @@ void render()
         } else {
              model = allObjects[objIndex]->getModel();
         }
-        
+
         //premultiply the matrix for this example
         mvp = projection * view * model;
 
@@ -517,11 +520,9 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 'p':
             case 'P':
-                state = GAMEPLAY;
-                glutDisplayFunc(render);
-                dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
-                maingame.resetGame();
-                camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                state = LEVELPAGE;
+                    // show level select window
+                glutDisplayFunc(render_LevelSelect);
                 break;
             case 'm':
             case 'M':
@@ -550,10 +551,48 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             theLight.diffuse[3] = POINT;
                 */
                 break;
-            case 'b':
-            case 'B':
+            case 's':
+            case 'S':
                 state = SCOREBOARD;
                 glutDisplayFunc(render_ScoreBoard);
+                break;
+            case 'w':
+            case 'W':
+                /** Load Easy level */
+                if (state == LEVELPAGE){
+                    maingame.pickLevel(EASY);
+                    state = GAMEPLAY;
+                    glutDisplayFunc(render);
+                    dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
+                    maingame.resetGame();
+                    camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                }
+
+                break;
+            case 'a':
+            case 'A':
+                /** Load Medium level */
+                if (state == LEVELPAGE){
+                    maingame.pickLevel(MEDIUM);
+                    state = GAMEPLAY;
+                    glutDisplayFunc(render);
+                    dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
+                    maingame.resetGame();
+                    camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                }
+
+                break;
+            case 'f':
+            case 'F':
+                /** Load Hard level */
+                if (state == LEVELPAGE){
+                    maingame.pickLevel(HARD);
+                    state = GAMEPLAY;
+                    glutDisplayFunc(render);
+                    dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
+                    maingame.resetGame();
+                    camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                }
         }        
     }
     glutPostRedisplay();
@@ -590,8 +629,8 @@ void render_ScoreBoard(){
     int difficulty = 1;  
     string currentScore = scoreBoard.getPlayerScore();
     
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    //glClearColor(0.0, 0.0, 0.0, 1.0);
+    //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     // set the color
     glColor3f( 1.0, 1.0, 0.0 );
@@ -603,9 +642,9 @@ void render_ScoreBoard(){
     int cursor = 0;
 
     std::string scoreTitle;
-    std::string easyTitle = "Easy Mode High Scores";
-    std::string mediumTitle = "Medium Mode High Scores";
-    std::string hardTitle = "Hard Mode High Scores";
+    std::string easyTitle = "Wimp Mode High Scores";
+    std::string mediumTitle = "Average Mode Joe High Scores";
+    std::string hardTitle = "Fucking Badass Mode High Scores";
 
     switch(difficulty){
         case 1:
@@ -694,6 +733,60 @@ void render_ScoreBoard(){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
 
-    glutSwapBuffers();
+   glutSwapBuffers();
 
 }
+
+void render_LevelSelect(){
+    // clear the screen
+
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 0.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+    char * tempStr;
+    int cursor = 0;
+
+    std::string title = "Select Difficulty";
+    std::string easyTitle = "Wimp (W)";
+    std::string mediumTitle = "Average Joe (A)";
+    std::string hardTitle = "Fucking Badass (F)";
+
+    /** Print out main title */
+    glRasterPos2f(-.1, .3);
+    tempStr = &title[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    /** Print out difficulties text*/
+    glRasterPos2f(-.1, .2);
+    tempStr = &easyTitle[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    glRasterPos2f(-.1, .1);
+    tempStr = &mediumTitle[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    glRasterPos2f(-.1, .0);
+    tempStr = &hardTitle[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    glutPostRedisplay();
+}
+

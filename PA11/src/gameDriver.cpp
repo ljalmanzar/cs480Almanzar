@@ -172,7 +172,7 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 		_empty,
 		angle/90.0f,
 		glm::vec3(0.0,0.0,1.0)
-		);
+	);
 	
 	glm::mat3 rotationMatrix( _empty );
 
@@ -198,8 +198,8 @@ bool GameDriver::checkIfBallOK(){
 	return false;
 }
 
-void GameDriver::pickLevel(){
-
+void GameDriver::pickLevel(Difficulty){
+	
 }
 
 std::vector<GLD*> GameDriver::getAllObjects(){

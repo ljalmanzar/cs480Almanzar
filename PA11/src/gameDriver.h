@@ -15,6 +15,12 @@ struct RoundType{
 
 };
 
+enum Difficulty{
+	EASY,
+    MEDIUM,
+    HARD
+};
+
 class GameDriver{
 	public:
 		// initializers
@@ -37,7 +43,7 @@ class GameDriver{
 		// level advancing
 		void resetGame();
 		void printTimeElapsed();
-		void pickLevel();
+		void pickLevel(Difficulty);
 
 		std::string getFinalTime();
 		
