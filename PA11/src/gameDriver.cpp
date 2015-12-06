@@ -101,14 +101,14 @@ void GameDriver::printTimeElapsed() {
 	microseconds /= 10000;
 
 	//make the string
-	snprintf( buffer, 100, "Time Elapsed: [%4i.%.2i]",
+	snprintf( buffer, 100, "Player Score: %4i.%.2i",
 		seconds, microseconds );
 	string tempStr( buffer );
 
 	//print the amount of time it's taken
 		//no program for printing
 		glUseProgram(0);
-		glColor3f(1,1,1);
+		glColor3f(1,1,0);
 		glRasterPos2f( -.95, .95 );
 		while( tempStr[cursor] ){
 			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
@@ -181,6 +181,11 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 }  
 
 bool GameDriver::checkForWin(){
+	if( _balls.size() == 1 && _balls[0]->getModel()[3][1] < -2 ){
+		//if it is, reset the positions
+		return true;
+	}
+
 	return false;
 }
 

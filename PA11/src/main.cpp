@@ -330,7 +330,6 @@ bool initialize()
 void render()
 {
     //--Render the scene
-
     //clear the screen
     glClearColor(0.0, 0.0, 0.0, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
@@ -439,12 +438,14 @@ void update()
     camera.update();
 
     if (maingame.checkForWin() && state == GAMEPLAY){
+        int difficulty = 1;
         state = SCOREBOARD;
+        string currentScore = maingame.getFinalTime();
+        scoreBoard.saveScore(difficulty, currentScore);
         glutDisplayFunc(render_ScoreBoard);
     }
 
      glutPostRedisplay();
-
 }
 
 void reshape(int n_w, int n_h)
@@ -517,12 +518,14 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'p':
             case 'P':
                 state = GAMEPLAY;
+                glutDisplayFunc(render);
                 maingame.resetGame();
                 camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
                 break;
             case 'm':
             case 'M':
                 state = MAINTITLE;
+                glutDisplayFunc(render);
                 break;
             case 'a':
             case 'A':
@@ -582,8 +585,7 @@ void special_keyboard(int key, int x_pos, int y_pos){
 void render_ScoreBoard(){
     // clear the screen
     int difficulty = 1;  
-    string currentScore = maingame.getFinalTime();
-    scoreBoard.saveScore(difficulty, currentScore);
+    string currentScore = scoreBoard.getPlayerScore();
     
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -619,20 +621,23 @@ void render_ScoreBoard(){
 
     playerScore.append(currentScore);
 
+    if (currentScore == "")
+        playerScore.append("--:--");
+
     /** Show player's score*/ 
 
-    glRasterPos2f(-.1, .5);
+    glRasterPos2f(-.1, -.4);
     tempStr = &playerScore[0];
     while( tempStr[cursor] ){
-        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
     cursor = 0;
 
     /** Print out main title */
-    glRasterPos2f(-.1, .7);
+    glRasterPos2f(-.1, .3);
     tempStr = &scoreTitle[0];
     while( tempStr[cursor] ){
-        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+        glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
     cursor = 0;
 
@@ -645,22 +650,45 @@ void render_ScoreBoard(){
         /** print out blank lines if not all scores are filled */
         if (i >= scores.size()){
             string blankString = "--:--";
-            glRasterPos2f(-.2, -float(i)/20);
+            glRasterPos2f(0.0, -float(i)/10 + .2);
             tempStr = &blankString[0];
             while( tempStr[cursor] ){
-                glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+                glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
             }
-
         /** Otherwise, print out scores */
         } else{
-            glRasterPos2f(-.2, -float(i)/20);
+            glRasterPos2f(0.0, -float(i)/10 + .2);
             tempStr = &scores[i][0];
             while( tempStr[cursor] ){
-                glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+                glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
             }
         }
 
         cursor = 0;
+    }
+
+    string command = "P : Play Again";
+    glRasterPos2f(-.1, -.5);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+
+    command = "M : Main Menu";
+    glRasterPos2f(-.1, -.6);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+
+    command = "ESC = Exit";
+    glRasterPos2f(-.1, -.7);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
 
     glutSwapBuffers();
