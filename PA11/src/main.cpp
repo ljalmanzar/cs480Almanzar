@@ -322,11 +322,6 @@ bool initialize()
 void render()
 {
     //--Render the scene
-
-    /** dont call render when showing scoreboard */
-    if (state == SCOREBOARD)
-        return;
-
     //clear the screen
     glClearColor(0.0, 0.0, 0.0, 1.0); // sets color for clearing the frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
