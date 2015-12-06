@@ -7,6 +7,14 @@
 #include "GLD.cpp"
 #include "camera.h"
 
+struct RoundType{
+	unsigned int _ballRadius;
+	GLD * _maze;
+	vector<GLD*> _balls;
+	glm::vec3 intialPosition;
+
+};
+
 class GameDriver{
 	public:
 		// initializers
@@ -51,7 +59,11 @@ class GameDriver{
 
 		btDiscreteDynamicsWorld * _world;
 
-		unsigned int _maze_index;
+		unsigned int _round_index;
+
+		vector<RoundType> _rounds;
+
+		GLD _xwing;
 };
 
 #endif
