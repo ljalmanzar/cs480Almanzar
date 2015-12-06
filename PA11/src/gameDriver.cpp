@@ -27,7 +27,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	//initialize the mazes
 	vector<string> files = {
-		"../bin/maze_easy.obj"
+		"../bin/maze_crazyhard.obj"
 	};
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		GLD * temp = new GLD;
@@ -70,7 +70,7 @@ void GameDriver::addBall(){
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
-	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.01, .01, .01) );
+	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.0001, .0001, .0001) );
 	temp->setModel( translation );
 	
 	//temp->setShape(SPHERE);
