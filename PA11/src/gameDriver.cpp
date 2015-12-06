@@ -203,12 +203,7 @@ void GameDriver::pickLevel(){
 }
 
 std::vector<GLD*> GameDriver::getAllObjects(){
-	//update all of the GLDs
-	//_xwing.setModel( _balls[0]->getModel() );
-	glm::mat4 move = _balls[0]->getModel();
-	glm::vec3 position = glm::vec3( move * glm::vec4( 0.0,0.0,0.0,1.0 ) );
-	_xwing.setModel();
-
+	//update all of the GLD
 
 	//keep static stuff static
 	std::vector<GLD*> temp = _allObjects;

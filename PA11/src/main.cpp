@@ -498,10 +498,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     else {
         switch( key ){
             case '[':
-                theLight.position[0] += 0.25;
+                theLight[0].position[0] += 0.25;
                 break;
             case ']':
-                theLight.position[0] -= 0.25;
+                theLight[0].position[0] -= 0.25;
                 break;
             case '8':
                 camera.pivot( P_UP );
@@ -528,6 +528,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 state = MAINTITLE;
                 glutDisplayFunc(render);
                 break;
+                /*
             case 'a':
             case 'A':
             //theLight.position[3] = AMBIENT;
@@ -547,6 +548,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'F':
             //theLight.position[3] = POINT;
             theLight.diffuse[3] = POINT;
+                */
                 break;
             case 'b':
             case 'B':
