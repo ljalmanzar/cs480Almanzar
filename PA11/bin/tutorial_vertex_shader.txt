@@ -8,7 +8,7 @@ varying vec3 v_position_world;
 varying vec3 v_normal_camera;
 varying vec3 vertToCam;
 varying vec3 vertToLight;
-varying vec3 average_lightpos;
+varying vec3 vertToLight2;
 
 uniform vec4 l_lightpos;
 uniform vec4 l_lightpos2;
@@ -27,17 +27,18 @@ void main(void){
 
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
 	vec3 l_position_camera = vec3(vMatrix * vec4(l_lightpos.xyz,1.0));
+	vertToLight = l_position_camera + vertToCam;
+
 	vec3 l_position_camera2 = vec3(vMatrix * vec4(l_lightpos2.xyz,1.0));
-	float weight = length( vec3(l_lightpos) - v_position_world );
-	float weight2 = length( vec3(l_lightpos2) - v_position_world );
-	average_lightpos = (l_position_camera*weight) + (l_position_camera2*weight2);
-	vertToLight = average_lightpos + vertToCam;
-	
+	vertToLight2 = l_position_camera2 + vertToCam;
+
+
 	// Normal of the the vertex, in camera space
 	v_normal_camera = vec3(vMatrix * mMatrix * vec4(v_normal,0.0)); // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 
 	// Output position of the vertex, in clip space : MVP * position
 	gl_Position = mvpMatrix * vec4(v_position,1.0);
+
 	// UV of the vertex. No special space for this one.
 	uv = v_uv;
 }
