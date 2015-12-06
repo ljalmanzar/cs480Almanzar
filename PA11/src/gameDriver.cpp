@@ -179,6 +179,11 @@ glm::vec3 GameDriver::tiltOnZ( float angle ){
 }  
 
 bool GameDriver::checkForWin(){
+	if( _balls.size() == 1 && _balls[0]->getModel()[3][1] < -2 ){
+		//if it is, reset the positions
+		return true;
+	}
+
 	return false;
 }
 
