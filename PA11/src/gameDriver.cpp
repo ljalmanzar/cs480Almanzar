@@ -26,6 +26,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	glm::mat4 transformation;
 
 	//initialize the mazes
+	_maze_index = 0;
 	vector<string> files = {
 		"../bin/maze_easy.obj"
 	};
@@ -197,7 +198,7 @@ std::vector<GLD*> GameDriver::getAllObjects(){
 	//keep static stuff static
 
 	std::vector<GLD*> temp = _allObjects;
-	temp.insert( temp.end(), _mazes.begin(), _mazes.end() );
+	temp.push_back( _mazes[_maze_index] );
 	temp.insert( temp.end(), _balls.begin(), _balls.end() );
 	return temp;
 }
@@ -221,7 +222,7 @@ std::string GameDriver::getFinalTime(){
 	microseconds /= 10000;
 
 	//make the string
-	snprintf( buffer, 100, "Time Elapsed: [%4i.%.2i]",
+	snprintf( buffer, 100, "%4i.%.2i",
 		seconds, microseconds );
 	string tempStr( buffer );
 

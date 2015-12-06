@@ -21,6 +21,7 @@ class GameDriver{
 		glm::vec3 tiltOnX( float angle );
 		glm::vec3 tiltOnZ( float angle );
 
+
 		// check for win
 		bool checkForWin();
 		bool checkIfBallOK();
@@ -35,9 +36,6 @@ class GameDriver{
 		std::vector<GLD*> getAllObjects();
 		glm::mat4 getMasterTransform();
 
-		/** calculates the time expired and then returns it as a string */
-		std::string getFinalTime();
-
 	private:
 		GLD _backGround;
 		GLD _casket;
@@ -51,6 +49,8 @@ class GameDriver{
 		timeval _endingTime;
 
 		btDiscreteDynamicsWorld * _world;
+
+		unsigned int _maze_index;
 };
 
 #endif
