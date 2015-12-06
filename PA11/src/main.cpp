@@ -509,12 +509,14 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'p':
             case 'P':
                 state = GAMEPLAY;
+                glutDisplayFunc(render);
                 maingame.resetGame();
                 camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
                 break;
             case 'm':
             case 'M':
                 state = MAINTITLE;
+                glutDisplayFunc(render);
                 break;
             case 'a':
             case 'A':
@@ -654,6 +656,30 @@ void render_ScoreBoard(){
         }
 
         cursor = 0;
+    }
+
+    string command = "P : Play Again";
+    glRasterPos2f(-.1, -.5);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+
+    command = "M : Main Menu";
+    glRasterPos2f(-.1, -.6);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
+    }
+
+    command = "ESC = Exit";
+    glRasterPos2f(-.1, -.7);
+    cursor = 0;
+    tempStr = &command[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
 
     glutSwapBuffers();
