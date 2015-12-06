@@ -510,6 +510,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'P':
                 state = GAMEPLAY;
                 glutDisplayFunc(render);
+                dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                 maingame.resetGame();
                 camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
                 break;
