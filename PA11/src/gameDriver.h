@@ -31,7 +31,8 @@ class GameDriver{
 		void printTimeElapsed();
 		void pickLevel();
 
-
+		std::string getFinalTime();
+		
 		// printing encalsulators
 		std::vector<GLD*> getAllObjects();
 		glm::mat4 getMasterTransform();
