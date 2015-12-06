@@ -363,6 +363,7 @@ void render()
             model = allObjects[objIndex]->getModel();
         }
 
+
         //premultiply the matrix for this example
         mvp = projection * view * model;
 
