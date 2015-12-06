@@ -361,9 +361,9 @@ void render()
         if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
         } else {
+             model = allObjects[objIndex]->getModel();
         }
-            model = allObjects[objIndex]->getModel();
-
+        
         //premultiply the matrix for this example
         mvp = projection * view * model;
 
