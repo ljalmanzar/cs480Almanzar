@@ -20,7 +20,7 @@ std::vector<std::string> ScoreBoard::getHighScores(const int difficulty){
 	std::string line;
 	std::vector<std::string> scoresVector;
 
-	/** determine difficulty*/
+	/** determine difficulty */
 	switch(difficulty){
 		case 1:
 			fileName = &easyName;

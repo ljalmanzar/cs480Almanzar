@@ -206,4 +206,26 @@ glm::mat4 GameDriver::getMasterTransform(){
 	return _empty;
 }
 
+std::string GameDriver::getFinalTime(){
+	//declare variables
+	char buffer[100];
+
+	//get the new time
+	gettimeofday( &_endingTime, NULL );
+	int seconds = _endingTime.tv_sec - _startingTime.tv_sec;
+	int microseconds = _endingTime.tv_usec - _startingTime.tv_usec;
+	if( microseconds < 0 ){
+		microseconds += 1000000;
+		seconds--;
+	}
+	microseconds /= 10000;
+
+	//make the string
+	snprintf( buffer, 100, "Time Elapsed: [%4i.%.2i]",
+		seconds, microseconds );
+	string tempStr( buffer );
+
+	return tempStr;
+}
+
 #endif
