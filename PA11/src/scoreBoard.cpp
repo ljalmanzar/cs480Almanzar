@@ -72,14 +72,21 @@ void ScoreBoard::saveScore(int difficulty, string score){
 	}
 
 	/** open file */
-	fout.open(fileName->c_str());
-
-	/** go to end of file */
-    fout.seekp(-1,ios_base::end);
+	fout.open(fileName->c_str(), std::ios_base::app);
+    
+    if (!fout.good()){
+       std::cerr << "ERROR: Cannot find file: "
+                   << fileName << std::endl;
+    }
 
     /** write out score with endline */
     fout << score << endl;
 
     fout.close();
+
+    playerScore = score;
 }
 
+std::string ScoreBoard::getPlayerScore(){
+	return playerScore;
+}

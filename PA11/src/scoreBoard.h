@@ -14,11 +14,14 @@ public:
 	/** Saves the passed score to file based on difficulty level */
 	void saveScore(int, string);
 
+	std::string getPlayerScore();
 private:
 
 	std::string easyName;
 	std::string mediumName;
 	std::string hardName;
+
+	std::string playerScore;
 };
 
 #endif
