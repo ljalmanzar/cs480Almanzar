@@ -37,13 +37,14 @@ GLint loc_position;
 GLuint loc_texture;
 GLint loc_normal;
 GLint loc_lightpos;
+GLint loc_lightpos2;
 GLint loc_diffuse;
 
 vector<GLD*> titlePage;
 vector<GLD*> allObjects;
 
 // Suggested by gunnar
-Light theLight; // 0 ambient, 1 distant, 2 point, 3 spot
+Light theLight[2]; // 0 ambient, 1 distant, 2 point, 3 spot
 
 enum LightSource{
     AMBIENT = 0,
@@ -160,9 +161,9 @@ bool initialize()
     dynamicsWorld->setGravity(btVector3(0.0f,-9.8f,0.0f));
 
     //light
-    theLight.position = glm::vec4(5.0,5.0,5.0,1.0);
-    theLight.diffuse = glm::vec4(1.0,1.0,1.0,0.0);
-
+    theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
+    theLight[0].diffuse = glm::vec4(1.0,1.0,1.0,0.0);
+    theLight[1].position = glm::vec4(-5.0,5.0,1.0.1.0);
     maingame.initGame( dynamicsWorld );
 
     //assign the main name of the objects
@@ -179,7 +180,7 @@ bool initialize()
 
     //assign the title characters
         /*text_MainTitle*/
-    titlePage.push_back( new GLD( "../bin/xwing.obj", "../bin/WINGTOP.jpg" ) );
+    titlePage.push_back( new GLD( "../bin/text_MainTitle.obj", "../bin/Color_icon_yellow.png" ) );
     titlePage.push_back( new GLD( "../bin/text_Options.obj", "../bin/Color_icon_yellow.png" ) );
     titlePage[0]->translate( glm::vec3(0.0,5.0,0.0) );
     titlePage[1]->translate( glm::vec3(0.0,-0.2,0.0) );
@@ -263,6 +264,13 @@ bool initialize()
         std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
         return false;
     }
+
+    loc_lightpos2 = glGetUniformLocation(program,
+                    const_cast<const char*>("l_lightpos2"));
+    if(loc_lightpos2 == -1){
+        std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
+        return false;
+    }
 /*
     loc_diffuse = glGetUniformLocation(program,
                     const_cast<const char*>("l_diffuse"));
@@ -333,7 +341,8 @@ void render()
     //get the most recent camera data
     view = camera.getViewMatrix();
     //give information to shades for static lights
-    glUniform4fv(loc_lightpos, 1, &theLight.position[0]);
+    glUniform4fv(loc_lightpos, 1, &theLight[0].position[0]);
+    glUniform4fv(loc_lightpos2, 1, &theLight[1].position[0]);
     //glUniform4fv(loc_diffuse, 1, &theLight.diffuse[0]);
 
     //get the right objects for the game play
@@ -353,8 +362,8 @@ void render()
         if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
         } else {
-            model = allObjects[objIndex]->getModel();
         }
+            model = allObjects[objIndex]->getModel();
 
         //premultiply the matrix for this example
         mvp = projection * view * model;

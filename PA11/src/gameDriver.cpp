@@ -24,9 +24,10 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	//declare helper variables
 	glm::mat4 transformation;
+	RoundType tempRound;
 
 	//initialize the mazes
-	_maze_index = 0;
+	//_maze_index = 0;
 	vector<string> files = {
 		"../bin/maze_easy.obj"
 	};
@@ -40,6 +41,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	//add the default ball
 	addBall();
+	_xwing.initialize( "../bin/xwing.obj", "../bin/WINGTOP.jpg" );
 
 	//initialize the world
 	_backGround.initialize("../bin/planet.obj", "../bin/star_map.jpg");
@@ -197,12 +199,17 @@ void GameDriver::pickLevel(){
 
 std::vector<GLD*> GameDriver::getAllObjects(){
 	//update all of the GLDs
+	//_xwing.setModel( _balls[0]->getModel() );
+	glm::mat4 move = _balls[0]->getModel();
+	glm::vec3 position = glm::vec3( move * glm::vec4( 0.0,0.0,0.0,1.0 ) ) );
+	_xwing.setModel()
+
 
 	//keep static stuff static
-
 	std::vector<GLD*> temp = _allObjects;
-	temp.push_back( _mazes[_maze_index] );
+	temp.insert( temp.end(), _mazes.begin(), _mazes.end() );
 	temp.insert( temp.end(), _balls.begin(), _balls.end() );
+	temp.push_back( &_xwing );
 	return temp;
 }
 
