@@ -4,6 +4,7 @@ varying vec3 v_position_world;
 varying vec3 v_normal_camera;
 varying vec3 vertToCam;
 varying vec3 vertToLight;
+varying vec3 average_lightpos;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
@@ -18,11 +19,11 @@ void main(){
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture2D( myTextureSampler, uv ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
+	vec3 MaterialAmbientColor = vec3(0.3,0.3,0.3) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
 
 	// Distance to the light
-	float distance = length( vec3(l_lightpos) - v_position_world );
+	float distance = length( vec3(average_lightpos) - v_position_world );
 
 	// Normal of the computed fragment, in camera space
 	vec3 n = normalize( v_normal_camera );
