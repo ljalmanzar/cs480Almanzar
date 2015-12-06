@@ -3,9 +3,10 @@
 #include "scoreBoard.h"
 
 ScoreBoard::ScoreBoard(){
-	easyName = "easyTopScores.gld";
-	mediumName = "mediumTopScores.gld";
-	hardName = "hardTopScores.gld";
+	/** Initialize file names */
+	easyName = "../bin/topScores/easy.gld";
+	mediumName = "../bin/topScores/medium.gld";
+	hardName = "../bin/topScores/hard.gld";
 }
 
 ScoreBoard::~ScoreBoard(){
@@ -48,6 +49,8 @@ std::vector<std::string> ScoreBoard::getHighScores(const int difficulty){
         scoresVector.push_back(line);
     }
 
+    fin.close();
+
     return scoresVector;
 }
 
@@ -55,6 +58,7 @@ void ScoreBoard::saveScore(int difficulty, string score){
 	std::string *fileName;
 	ofstream fout;
 
+	/** determine difficulty */
 	switch(difficulty){
 		case 1:
 			fileName = &easyName;
@@ -67,8 +71,15 @@ void ScoreBoard::saveScore(int difficulty, string score){
 			break;
 	}
 
+	/** open file */
 	fout.open(fileName->c_str());
 
+	/** go to end of file */
     fout.seekp(-1,ios_base::end);
-    
+
+    /** write out score with endline */
+    fout << score << endl;
+
+    fout.close();
 }
+
