@@ -30,6 +30,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	vector<string> files = {
 		"../bin/maze_easy.obj"
 	};
+
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		GLD * temp = new GLD;
 		temp->initialize( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC );
