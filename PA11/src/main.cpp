@@ -304,6 +304,9 @@ bool initialize()
     //put an initialize zoom in animation on the camera
     camera.setAnimation( glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0) );
 
+    //make full screen
+    glutFullScreen();
+
     //enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -347,8 +350,8 @@ void render()
         if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
         } else {
-        }
             model = allObjects[objIndex]->getModel();
+        }
 
         //premultiply the matrix for this example
         mvp = projection * view * model;
