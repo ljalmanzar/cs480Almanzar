@@ -191,7 +191,7 @@ bool GLD::initialize( const std::string& geometry_file, const std::string& textu
     int switchInt = incomingType;
     switch( switchInt ){
         case SPHERE:
-            _sphereShape = new btSphereShape(.5);
+            _sphereShape = new btSphereShape(.25);
             break;
         case BOX:
             _boxShape = new btBoxShape(btVector3(2,2,3));

@@ -27,10 +27,13 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	//initialize the mazes
 	vector<string> files = {
-		"../bin/maze_intermediate_1.obj"
+		"../bin/maze_easy.obj"
 	};
 	for( unsigned int i = 0; i < files.size(); i++ ){
-		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, STATIC ) );
+		GLD * temp = new GLD;
+		temp->initialize( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC );
+		_mazes.push_back( temp );
+//		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC ) );
 	}
 
 	//add the default ball
@@ -46,7 +49,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	_backGround.setModel( transformation );
 
 	//initialize the static object
-	_casket.initialize("../bin/casket.obj", "../bin/deathStar.jpg", true, TRIMESH, KINEMATIC );
+	_casket.initialize("../bin/casket.obj", "../bin/deathStar2.jpg", true, TRIMESH, KINEMATIC );
 	_casket.translate(glm::vec3(0,-1.25,0));
 
 	//set all the appropriate pointers
@@ -62,14 +65,15 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 void GameDriver::addBall(){
 	//creating a new ball
-	GLD * temp = new GLD( "../bin/planet.obj", "../bin/deathStar.jpg", true, SPHERE, DYNAMIC );
+	GLD * temp = new GLD;
+	temp->initialize( "../bin/planet.obj", "../bin/deathStar.jpg", true, SPHERE, DYNAMIC );
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
 	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.01, .01, .01) );
 	temp->setModel( translation );
 	
-	temp->setShape(SPHERE);
+	//temp->setShape(SPHERE);
 
 	temp->addPhysics();
 
@@ -140,6 +144,18 @@ glm::vec3 GameDriver::tiltOnX( float angle ){
 		);
 	glm::mat3 rotationMatrix( _empty );
 
+	//tilt the mazes accordingly
+	for( unsigned int i = 0; i < _mazes.size(); i++ ){
+		btTransform trans;
+		trans.setFromOpenGLMatrix( glm::value_ptr(_empty) );
+		//trans set origin
+		//trans set orientation
+		_mazes[i]->getRigidBody()->setWorldTransform(trans);
+		cout << "debug" << endl;
+//		_mazes[i]->getRigidBody()->getMotionState()->getWorldTransform(trans);
+	}
+
+
 	//use newGravity to update shit
 	return rotationMatrix * glm::vec3(0.0, -9.81, 0.0);
 }
@@ -176,6 +192,8 @@ void GameDriver::pickLevel(){
 }
 
 std::vector<GLD*> GameDriver::getAllObjects(){
+	//update all of the GLDs
+
 	//keep static stuff static
 
 	std::vector<GLD*> temp = _allObjects;

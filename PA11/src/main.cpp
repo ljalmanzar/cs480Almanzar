@@ -175,7 +175,8 @@ bool initialize()
         }
 
     //assign the title characters
-    titlePage.push_back( new GLD( "../bin/text_MainTitle.obj", "../bin/Color_icon_yellow.png" ) );
+        /*text_MainTitle*/
+    titlePage.push_back( new GLD( "../bin/xwing.obj", "../bin/Color_icon_yellow.png" ) );
     titlePage.push_back( new GLD( "../bin/text_Options.obj", "../bin/Color_icon_yellow.png" ) );
     titlePage[0]->translate( glm::vec3(0.0,5.0,0.0) );
     titlePage[1]->translate( glm::vec3(0.0,-0.2,0.0) );
@@ -345,9 +346,9 @@ void render()
         //add rotation to model matrix if necessary
         if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
-        } else{
-            model = allObjects[objIndex]->getModel();
+        } else {
         }
+            model = allObjects[objIndex]->getModel();
 
         //premultiply the matrix for this example
         mvp = projection * view * model;
