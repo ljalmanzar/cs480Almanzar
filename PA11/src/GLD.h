@@ -96,6 +96,7 @@ class GLD{
 		bool updateObjectAndPhysics();
 
 		void setShape(TypeOfShape incoming);
+		void setRadius(int incomingRadius);
 
 		//set animations
 		void anim_MoveUp( float distance );
@@ -119,6 +120,8 @@ class GLD{
 
 		// Bullet
 		// All Shapes
+		int _radius;
+		
 		btSphereShape * _sphereShape;
 		btBoxShape * _boxShape;
 		btCylinderShape * _cylinderShape;
