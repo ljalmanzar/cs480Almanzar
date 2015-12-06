@@ -27,7 +27,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	//initialize the mazes
 	vector<string> files = {
-		"../bin/maze_crazyhard.obj"
+		"../bin/maze_easy.obj"
 	};
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		GLD * temp = new GLD;
