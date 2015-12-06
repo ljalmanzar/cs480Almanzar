@@ -162,8 +162,7 @@ bool initialize()
 
     //light
     theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
-    theLight[0].diffuse = glm::vec4(1.0,1.0,1.0,0.0);
-    theLight[1].position = glm::vec4(-5.0,5.0,1.0,1.0);
+    theLight[1].position = glm::vec4(6.0,4.0,7.0,1.0);
     maingame.initGame( dynamicsWorld );
 
     //assign the main name of the objects
@@ -268,7 +267,7 @@ bool initialize()
     loc_lightpos2 = glGetUniformLocation(program,
                     const_cast<const char*>("l_lightpos2"));
     if(loc_lightpos2 == -1){
-        std::cerr << "[F] LIGHT POS NOT FOUND" << std::endl;
+        std::cerr << "[F] LIGHT POS2 NOT FOUND" << std::endl;
         return false;
     }
 /*
@@ -361,8 +360,8 @@ void render()
         if ( state == GAMEPLAY && objIndex > 1){
             model = maingame.getMasterTransform() * allObjects[objIndex]->getModel();
         } else {
-        }
             model = allObjects[objIndex]->getModel();
+        }
 
         //premultiply the matrix for this example
         mvp = projection * view * model;
@@ -445,7 +444,18 @@ void update()
         glutDisplayFunc(render_ScoreBoard);
     }
 
-     glutPostRedisplay();
+    //update position of lights depending on the position
+    if( state == MAINTITLE ){
+        theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
+        theLight[1].position = glm::vec4(-5.0,4.0,7.0,1.0);
+    } else if( state == GAMEPLAY ){
+        //follow the x wing
+        glm::vec3 pos = glm::vec3(allObjects[ allObjects.size() -1 ]->getModel()[3]);
+        theLight[0].position = glm::vec4(pos,1.0);
+        theLight[1].position = glm::vec4(5.0,-1.0,5.0,1.0);
+    }
+
+    glutPostRedisplay();
 }
 
 void reshape(int n_w, int n_h)
@@ -527,6 +537,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'M':
                 state = MAINTITLE;
                 glutDisplayFunc(render);
+                camera.setAnimation( glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0) );
                 break;
                 /*
             case 'a':
