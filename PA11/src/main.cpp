@@ -418,7 +418,6 @@ void render()
 
 void update()
 {
-    cout << "first "; 
     allObjects = maingame.getAllObjects();
 
     dynamicsWorld->stepSimulation(getDT(), 10);
@@ -434,8 +433,6 @@ void update()
         state = SCOREBOARD;
         glutDisplayFunc(render_ScoreBoard);
     }
-
-    cout << "not here ";
 
      glutPostRedisplay();
 
@@ -613,7 +610,6 @@ void render_ScoreBoard(){
 
     playerScore.append(currentScore);
 
-
     /** Show player's score*/ 
 
     glRasterPos2f(-.1, .5);
@@ -624,7 +620,7 @@ void render_ScoreBoard(){
     cursor = 0;
 
     /** Print out main title */
-    glRasterPos2f(-.1, 1);
+    glRasterPos2f(-.1, .7);
     tempStr = &scoreTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
