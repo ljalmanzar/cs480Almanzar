@@ -610,7 +610,7 @@ void render_ScoreBoard(){
     /** Show player's score*/ 
 
     glRasterPos2f(-.1, .5);
-    tempStr = &scoreTitle[0];
+    tempStr = &playerScore[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
     }
