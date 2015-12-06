@@ -163,7 +163,7 @@ bool initialize()
     //light
     theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
     theLight[0].diffuse = glm::vec4(1.0,1.0,1.0,0.0);
-    theLight[1].position = glm::vec4(-5.0,5.0,1.0.1.0);
+    theLight[1].position = glm::vec4(-5.0,5.0,1.0,1.0);
     maingame.initGame( dynamicsWorld );
 
     //assign the main name of the objects
