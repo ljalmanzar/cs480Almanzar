@@ -365,7 +365,7 @@ void render()
         } else {
             model = allObjects[objIndex]->getModel();
         }
-        
+
         //premultiply the matrix for this example
         mvp = projection * view * model;
 
@@ -571,7 +571,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'W':
                 /** Load Easy level */
                 if (state == LEVELPAGE){
-                    maingame.pickLevel(EASY);
+                 //   maingame.pickLevel(EASY);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
@@ -584,7 +584,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'A':
                 /** Load Medium level */
                 if (state == LEVELPAGE){
-                    maingame.pickLevel(MEDIUM);
+                   // maingame.pickLevel(MEDIUM);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
@@ -597,7 +597,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'F':
                 /** Load Hard level */
                 if (state == LEVELPAGE){
-                    maingame.pickLevel(HARD);
+                 //   maingame.pickLevel(HARD);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
@@ -653,9 +653,9 @@ void render_ScoreBoard(){
     int cursor = 0;
 
     std::string scoreTitle;
-    std::string easyTitle = "Wimp Mode High Scores";
-    std::string mediumTitle = "Average Mode Joe High Scores";
-    std::string hardTitle = "Fucking Badass Mode High Scores";
+    std::string easyTitle = "Padawan High Scores";
+    std::string mediumTitle = "Jedi Knight High Scores";
+    std::string hardTitle = "Jedi Master High Scores";
 
     switch(difficulty){
         case 1:
@@ -679,7 +679,7 @@ void render_ScoreBoard(){
 
     /** Show player's score*/ 
 
-    glRasterPos2f(-.1, -.4);
+    glRasterPos2f(0, -.4);
     tempStr = &playerScore[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -764,12 +764,12 @@ void render_LevelSelect(){
     int cursor = 0;
 
     std::string title = "Select Difficulty";
-    std::string easyTitle = "Wimp (W)";
-    std::string mediumTitle = "Average Joe (A)";
-    std::string hardTitle = "Fucking Badass (F)";
+    std::string easyTitle = "Padawan (W)";
+    std::string mediumTitle = "Jedi Knight (A)";
+    std::string hardTitle = "Jedi Master (F)";
 
     /** Print out main title */
-    glRasterPos2f(-.1, .3);
+    glRasterPos2f(-.1, .4);
     tempStr = &title[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -791,13 +791,13 @@ void render_LevelSelect(){
     }
     cursor = 0;
 
-    glRasterPos2f(-.1, .0);
+    glRasterPos2f(-.1, 0);
     tempStr = &hardTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
     cursor = 0;
 
-    glutPostRedisplay();
+    glutSwapBuffers();
 }
 

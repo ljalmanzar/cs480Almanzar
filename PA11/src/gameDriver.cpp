@@ -34,7 +34,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		GLD * temp = new GLD;
-		temp->initialize( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC );
+		temp->initialize( files[i], "../bin/deathStar.jpg", true, TRIMESH, KINEMATIC );
 		_mazes.push_back( temp );
 //		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC ) );
 	}
@@ -199,7 +199,7 @@ bool GameDriver::checkIfBallOK(){
 }
 
 void GameDriver::pickLevel(Difficulty){
-	
+
 }
 
 std::vector<GLD*> GameDriver::getAllObjects(){
