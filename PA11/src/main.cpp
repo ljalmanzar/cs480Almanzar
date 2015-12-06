@@ -73,7 +73,7 @@ void reshape(int n_w, int n_h);
 //--Resource management
 bool initialize();
 void cleanUp();
-void render_ScoreBoard(int, std::string);
+void render_ScoreBoard();
 
 //--Random time things
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
@@ -415,6 +415,7 @@ void render()
 
 void update()
 {
+    cout << "first "; 
     allObjects = maingame.getAllObjects();
 
     dynamicsWorld->stepSimulation(getDT(), 10);
@@ -426,7 +427,15 @@ void update()
     //move the camera
     camera.update();
 
-    glutPostRedisplay();
+    if (maingame.checkForWin() && state == GAMEPLAY){
+        state = SCOREBOARD;
+        glutDisplayFunc(render_ScoreBoard);
+    }
+
+    cout << "not here ";
+
+     glutPostRedisplay();
+
 }
 
 void reshape(int n_w, int n_h)
@@ -526,6 +535,10 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             //theLight.position[3] = POINT;
             theLight.diffuse[3] = POINT;
                 break;
+            case 'b':
+            case 'B':
+                state = SCOREBOARD;
+                glutDisplayFunc(render_ScoreBoard);
         }        
     }
     glutPostRedisplay();
@@ -557,13 +570,17 @@ void special_keyboard(int key, int x_pos, int y_pos){
 }
 
 
-void render_ScoreBoard(int difficulty, std::string currentScore){
+void render_ScoreBoard(){
     // clear the screen
-    glClearColor(0.174, 0.167, 0.159, 1.0);
+    int difficulty = 1;  
+    string currentScore = maingame.getFinalTime();
+    scoreBoard.saveScore(difficulty, currentScore);
+    
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     // set the color
-    glColor3f( 1.0, 1.0, 1.0 );
+    glColor3f( 1.0, 1.0, 0.0 );
     // no program needed to print
     glUseProgram(0);
 
@@ -618,7 +635,7 @@ void render_ScoreBoard(int difficulty, std::string currentScore){
     for(unsigned int i = 0; i < 5; i++ ){
 
         /** print out blank lines if not all scores are filled */
-        if (i + 1 < scores.size()){
+        if (i >= scores.size()){
             string blankString = "--:--";
             glRasterPos2f(-.2, -float(i)/20);
             tempStr = &blankString[0];
