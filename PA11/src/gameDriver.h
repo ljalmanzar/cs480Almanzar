@@ -35,6 +35,9 @@ class GameDriver{
 		std::vector<GLD*> getAllObjects();
 		glm::mat4 getMasterTransform();
 
+		/** calculates the time expired and then returns it as a string */
+		std::string getFinalTime();
+
 	private:
 		GLD _backGround;
 		GLD _casket;

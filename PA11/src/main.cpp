@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "light.cpp"
 #include "gameDriver.cpp"
+#include "scoreBoard.cpp"
 //#include "wiiController.cpp"
 
 //--Evil Global variables
@@ -24,6 +25,7 @@ GLuint vbo_geometry;// VBO handle for our geometry
 int NUM_OF_VERTICIES = 0;
 Camera camera;
 GameDriver maingame;
+ScoreBoard scoreBoard;
 
 //uniform locations
 GLint loc_mvpmat;// Location of the modelviewprojection matrix in the shader
@@ -71,6 +73,7 @@ void reshape(int n_w, int n_h);
 //--Resource management
 bool initialize();
 void cleanUp();
+void render_ScoreBoard(int, std::string);
 
 //--Random time things
 std::chrono::time_point<std::chrono::high_resolution_clock> t1,t2;
@@ -551,4 +554,90 @@ void special_keyboard(int key, int x_pos, int y_pos){
         dynamicsWorld->setGravity( btVector3(-tilt.x, tilt.y, -tilt.z) );
     }
     glutPostRedisplay();
+}
+
+
+void render_ScoreBoard(int difficulty, std::string currentScore){
+    // clear the screen
+    glClearColor(0.174, 0.167, 0.159, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // set the color
+    glColor3f( 1.0, 1.0, 1.0 );
+    // no program needed to print
+    glUseProgram(0);
+
+    //set the text i want to say
+    char * tempStr;
+    int cursor = 0;
+
+    std::string scoreTitle;
+    std::string easyTitle = "Easy Mode High Scores";
+    std::string mediumTitle = "Medium Mode High Scores";
+    std::string hardTitle = "Hard Mode High Scores";
+
+    switch(difficulty){
+        case 1:
+            scoreTitle = easyTitle;
+            break;
+        case 2:
+            scoreTitle = mediumTitle;
+            break;
+        case 3:
+            scoreTitle = hardTitle;
+            break;
+    }
+
+    std::vector<std::string> scores = scoreBoard.getHighScores(difficulty); 
+    std::string playerScore = "Your Score: ";
+
+    playerScore.append(currentScore);
+
+
+    /** Show player's score*/ 
+
+    glRasterPos2f(-.1, .5);
+    tempStr = &scoreTitle[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    /** Print out main title */
+    glRasterPos2f(-.1, 1);
+    tempStr = &scoreTitle[0];
+    while( tempStr[cursor] ){
+        glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+    }
+    cursor = 0;
+
+    /** Sort scores */
+    std::sort(scores.begin(), scores.end());
+
+    /** Print out the scores*/
+    for(unsigned int i = 0; i < 5; i++ ){
+
+        /** print out blank lines if not all scores are filled */
+        if (i + 1 < scores.size()){
+            string blankString = "--:--";
+            glRasterPos2f(-.2, -float(i)/20);
+            tempStr = &blankString[0];
+            while( tempStr[cursor] ){
+                glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+            }
+
+        /** Otherwise, print out scores */
+        } else{
+            glRasterPos2f(-.2, -float(i)/20);
+            tempStr = &scores[i][0];
+            while( tempStr[cursor] ){
+                glutBitmapCharacter( GLUT_BITMAP_HELVETICA_12, tempStr[cursor++] );
+            }
+        }
+
+        cursor = 0;
+    }
+
+    glutSwapBuffers();
+
 }
