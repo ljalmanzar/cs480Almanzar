@@ -72,7 +72,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 void GameDriver::addBall(){
 	//creating a new ball
 	GLD * temp = new GLD;
-	temp->initialize( "../bin/planet.obj", "../bin/deathStar.jpg", true, SPHERE, DYNAMIC );
+	temp->initialize( "../bin/planet.obj", "../bin/ice.jpg", true, SPHERE, DYNAMIC );
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
@@ -114,6 +114,14 @@ void GameDriver::printTimeElapsed() {
 		glRasterPos2f( -.95, .95 );
 		while( tempStr[cursor] ){
 			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
+		}
+		cursor = 0;
+
+		string rpgText = "Deliver your photon torpedo into that exaust port to blow up the Death Star!";
+
+		glRasterPos2f( -.3, -.85 );
+		while( rpgText[cursor] ){
+			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, rpgText[cursor++] );
 		}
 		cursor = 0;
 }
