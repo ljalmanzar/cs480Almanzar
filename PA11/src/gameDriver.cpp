@@ -116,6 +116,14 @@ void GameDriver::printTimeElapsed() {
 			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, tempStr[cursor++] );
 		}
 		cursor = 0;
+
+		string rpgText = "Deliver your photon torpedo into that exaust port to blow up the Death Star!";
+
+		glRasterPos2f( -.3, -.85 );
+		while( rpgText[cursor] ){
+			glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, rpgText[cursor++] );
+		}
+		cursor = 0;
 }
 
 void GameDriver::resetGame(){
