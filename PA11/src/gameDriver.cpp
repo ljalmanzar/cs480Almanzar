@@ -75,7 +75,7 @@ void GameDriver::addBall(){
 	temp->initialize( "../bin/planet.obj", "../bin/ice.jpg", true, SPHERE, DYNAMIC );
 
 	//setting initial position
-	temp->translate(glm::vec3(0,10,0));
+	temp->translate(glm::vec3(-1,10,5));
 	glm::mat4 translation = glm::scale( temp->getModel(), glm::vec3(.0001, .0001, .0001) );
 	temp->setModel( translation );
 	
