@@ -443,9 +443,15 @@ void update()
     camera.update();
 
     if (maingame.checkForWin() && state == GAMEPLAY){
+
         string currentScore = maingame.getFinalTime();
         scoreBoard.saveScore(difficulty, currentScore);
-        glutDisplayFunc(render_ScoreBoard);
+        if(camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0,22.0,0.0) ) == true){
+            glutDisplayFunc(render_ScoreBoard);
+        }
+    
+       
+        //glutDisplayFunc(render_ScoreBoard);
     }
 
     //update position of lights depending on the position
@@ -453,8 +459,11 @@ void update()
         theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
         theLight[1].position = glm::vec4(-5.0,4.0,7.0,1.0);
     } else if( state == GAMEPLAY ){
+        //move the x wing
+
         //follow the x wing
         glm::vec3 pos = glm::vec3(allObjects[ allObjects.size() -1 ]->getModel()[3]);
+        pos.y -= 1.2;
         theLight[0].position = glm::vec4(pos,1.0);
         theLight[1].position = glm::vec4(5.0,-1.0,5.0,1.0);
     }
@@ -582,6 +591,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 if (state == LEVELPAGE){
                     maingame.pickLevel(EASY);
                     state = GAMEPLAY;
+                    difficulty = EASY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
@@ -592,27 +602,30 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'a':
             case 'A':
                 /** Load Medium level */
-                if (state == LEVELPAGE){
+                /*if (state == LEVELPAGE){
                     maingame.pickLevel(MEDIUM);
                     state = GAMEPLAY;
+                    difficulty = MEDIUM;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
                     camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
-                }
+                }*/
 
                 break;
             case 'f':
             case 'F':
                 /** Load Hard level */
-                if (state == LEVELPAGE){
+               /* if (state == LEVELPAGE){
                     maingame.pickLevel(HARD);
                     state = GAMEPLAY;
+                    difficulty = MEDIUM;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
                     camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
-                }
+                }*/
+                break;
         }        
     }
     glutPostRedisplay();
@@ -650,10 +663,11 @@ void render_ScoreBoard(){
     
     //glClearColor(0.0, 0.0, 0.0, 1.0);
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    if (state == MAINTITLE){
+    //if (state == MAINTITLE){
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    }
+    //}
+
     state = SCOREBOARD;
     // set the color
     glColor3f( 1.0, 1.0, 0.0 );
@@ -691,7 +705,7 @@ void render_ScoreBoard(){
 
     /** Show player's score*/ 
 
-    glRasterPos2f(0, -.4);
+    glRasterPos2f(-.07, -.5);
     tempStr = &playerScore[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -699,7 +713,7 @@ void render_ScoreBoard(){
     cursor = 0;
 
     /** Print out main title */
-    glRasterPos2f(-.1, .3);
+    glRasterPos2f(-.07, .6);
     tempStr = &scoreTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -710,19 +724,19 @@ void render_ScoreBoard(){
     std::sort(scores.begin(), scores.end());
 
     /** Print out the scores*/
-    for(unsigned int i = 0; i < 5; i++ ){
+    for(unsigned int i = 0; i < 11; i++ ){
 
         /** print out blank lines if not all scores are filled */
         if (i >= scores.size()){
             string blankString = "--:--";
-            glRasterPos2f(0.0, -float(i)/10 + .2);
+            glRasterPos2f(0.0, -float(i)/25 + .6);
             tempStr = &blankString[0];
             while( tempStr[cursor] ){
                 glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
             }
         /** Otherwise, print out scores */
         } else{
-            glRasterPos2f(0.0, -float(i)/10 + .2);
+            glRasterPos2f(0.0, -float(i)/10 + .6);
             tempStr = &scores[i][0];
             while( tempStr[cursor] ){
                 glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -733,7 +747,7 @@ void render_ScoreBoard(){
     }
 
     string command = "P : Play Again";
-    glRasterPos2f(-.1, -.5);
+    glRasterPos2f(-.07, -.6);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
@@ -741,7 +755,7 @@ void render_ScoreBoard(){
     }
 
     command = "M : Main Menu";
-    glRasterPos2f(-.1, -.6);
+    glRasterPos2f(-.07, -.7);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
@@ -749,7 +763,7 @@ void render_ScoreBoard(){
     }
 
     command = "ESC = Exit";
-    glRasterPos2f(-.1, -.7);
+    glRasterPos2f(-.07, -.8);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
@@ -777,8 +791,8 @@ void render_LevelSelect(){
 
     std::string title = "Select Difficulty";
     std::string easyTitle = "Padawan (W)";
-    std::string mediumTitle = "Jedi Knight (A)";
-    std::string hardTitle = "Jedi Master (F)";
+   // std::string mediumTitle = "Jedi Knight (A)";
+    //std::string hardTitle = "Jedi Master (F)";
 
     /** Print out main title */
     glRasterPos2f(-.1, .4);
@@ -796,7 +810,7 @@ void render_LevelSelect(){
     }
     cursor = 0;
 
-    glRasterPos2f(-.1, .1);
+   /* glRasterPos2f(-.1, .1);
     tempStr = &mediumTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -809,6 +823,7 @@ void render_LevelSelect(){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
     cursor = 0;
+    */
 
     glutSwapBuffers();
 }
