@@ -443,9 +443,15 @@ void update()
     camera.update();
 
     if (maingame.checkForWin() && state == GAMEPLAY){
+
         string currentScore = maingame.getFinalTime();
         scoreBoard.saveScore(difficulty, currentScore);
-        glutDisplayFunc(render_ScoreBoard);
+        if(camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0,22.0,0.0) ) == true){
+            glutDisplayFunc(render_ScoreBoard);
+        }
+    
+       
+        //glutDisplayFunc(render_ScoreBoard);
     }
 
     //update position of lights depending on the position
@@ -650,10 +656,11 @@ void render_ScoreBoard(){
     
     //glClearColor(0.0, 0.0, 0.0, 1.0);
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    if (state == MAINTITLE){
+    //if (state == MAINTITLE){
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    }
+    //}
+
     state = SCOREBOARD;
     // set the color
     glColor3f( 1.0, 1.0, 0.0 );
