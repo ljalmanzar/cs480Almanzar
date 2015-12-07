@@ -57,7 +57,8 @@ enum GameState{
     MAINTITLE,
     GAMEPLAY,
     LEVELPAGE,
-    SCOREBOARD
+    SCOREBOARD,
+    PAUSED
 } state = MAINTITLE;
 
 enum Difficulty;
@@ -511,6 +512,15 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
     }
     else {
         switch( key ){
+            case ' ':
+                if (state == PAUSED){
+                    state = GAMEPLAY;
+                }
+                else{
+                    state = PAUSED;
+                }
+
+                break;
             case '[':
                 theLight[0].position[0] += 0.25;
                 break;
