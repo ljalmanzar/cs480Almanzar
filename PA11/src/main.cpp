@@ -186,9 +186,14 @@ bool initialize()
     //assign the title characters
         /*text_MainTitle*/
     titlePage.push_back( new GLD( "../bin/text_MainTitle.obj", "../bin/Color_icon_yellow.png" ) );
-    titlePage.push_back( new GLD( "../bin/text_Options.obj", "../bin/Color_icon_yellow.png" ) );
+    titlePage.push_back( new GLD( "../bin/text_Options2.obj", "../bin/Color_icon_yellow.png" ) );
+    titlePage.push_back( new GLD( "../bin/lightsaber.obj", "../bin/lightsaber_texture.jpg" ) );
     titlePage[0]->translate( glm::vec3(0.0,5.0,0.0) );
     titlePage[1]->translate( glm::vec3(0.0,-0.2,0.0) );
+    titlePage[2]->translate( glm::vec3(3.0,0.0,0.0) );
+    glm::mat4 transform = glm::scale( titlePage[2]->getModel(), glm::vec3(.5f) );
+    titlePage[2]->setModel( transform );
+
     allObjects = titlePage;
 
     // Creation of shaders
@@ -467,6 +472,14 @@ void update()
         theLight[0].position = glm::vec4(pos,1.0);
         theLight[1].position = glm::vec4(5.0,-1.0,5.0,1.0);
     }
+
+    //rotate the light saber continuously
+    glm::mat4 transform = glm::rotate(
+        titlePage[2]->getModel(),
+        .002f,
+        glm::vec3(0.0,1.0,0.1)
+        );
+    titlePage[2]->setModel( transform );
 
     glutPostRedisplay();
 }
