@@ -61,6 +61,7 @@ enum GameState{
 } state = MAINTITLE;
 
 enum Difficulty;
+Difficulty difficulty;
 
 //transform matrices
 glm::mat4 model;//obj->world each object should have its own model matrix
@@ -153,6 +154,7 @@ int main(int argc, char **argv)
 
 bool initialize()
 {
+    difficulty = EASY;
     //bullet allocating stuff
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -440,7 +442,6 @@ void update()
     camera.update();
 
     if (maingame.checkForWin() && state == GAMEPLAY){
-        int difficulty = 1;
         state = SCOREBOARD;
         string currentScore = maingame.getFinalTime();
         scoreBoard.saveScore(difficulty, currentScore);
@@ -637,7 +638,6 @@ void special_keyboard(int key, int x_pos, int y_pos){
 
 void render_ScoreBoard(){
     // clear the screen
-    int difficulty = 1;  
     string currentScore = scoreBoard.getPlayerScore();
     
     //glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -658,13 +658,13 @@ void render_ScoreBoard(){
     std::string hardTitle = "Jedi Master High Scores";
 
     switch(difficulty){
-        case 1:
+        case EASY:
             scoreTitle = easyTitle;
             break;
-        case 2:
+        case MEDIUM:
             scoreTitle = mediumTitle;
             break;
-        case 3:
+        case HARD:
             scoreTitle = hardTitle;
             break;
     }

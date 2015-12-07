@@ -14,7 +14,7 @@ ScoreBoard::~ScoreBoard(){
 }
 
 /** Get all high scores dependent on the difficulty level */ 
-std::vector<std::string> ScoreBoard::getHighScores(const int difficulty){
+std::vector<std::string> ScoreBoard::getHighScores(Difficulty difficulty){
 	std::string *fileName;
 	ifstream fin;
 	std::string line;
@@ -22,13 +22,13 @@ std::vector<std::string> ScoreBoard::getHighScores(const int difficulty){
 
 	/** determine difficulty */
 	switch(difficulty){
-		case 1:
+		case EASY:
 			fileName = &easyName;
 			break;
-		case 2:
+		case MEDIUM:
 			fileName = &mediumName;
 			break;
-		case 3:
+		case HARD:
 			fileName = &hardName;
 			break;
 	}
@@ -54,19 +54,19 @@ std::vector<std::string> ScoreBoard::getHighScores(const int difficulty){
     return scoresVector;
 }
 
-void ScoreBoard::saveScore(int difficulty, string score){
+void ScoreBoard::saveScore(Difficulty difficulty, string score){
 	std::string *fileName;
 	ofstream fout;
 
 	/** determine difficulty */
 	switch(difficulty){
-		case 1:
+		case EASY:
 			fileName = &easyName;
 			break;
-		case 2:
+		case MEDIUM:
 			fileName = &mediumName;
 			break;
-		case 3:
+		case HARD:
 			fileName = &hardName;
 			break;
 	}

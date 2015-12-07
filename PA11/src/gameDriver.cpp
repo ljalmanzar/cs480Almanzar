@@ -198,8 +198,18 @@ bool GameDriver::checkIfBallOK(){
 	return false;
 }
 
-void GameDriver::pickLevel(Difficulty){
-
+void GameDriver::pickLevel(Difficulty difficulty){
+	switch(difficulty){
+		case EASY:
+			_difficulty = EASY;
+			break;
+		case MEDIUM:
+			_difficulty = MEDIUM;
+			break;
+		case HARD:
+			_difficulty = HARD;
+			break;
+	}
 }
 
 std::vector<GLD*> GameDriver::getAllObjects(){

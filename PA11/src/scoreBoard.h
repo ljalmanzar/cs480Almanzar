@@ -9,10 +9,10 @@ public:
 	~ScoreBoard();
 
 	/** gets high scores from data sheet, dependent on difficulty int */
-	std::vector<std::string> getHighScores(const int);
+	std::vector<std::string> getHighScores(Difficulty);
 
 	/** Saves the passed score to file based on difficulty level */
-	void saveScore(int, string);
+	void saveScore(Difficulty, string);
 
 	std::string getPlayerScore();
 private:

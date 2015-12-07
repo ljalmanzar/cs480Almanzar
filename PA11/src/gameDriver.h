@@ -70,6 +70,8 @@ class GameDriver{
 		vector<RoundType> _rounds;
 
 		GLD _xwing;
+
+		Difficulty _difficulty;
 };
 
 #endif
