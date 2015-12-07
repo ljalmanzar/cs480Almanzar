@@ -21,7 +21,7 @@ GameDriver::~GameDriver(){
 void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	//set incoming variables
 	_world = incomingWorld;
-	_difficulty = HARD;
+	_difficulty = EASY;
 
 	//declare helper variables
 	glm::mat4 transformation;
