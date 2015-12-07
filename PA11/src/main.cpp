@@ -442,7 +442,6 @@ void update()
     camera.update();
 
     if (maingame.checkForWin() && state == GAMEPLAY){
-        state = SCOREBOARD;
         string currentScore = maingame.getFinalTime();
         scoreBoard.saveScore(difficulty, currentScore);
         glutDisplayFunc(render_ScoreBoard);
@@ -565,7 +564,6 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 's':
             case 'S':
-                state = SCOREBOARD;
                 glutDisplayFunc(render_ScoreBoard);
                 break;
             case 'w':
@@ -642,7 +640,11 @@ void render_ScoreBoard(){
     
     //glClearColor(0.0, 0.0, 0.0, 1.0);
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
+    if (state == MAINTITLE){
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    }
+    state = SCOREBOARD;
     // set the color
     glColor3f( 1.0, 1.0, 0.0 );
     // no program needed to print
