@@ -459,8 +459,11 @@ void update()
         theLight[0].position = glm::vec4(5.0,5.0,5.0,1.0);
         theLight[1].position = glm::vec4(-5.0,4.0,7.0,1.0);
     } else if( state == GAMEPLAY ){
+        //move the x wing
+
         //follow the x wing
         glm::vec3 pos = glm::vec3(allObjects[ allObjects.size() -1 ]->getModel()[3]);
+        pos.y -= 1.2;
         theLight[0].position = glm::vec4(pos,1.0);
         theLight[1].position = glm::vec4(5.0,-1.0,5.0,1.0);
     }
