@@ -247,6 +247,12 @@ std::vector<GLD*> GameDriver::getAllObjects(){
 
 	temp.insert( temp.end(), _balls.begin(), _balls.end() );
 
+	glm::mat4 ballpos = glm::scale( _balls[0]->getModel(), glm::vec3(.75f) );
+	glm::mat4 newpos = glm::mat4(1.0f);
+	newpos[3] = ballpos[3];
+	newpos[3][1] += 5.0f;
+
+	_xwing.setModel( newpos );
 	temp.push_back( &_xwing );
 	return temp;
 }
