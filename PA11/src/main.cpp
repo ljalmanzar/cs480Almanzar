@@ -681,7 +681,7 @@ void render_ScoreBoard(){
 
     /** Show player's score*/ 
 
-    glRasterPos2f(0, -.4);
+    glRasterPos2f(-.07, -.5);
     tempStr = &playerScore[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -689,7 +689,7 @@ void render_ScoreBoard(){
     cursor = 0;
 
     /** Print out main title */
-    glRasterPos2f(-.1, .3);
+    glRasterPos2f(-.07, .6);
     tempStr = &scoreTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -700,19 +700,19 @@ void render_ScoreBoard(){
     std::sort(scores.begin(), scores.end());
 
     /** Print out the scores*/
-    for(unsigned int i = 0; i < 5; i++ ){
+    for(unsigned int i = 0; i < 11; i++ ){
 
         /** print out blank lines if not all scores are filled */
         if (i >= scores.size()){
             string blankString = "--:--";
-            glRasterPos2f(0.0, -float(i)/10 + .2);
+            glRasterPos2f(0.0, -float(i)/25 + .6);
             tempStr = &blankString[0];
             while( tempStr[cursor] ){
                 glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
             }
         /** Otherwise, print out scores */
         } else{
-            glRasterPos2f(0.0, -float(i)/10 + .2);
+            glRasterPos2f(0.0, -float(i)/10 + .6);
             tempStr = &scores[i][0];
             while( tempStr[cursor] ){
                 glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -723,7 +723,7 @@ void render_ScoreBoard(){
     }
 
     string command = "P : Play Again";
-    glRasterPos2f(-.1, -.5);
+    glRasterPos2f(-.07, -.6);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
@@ -731,7 +731,7 @@ void render_ScoreBoard(){
     }
 
     command = "M : Main Menu";
-    glRasterPos2f(-.1, -.6);
+    glRasterPos2f(-.07, -.7);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
@@ -739,7 +739,7 @@ void render_ScoreBoard(){
     }
 
     command = "ESC = Exit";
-    glRasterPos2f(-.1, -.7);
+    glRasterPos2f(-.07, -.8);
     cursor = 0;
     tempStr = &command[0];
     while( tempStr[cursor] ){
