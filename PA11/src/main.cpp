@@ -546,9 +546,13 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 'p':
             case 'P':
-                state = LEVELPAGE;
-                    // show level select window
-                glutDisplayFunc(render_LevelSelect);
+                    maingame.pickLevel(EASY);
+                    state = GAMEPLAY;
+                   difficulty = EASY;
+                    glutDisplayFunc(render);
+                    dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
+                    maingame.resetGame();
+                    camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
                 break;
             case 'm':
             case 'M':
@@ -588,6 +592,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 if (state == LEVELPAGE){
                     maingame.pickLevel(EASY);
                     state = GAMEPLAY;
+                    difficulty = EASY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
@@ -601,6 +606,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 if (state == LEVELPAGE){
                     maingame.pickLevel(MEDIUM);
                     state = GAMEPLAY;
+                    difficulty = MEDIUM;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
@@ -614,6 +620,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 if (state == LEVELPAGE){
                     maingame.pickLevel(HARD);
                     state = GAMEPLAY;
+                    difficulty = HARD;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
