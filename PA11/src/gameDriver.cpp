@@ -72,7 +72,7 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 void GameDriver::addBall(){
 	//creating a new ball
 	GLD * temp = new GLD;
-	temp->initialize( "../bin/planet.obj", "../bin/deathStar.jpg", true, SPHERE, DYNAMIC );
+	temp->initialize( "../bin/planet.obj", "../bin/blueOrb.jpg", true, SPHERE, DYNAMIC );
 
 	//setting initial position
 	temp->translate(glm::vec3(0,10,0));
