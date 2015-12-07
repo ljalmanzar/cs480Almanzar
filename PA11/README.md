@@ -1,14 +1,19 @@
-Labyrinth
+﻿Labyrinth
 =========
+
+Main Menu
+---------
+
+P – Play 
+S – Go to the scoreboard
+Esc – Exit the game
+
+Gameplay
+--------
+
 
 Main Movement
 - Arrow Keys to move table
-
-Lighting Controls
-- For ambient lighting : A
-- For spot light : S
-- For distant light : D
-- For point light : F
 
 Camera Controls
 - Pivot camera up : 8
@@ -21,6 +26,9 @@ Camera Controls
 
 Go to main menu : M
 Reset Game: P
+View Top Scores: B
+
+
 
 By the following people,
  + Luis Almanzar (Repo Holder)
