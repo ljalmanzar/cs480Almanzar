@@ -572,7 +572,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'W':
                 /** Load Easy level */
                 if (state == LEVELPAGE){
-                 //   maingame.pickLevel(EASY);
+                    maingame.pickLevel(EASY);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
@@ -585,7 +585,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'A':
                 /** Load Medium level */
                 if (state == LEVELPAGE){
-                   // maingame.pickLevel(MEDIUM);
+                    maingame.pickLevel(MEDIUM);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
@@ -598,7 +598,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'F':
                 /** Load Hard level */
                 if (state == LEVELPAGE){
-                 //   maingame.pickLevel(HARD);
+                    maingame.pickLevel(HARD);
                     state = GAMEPLAY;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));

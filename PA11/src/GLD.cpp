@@ -483,6 +483,7 @@ string GLD::getFile(){
 
 void GLD::translate(glm::vec3 newTranslation){
     _model = glm::translate(_model, newTranslation);
+   // _rigidBody->translate(btVector3(newTranslation.x, newTranslation.y, newTranslation.z));
 }
 
 bool GLD::updateObjectAndPhysics(){

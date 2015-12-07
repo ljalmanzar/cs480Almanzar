@@ -21,6 +21,7 @@ GameDriver::~GameDriver(){
 void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	//set incoming variables
 	_world = incomingWorld;
+	_difficulty = HARD;
 
 	//declare helper variables
 	glm::mat4 transformation;
@@ -30,13 +31,14 @@ void GameDriver::initGame( btDiscreteDynamicsWorld * incomingWorld ){
 	//_maze_index = 0;
 	vector<string> files = {
 		"../bin/maze_easy.obj"
+		,"../bin/maze_interm_1.obj"
+		,"../bin/maze_crazyhard.obj"
 	};
 
 	for( unsigned int i = 0; i < files.size(); i++ ){
 		GLD * temp = new GLD;
 		temp->initialize( files[i], "../bin/deathStar.jpg", true, TRIMESH, KINEMATIC );
 		_mazes.push_back( temp );
-//		_mazes.push_back( new GLD( files[i], "../bin/metal.jpg", true, TRIMESH, KINEMATIC ) );
 	}
 
 	//add the default ball
@@ -217,8 +219,34 @@ std::vector<GLD*> GameDriver::getAllObjects(){
 
 	//keep static stuff static
 	std::vector<GLD*> temp = _allObjects;
-	temp.insert( temp.end(), _mazes.begin(), _mazes.end() );
+	
+	glm::vec3 hide(0,1000,0);
+	glm::vec3 show(0,0,0);
+
+	switch(_difficulty){
+		case EASY:
+			_mazes[0]->translate(show);
+			_mazes[1]->translate(hide);
+			_mazes[2]->translate(hide);
+			break;
+		case MEDIUM:
+			_mazes[0]->translate(hide);
+			_mazes[1]->translate(show);
+			_mazes[2]->translate(hide);
+			break;
+		case HARD:
+			_mazes[0]->translate(hide);
+			_mazes[1]->translate(hide);
+			_mazes[2]->translate(show);
+			break;
+	}
+
+	temp.push_back(_mazes[0]);
+	temp.push_back(_mazes[1]);
+	temp.push_back(_mazes[2]);
+
 	temp.insert( temp.end(), _balls.begin(), _balls.end() );
+
 	temp.push_back( &_xwing );
 	return temp;
 }
