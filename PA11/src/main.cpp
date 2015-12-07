@@ -546,13 +546,9 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                 break;
             case 'p':
             case 'P':
-                    maingame.pickLevel(EASY);
-                    state = GAMEPLAY;
-                   difficulty = EASY;
-                    glutDisplayFunc(render);
-                    dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
-                    maingame.resetGame();
-                    camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
+                state = LEVELPAGE;
+                    // show level select window
+                glutDisplayFunc(render_LevelSelect);
                 break;
             case 'm':
             case 'M':
@@ -603,7 +599,7 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
             case 'a':
             case 'A':
                 /** Load Medium level */
-                if (state == LEVELPAGE){
+                /*if (state == LEVELPAGE){
                     maingame.pickLevel(MEDIUM);
                     state = GAMEPLAY;
                     difficulty = MEDIUM;
@@ -611,21 +607,22 @@ void keyboard(unsigned char key, int x_pos, int y_pos)
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
                     camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
-                }
+                }*/
 
                 break;
             case 'f':
             case 'F':
                 /** Load Hard level */
-                if (state == LEVELPAGE){
+               /* if (state == LEVELPAGE){
                     maingame.pickLevel(HARD);
                     state = GAMEPLAY;
-                    difficulty = HARD;
+                    difficulty = MEDIUM;
                     glutDisplayFunc(render);
                     dynamicsWorld -> setGravity (btVector3(0,-9.81,0));
                     maingame.resetGame();
                     camera.setAnimation( glm::vec3(0.0,20.0,30.0), glm::vec3(0.0) );
-                }
+                }*/
+                break;
         }        
     }
     glutPostRedisplay();
@@ -791,8 +788,8 @@ void render_LevelSelect(){
 
     std::string title = "Select Difficulty";
     std::string easyTitle = "Padawan (W)";
-    std::string mediumTitle = "Jedi Knight (A)";
-    std::string hardTitle = "Jedi Master (F)";
+   // std::string mediumTitle = "Jedi Knight (A)";
+    //std::string hardTitle = "Jedi Master (F)";
 
     /** Print out main title */
     glRasterPos2f(-.1, .4);
@@ -810,7 +807,7 @@ void render_LevelSelect(){
     }
     cursor = 0;
 
-    glRasterPos2f(-.1, .1);
+   /* glRasterPos2f(-.1, .1);
     tempStr = &mediumTitle[0];
     while( tempStr[cursor] ){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
@@ -823,6 +820,7 @@ void render_LevelSelect(){
         glutBitmapCharacter( GLUT_BITMAP_TIMES_ROMAN_24, tempStr[cursor++] );
     }
     cursor = 0;
+    */
 
     glutSwapBuffers();
 }
